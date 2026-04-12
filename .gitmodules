@@ -1,0 +1,6 @@
+[submodule "_Reference/nImage"]
+	path = _Reference/nImage
+	url = https://github.com/herrbasan/nImage.git
+[submodule "_Reference/ffmpeg-napi-interface"]
+	path = _Reference/ffmpeg-napi-interface
+	url = https://github.com/herrbasan/ffmpeg-napi-interface.git
