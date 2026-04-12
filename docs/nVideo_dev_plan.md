@@ -21,16 +21,16 @@
 
 ## Phase 0: Project Scaffolding
 
-- [ ] Initialize npm project (`package.json`, node-gyp, node-addon-api)
-- [ ] Create `binding.gyp` with FFmpeg library linkage (spec: Build Configuration)
-- [ ] Create `src/processor.h` — FFmpegProcessor class skeleton, zero N-API dependency
-- [ ] Create `src/processor.cpp` — empty implementation
-- [ ] Create `src/binding.cpp` — minimal NAPI module registration, exports `version`
-- [ ] Create `lib/index.js` — native binary loading (4-location fallback chain) — see nImage `lib/index.js` for pattern
-- [ ] Create `scripts/download-ffmpeg.js` — download FFmpeg shared libs from BtbN (versioned branch, not master-latest) — see ffmpeg-napi-interface `scripts/download-ffmpeg.js`
-- [ ] Create `AGENTS.md` — LLM development guide (maxims, architecture, build commands, Electron section) — see nImage `AGENTS.md` for structure
-- [ ] Verify: `node -e "require('./lib')"` loads without crash
-- [ ] Verify: MSVC build produces working `.node` + DLLs in `build/Release/`
+- [x] Initialize npm project (`package.json`, node-gyp, node-addon-api)
+- [x] Create `binding.gyp` with FFmpeg library linkage (spec: Build Configuration)
+- [x] Create `src/processor.h` — FFmpegProcessor class skeleton, zero N-API dependency
+- [x] Create `src/processor.cpp` — empty implementation
+- [x] Create `src/binding.cpp` — minimal NAPI module registration, exports `version`
+- [x] Create `lib/index.js` — native binary loading (3-location fallback: bin/ → build/Release → dist/)
+- [x] Create `scripts/download-ffmpeg.js` — download FFmpeg shared libs from BtbN (GPL shared, auto-platform)
+- [x] Create `AGENTS.md` — LLM development guide (vision, principles, maxims, architecture, phases)
+- [x] Verify: `node -e "require('./lib')"` loads and `version()` returns `"0.1.0"`
+- [x] Verify: MSVC build produces `nvideo.node` + 6 FFmpeg DLLs in `build/Release/`
 - [ ] Verify: `npx electron-rebuild -f -w nvideo -v <version>` produces Electron-compatible binary
 
 ## Phase 1: Probe / Metadata

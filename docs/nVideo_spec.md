@@ -53,6 +53,8 @@ The N-API addon exists because of the bottom two rows — they are impossible wi
 6. **No CLI dependency** — links directly against FFmpeg's C libraries (`libavformat`, `libavcodec`, `libswscale`, `libswresample`, `libavfilter`). No `ffmpeg.exe` needed.
 7. **Rich progress reporting** — every long-running operation reports detailed, real-time progress back to JavaScript. Progress data mirrors what FFmpeg's `-progress` flag provides: timestamps, frame counts, bitrates, speed, ETA. Progress is delivered via callbacks from async workers (`napi_threadsafe_function`), never EventEmitter.
 8. **Electron-compatible** — MSVC-built binaries, proper DLL loading, tested in renderer and main process.
+9. **Checkpoint before debugging** — when you encounter problems, always make a commit before starting to change things, so you have a clean state to return to when you actually figure out the cause/solution.
+10. **When in doubt, ask the Human** — otherwise, this is the agent's project. Be as smart and creative as possible, and have fun!
 
 ### Relationship to Reference Projects
 

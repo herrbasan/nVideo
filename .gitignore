@@ -1,2 +1,17 @@
 # Folders
 _Archive/
+_Reference/
+node_modules/
+build/
+deps/
+dist/
+bin/
+
+# Files
+*.node
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.lib
+package-lock.json

@@ -1,0 +1,61 @@
+{
+  "name": "nvideo",
+  "version": "0.1.0",
+  "description": "Native video/audio processing for Node.js via N-API + FFmpeg — zero-copy decode, transcode, streaming, thumbnails, waveforms",
+  "main": "lib/index.js",
+  "files": [
+    "lib/",
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "setup": "node scripts/download-ffmpeg.js",
+    "configure": "node-gyp configure",
+    "build": "npm run setup && node-gyp configure && node-gyp build",
+    "build:debug": "node-gyp configure && node-gyp build --debug",
+    "rebuild": "node-gyp rebuild",
+    "clean": "node-gyp clean",
+    "test": "node test/test.js",
+    "rebuild:electron": "npx @electron/rebuild -f -w nvideo"
+  },
+  "keywords": [
+    "ffmpeg",
+    "video",
+    "audio",
+    "transcode",
+    "streaming",
+    "napi",
+    "native",
+    "libavformat",
+    "libavcodec",
+    "libswscale",
+    "libswresample",
+    "libavfilter",
+    "thumbnail",
+    "waveform",
+    "probe",
+    "electron",
+    "zero-copy",
+    "sharedarraybuffer",
+    "audioworklet"
+  ],
+  "author": "David Renelt",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "os": [
+    "win32",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "dependencies": {
+    "node-addon-api": "^8.0.0"
+  },
+  "devDependencies": {
+    "node-gyp": "^10.0.0"
+  }
+}

@@ -1,0 +1,180 @@
+# nVideo - Agent Development Guide
+
+**Project**: Native video/audio processing for Node.js via N-API + FFmpeg
+**Spec**: [docs/nVideo_spec.md](docs/nVideo_spec.md)
+**Dev Plan**: [docs/nVideo_dev_plan.md](docs/nVideo_dev_plan.md)
+
+## Vision
+
+nVideo is a native Node.js module (N-API) that brings FFmpeg's full media processing capabilities to JavaScript. It is the video/media counterpart to nImage — where nImage makes exotic image formats accessible through a native API, nVideo makes professional-grade video and audio processing accessible through a native FFmpeg interface.
+
+The N-API addon exists because **streaming decoded data into JavaScript memory** is impossible with CLI wrappers. Zero-copy into `SharedArrayBuffer` for AudioWorklet/VideoFrame consumption in Electron is the core differentiator. But the utility functions (probe, thumbnail, waveform, transcode) are where 90% of usage happens and justify nVideo over spawning `ffmpeg.exe`.
+
+---
+
+## Design Principles
+
+1. **Zero-copy by default** — decoded data is written directly into JS-owned memory. No intermediate copies between FFmpeg and JavaScript.
+2. **File output bypasses JS entirely** — when transcoding to file, FFmpeg's native I/O writes directly to disk. The entire read → decode → filter → encode → write pipeline runs in C++ memory. Node.js only initiates the operation and receives a completion callback. No decoded frames ever enter V8 heap.
+3. **Pure C++ core, thin N-API wrapper** — the `FFmpegProcessor` class has zero N-API dependencies. The binding layer is a thin translation membrane.
+4. **FFmpeg-native API** — the JS API maps 1:1 to FFmpeg's C API and CLI. Existing FFmpeg recipes translate directly. Filter graphs use FFmpeg's filter graph syntax. Codec options map to `AVOptions`.
+5. **Performance-first JS surface** — no method chaining, no intermediate objects. The API uses flat function calls and configuration objects. A thin JS convenience layer may wrap the FFmpeg-native core, but it must not introduce allocation overhead.
+6. **No CLI dependency** — links directly against FFmpeg's C libraries (`libavformat`, `libavcodec`, `libswscale`, `libswresample`, `libavfilter`). No `ffmpeg.exe` needed.
+7. **Rich progress reporting** — every long-running operation reports detailed, real-time progress back to JavaScript. Progress data mirrors what FFmpeg's `-progress` flag provides: timestamps, frame counts, bitrates, speed, ETA. Progress is delivered via callbacks from async workers (`napi_threadsafe_function`), never EventEmitter.
+8. **Electron-compatible** — MSVC-built binaries, proper DLL loading, tested in renderer and main process.
+9. **Checkpoint before debugging** — when you encounter problems, always make a commit before starting to change things, so you have a clean state to return to when you actually figure out the cause/solution.
+10. **When in doubt, ask the Human** — otherwise, this is your project. Be as smart and creative as possible, and have fun!
+
+---
+
+## Core Development Maxims
+
+**Priorities: Reliability > Performance > Everything else.**
+
+**LLM-Native Codebase**: Code readability and structure for humans is a non-goal. The code will not be maintained by humans. Optimize for the most efficient structure an LLM can understand. Do not rely on conventional human coding habits.
+
+**Vanilla JS**: No TypeScript anywhere. Code must stay as close to the bare platform as possible for easy optimization and debugging. `.d.ts` files are generated strictly for LLM/editor context, not used at runtime.
+
+**Zero Dependencies**: If we can build it ourselves using raw standard libraries, we build it. Avoid external third-party packages. Evaluate per-case if a dependency is truly necessary.
+
+**Fail Fast, Always**: No defensive coding. No mock data, no fallback defaults, and no silencing try/catch blocks. The goal is to write perfect, deterministic software. When it breaks, let it crash and fix the root cause.
+
+**Pure C++ Core**: The `FFmpegProcessor` class has zero N-API dependency. The binding layer is a thin translation membrane.
+
+**MSVC Only**: MinGW-compiled NAPI addons crash in Electron due to IAT corruption. Always build with MSVC.
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  Layer 3: JavaScript API (lib/index.js)                             │
+│  - Utility: nVideo.probe(), nVideo.thumbnail(), nVideo.waveform()   │
+│  - Transcode: nVideo.transcode() — fire and forget, C++ writes disk │
+│  - Streaming: frame-by-frame decode into SAB for playback           │
+│  - Convenience: nVideo.remux(), nVideo.concat(), nVideo.convert()   │
+├─────────────────────────────────────────────────────────────────────┤
+│  Layer 2: N-API Bindings (src/binding.cpp)                          │
+│  - ProcessorWrapper (Napi::ObjectWrap)                              │
+│  - Zero-copy data marshalling (Float32Array, Uint8Array)            │
+│  - Type conversion, validation, error handling                      │
+├─────────────────────────────────────────────────────────────────────┤
+│  Layer 1: Native Core (src/processor.h/.cpp)                        │
+│  - FFmpegProcessor class (pure C++, no N-API)                       │
+│  - libavformat: container demuxing/muxing                           │
+│  - libavcodec: decode/encode                                        │
+│  - libswscale: pixel format conversion, scaling                     │
+│  - libswresample: audio resampling, format conversion               │
+│  - libavfilter: filter graph (resize, crop, rotate, EQ, etc.)      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Two Data Paths
+
+**Path A — Transcode to File (90% of usage):** Entire pipeline in C++ on async worker thread. FFmpeg reads disk → decodes → filters → encodes → writes disk. Zero frames touch V8 heap. Node.js gets a callback when done.
+
+**Path B — Stream to JavaScript (real-time playback):** Frame-by-frame decode, zero-copy into caller's `Uint8Array`/`Float32Array` or `SharedArrayBuffer`. For Electron AudioWorklet / VideoFrame consumption.
+
+### Project Structure
+
+```
+nVideo/
+├── src/
+│   ├── processor.h          # FFmpegProcessor class (pure C++)
+│   ├── processor.cpp        # FFmpegProcessor implementation
+│   ├── binding.cpp          # N-API bindings (thin wrapper)
+│   └── utils.h/.cpp         # Helper functions
+├── lib/
+│   ├── index.js             # JS entry point, convenience layer
+│   ├── player-video.js      # Video streaming player (SAB + VideoFrame)
+│   └── player-audio.js      # Audio streaming player (SAB + AudioWorklet)
+├── deps/
+│   └── ffmpeg/              # Pre-built FFmpeg shared libs (BtbN)
+│       ├── include/         # Headers
+│       ├── win/             # Windows .lib + .dll
+│       └── linux/           # Linux .so
+├── dist/                    # Pre-built .node binaries (per platform)
+├── scripts/
+│   ├── download-ffmpeg.js   # Download FFmpeg from BtbN
+│   └── package-binary.js    # Create release tarball
+├── test/
+│   ├── video.test.js        # Video decode/encode tests
+│   ├── audio.test.js        # Audio decode/encode tests
+│   ├── streaming.test.js    # Real-time streaming tests
+│   ├── benchmark.js         # Performance benchmarks
+│   └── assets/              # Test media files
+├── binding.gyp              # node-gyp build configuration
+└── package.json
+```
+
+---
+
+## Reference Projects
+
+| Project | Location | What to learn from |
+|---------|----------|--------------------|
+| **nImage** | `_Reference/nImage/` | N-API binding patterns, Electron compatibility, binary loading, build system (MSVC + vcpkg), AGENTS.md structure |
+| **ffmpeg-napi-interface** | `_Reference/ffmpeg-napi-interface/` | FFmpeg C API integration, audio decode, zero-copy Float32Array, SAB ring buffer, AudioWorklet streaming, AsyncWorker progress, three-phase EOF drain, FFmpeg 7.0+ AVChannelLayout API |
+
+---
+
+## Electron Compatibility
+
+- **MSVC builds only** — MinGW-compiled NAPI addons crash in Electron (IAT corruption, 0xC0000005). Proven in nImage.
+- **Electron rebuild** — `npx electron-rebuild -f -w nvideo -v <version>` after building for Node.js
+- **DLL loading** — FFmpeg DLLs must be in same directory as `.node` file or on system PATH
+- **Binary loading order** — project `bin/` → `build/Release/` → `dist/` (see nImage 4-location fallback)
+- **SAB headers** — `Cross-Origin-Opener-Policy: same-origin` + `Cross-Origin-Embedder-Policy: require-corp` required for SharedArrayBuffer in renderer
+- **Worklet reuse** — reuse AudioWorkletNode instances across track switches to avoid Chrome memory leak (~8-10MB per 30 switches)
+
+---
+
+## Development Phases
+
+| Phase | Status | Description |
+|-------|--------|-------------|
+| 0 | ✅ | Project scaffolding: binding.gyp, skeleton C++, JS loading, FFmpeg download script |
+| 1 | ⬜ | Probe / metadata — `nVideo.probe()` |
+| 2 | ⬜ | Thumbnail extraction — `nVideo.thumbnail()` |
+| 3 | ⬜ | Audio decode (zero-copy) — `input.readAudio()` |
+| 4 | ⬜ | Video decode (zero-copy) — `input.readVideoFrame()` |
+| 5 | ⬜ | Waveform generation — `nVideo.waveform()` |
+| 6 | ⬜ | Transcode to file — `nVideo.transcode()`, `nVideo.remux()`, `nVideo.convert()` |
+| 7 | ⬜ | Convenience functions — `nVideo.concat()`, `nVideo.extractStream()` |
+| 8 | ⬜ | Streaming (SAB + AudioWorklet + VideoFrame) |
+| 9 | ⬜ | Buffer pool + optimization |
+| 10 | ⬜ | Advanced: complex filters, stream mapping, hardware accel, HDR, network |
+
+---
+
+## Performance Targets
+
+| Operation | Target |
+|-----------|--------|
+| Probe / metadata | < 10 ms |
+| Thumbnail extraction | < 50 ms |
+| Waveform generation | < duration + 100ms |
+| Transcode to file | Same as ffmpeg CLI |
+| Remux | Disk I/O bound |
+| Video decode (1080p H.264) | < 10 ms/frame (100+ fps) |
+| Audio decode | < 5 ms/chunk (4096 samples) |
+| Seek | < 20 ms |
+| Zero-copy overhead | 0 copies |
+| Transcode JS overhead | ~0 ms |
+| Progress callback overhead | < 0.1 ms |
+
+---
+
+## Agent Notes
+
+_This section is for the agent to record discoveries, patterns, gotchas, and decisions during development._
+
+<!-- Add notes below as you learn things -->
+
+### Phase 0 Discoveries (2026-04-12)
+
+- **FFmpeg DLL versions**: BtbN latest (as of 2026-04-12) ships avformat-62, avcodec-62, avutil-60, swscale-9, swresample-6, avfilter-11. These are hardcoded in `binding.gyp` copies section — will need updating when FFmpeg major versions bump.
+- **MSVC /std:c++17 vs /std:c++20**: node-gyp sets `/std:c++20` by default, our binding.gyp overrides to `/std:c++17`. This produces a benign D9025 warning. No issue.
+- **`npm install` runs `node-gyp rebuild`**: Removed explicit `install` script from package.json. Use `npm install --ignore-scripts` then `npm run build` manually to control FFmpeg download timing.
+- **Binary loading order**: `bin/` (project-level, Electron-reliable) → `build/Release/` (dev) → `dist/` (distribution). Three locations, not four — nImage had prebuilds/ which we don't use.
