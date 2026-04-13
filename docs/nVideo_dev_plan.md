@@ -94,19 +94,20 @@ Dedicated function to extract audio from video files (decode + re-encode).
 - [x] JS convenience wrapper in `lib/index.js`
 - [x] Tests: extract audio from MP4 → WAV (18ms), MP4 → MP3 (23ms) (2026-04-13)
 
-### Phase A4: Caching System ⬜ NEXT
+### Phase A4: Caching System ✅ COMPLETE
 
 Hash-based cache to avoid redundant transcoding.
 
-- [ ] Design cache key: `SHA256(input_path + input_mtime + JSON.stringify(config))`
-- [ ] Implement cache lookup/store in C++ or JS layer
-- [ ] Cache directory: `.nvideo-cache/` (configurable)
-- [ ] Cache metadata: `cache.json` with entry info
-- [ ] API: `cache: true/false`, `cacheDir`, `onCacheHit`, `onCacheMiss`
-- [ ] `nVideo.clearCache()` — remove all or by age
-- [ ] Tests: cache hit returns instantly, cache miss transcodes, mtime change invalidates
+- [x] Design cache key: `SHA256(input_path + input_mtime + JSON.stringify(config))`
+- [x] Implement cache lookup/store in JS layer (lib/index.js)
+- [x] Cache directory: `.nvideo-cache/` (configurable via `cacheDir`)
+- [x] Cache metadata: `cache.json` with entry info
+- [x] API: `cache: true/false`, `cacheDir`, `onCacheHit`, `onCacheMiss`
+- [x] `nVideo.clearCache()` — remove all or by age
+- [x] Integrated into `transcode()`, `remux()`, `convert()`, `extractAudio()`
+- [x] Tests: cache hit returns instantly (4ms vs 2960ms), cache miss transcodes, clearCache works (2026-04-13)
 
-### Phase A5: Hardware Acceleration ⬜
+### Phase A5: Hardware Acceleration ⬜ NEXT
 
 GPU-accelerated encode/decode via FFmpeg's hardware encoders.
 

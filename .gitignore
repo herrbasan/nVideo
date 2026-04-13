@@ -6,6 +6,7 @@ build/
 deps/
 dist/
 bin/
+test_media/
 
 # Files
 *.node

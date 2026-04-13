@@ -178,3 +178,20 @@ _This section is for the agent to record discoveries, patterns, gotchas, and dec
 - **MSVC /std:c++17 vs /std:c++20**: node-gyp sets `/std:c++20` by default, our binding.gyp overrides to `/std:c++17`. This produces a benign D9025 warning. No issue.
 - **`npm install` runs `node-gyp rebuild`**: Removed explicit `install` script from package.json. Use `npm install --ignore-scripts` then `npm run build` manually to control FFmpeg download timing.
 - **Binary loading order**: `bin/` (project-level, Electron-reliable) → `build/Release/` (dev) → `dist/` (distribution). Three locations, not four — nImage had prebuilds/ which we don't use.
+
+### Phase 0 Verification (2026-04-12) ✅ COMPLETE
+
+**MSVC Build Verified:**
+- VS2022 (v143 toolset) successfully builds `nvideo.node` (126,464 bytes)
+- 6 FFmpeg DLLs copied to `build/Release/`: avformat-62.dll, avcodec-62.dll, avutil-60.dll, swscale-9.dll, swresample-6.dll, avfilter-11.dll
+- `npm run build` works: FFmpeg download skipped (already present), configure + build succeed
+
+**JS Loading Verified:**
+- `require('./lib')` loads successfully
+- `n.version()` returns `"0.1.0"`
+- Only export is `version` (as expected for Phase 0 skeleton)
+
+**Electron Rebuild Verified:**
+- `@electron/rebuild -f -w nvideo` succeeds with Electron v24.14.0
+- Rebuilt `nvideo.node` loads correctly in Electron
+- Use `electron@latest` (not pinned version) — old Electron headers (v16) no longer available at standard URL
