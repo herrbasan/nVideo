@@ -118,6 +118,7 @@ struct TranscodeOptions {
     VideoOpts video;
     AudioOpts audio;
     int threads = 0;             // 0 = auto
+    std::string hwaccel;         // "cuda", "qsv", "vaapi", or empty (software)
 };
 
 // Transcode completion result
@@ -205,6 +206,9 @@ public:
 
     // Get estimated duration from probe (used for progress reporting)
     static double probeDuration(const char* path);
+
+    // Hardware acceleration helper
+    static AVBufferRef* createHwDeviceContext(const char* hwaccel);
 
     // ==================== Audio Decode (Stateful) ====================
 

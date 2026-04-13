@@ -562,6 +562,10 @@ static bool ParseTranscodeOptions(Napi::Env env, Napi::Object opts, TranscodeOpt
         outOpts.threads = opts.Get("threads").As<Napi::Number>().Int32Value();
     }
 
+    if (opts.Has("hwaccel")) {
+        outOpts.hwaccel = opts.Get("hwaccel").As<Napi::String>().Utf8Value();
+    }
+
     return true;
 }
 

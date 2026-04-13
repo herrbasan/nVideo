@@ -1109,6 +1109,31 @@ extern "C" {
 #include <libavutil/time.h>
 }
 
+// Helper: Create hardware device context for given hwaccel type
+AVBufferRef* FFmpegProcessor::createHwDeviceContext(const char* hwaccel) {
+    AVHWDeviceType type = AV_HWDEVICE_TYPE_NONE;
+    
+    if (strcmp(hwaccel, "cuda") == 0) {
+        type = AV_HWDEVICE_TYPE_CUDA;
+    } else if (strcmp(hwaccel, "qsv") == 0) {
+        type = AV_HWDEVICE_TYPE_QSV;
+    } else if (strcmp(hwaccel, "vaapi") == 0) {
+        type = AV_HWDEVICE_TYPE_VAAPI;
+    } else if (strcmp(hwaccel, "d3d11va") == 0) {
+        type = AV_HWDEVICE_TYPE_D3D11VA;
+    } else {
+        return nullptr;
+    }
+    
+    AVBufferRef* hwDeviceCtx = nullptr;
+    int ret = av_hwdevice_ctx_create(&hwDeviceCtx, type, nullptr, nullptr, 0);
+    if (ret < 0) {
+        return nullptr;
+    }
+    
+    return hwDeviceCtx;
+}
+
 double FFmpegProcessor::probeDuration(const char* path) {
     AVFormatContext* fmtCtx = nullptr;
     if (avformat_open_input(&fmtCtx, path, nullptr, nullptr) < 0) {
@@ -1224,6 +1249,22 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         avcodec_parameters_to_context(videoDecCtx, videoStream->codecpar);
         if (opts.threads > 0) videoDecCtx->thread_count = opts.threads;
         videoDecCtx->thread_type = FF_THREAD_FRAME | FF_THREAD_SLICE;
+
+        // Hardware decode setup
+        AVBufferRef* hwDeviceCtx = nullptr;
+        bool hwDecode = !opts.hwaccel.empty();
+        if (hwDecode) {
+            hwDeviceCtx = createHwDeviceContext(opts.hwaccel.c_str());
+            if (hwDeviceCtx) {
+                videoDecCtx->hw_device_ctx = av_buffer_ref(hwDeviceCtx);
+                // Get supported HW pixel formats
+                const enum AVPixelFormat* hwPixFmt = videoDec->pix_fmts;
+                if (hwPixFmt && *hwPixFmt != AV_PIX_FMT_NONE) {
+                    videoDecCtx->pix_fmt = *hwPixFmt;
+                }
+            }
+        }
+
         if ((ret = avcodec_open2(videoDecCtx, videoDec, nullptr)) < 0) {
             error.message = std::string("Failed to open video decoder: ") + av_err_to_string(ret);
             error.operation = "open";
@@ -1254,9 +1295,58 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         videoEncCtx->height = encHeight;
         videoEncCtx->time_base = videoStream->time_base;
 
-        // Pixel format
+        // Pixel format - check if hardware encoder
         AVPixelFormat pixFmt = AV_PIX_FMT_YUV420P;
-        if (!opts.video.pixelFormat.empty()) {
+        bool hwEncode = !opts.hwaccel.empty();
+        AVBufferRef* hwFramesCtx = nullptr;
+
+        if (hwEncode && hwDeviceCtx) {
+            // Get supported pixel formats from encoder
+            const enum AVPixelFormat* encPixFmts = videoEnc->pix_fmts;
+            AVPixelFormat hwPixFmt = AV_PIX_FMT_NONE;
+            
+            // Find HW pixel format for this encoder
+            if (opts.hwaccel == "cuda") {
+                hwPixFmt = AV_PIX_FMT_CUDA;
+            } else if (opts.hwaccel == "qsv") {
+                hwPixFmt = AV_PIX_FMT_QSV;
+            } else if (opts.hwaccel == "vaapi") {
+                hwPixFmt = AV_PIX_FMT_VAAPI;
+            } else if (opts.hwaccel == "d3d11va") {
+                hwPixFmt = AV_PIX_FMT_D3D11;
+            }
+            
+            // Check if encoder supports the HW format
+            if (hwPixFmt != AV_PIX_FMT_NONE) {
+                bool supported = false;
+                if (encPixFmts) {
+                    for (int i = 0; encPixFmts[i] != AV_PIX_FMT_NONE; i++) {
+                        if (encPixFmts[i] == hwPixFmt) {
+                            supported = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (supported) {
+                    // Create HW frames context for encoder
+                    hwFramesCtx = av_hwframe_ctx_alloc(hwDeviceCtx);
+                    if (hwFramesCtx) {
+                        AVHWFramesContext* framesCtx = (AVHWFramesContext*)hwFramesCtx->data;
+                        framesCtx->format = hwPixFmt;
+                        framesCtx->sw_format = AV_PIX_FMT_NV12; // Common intermediate format
+                        framesCtx->width = encWidth;
+                        framesCtx->height = encHeight;
+                        
+                        ret = av_hwframe_ctx_init(hwFramesCtx);
+                        if (ret >= 0) {
+                            videoEncCtx->hw_frames_ctx = av_buffer_ref(hwFramesCtx);
+                            pixFmt = hwPixFmt;
+                        }
+                    }
+                }
+            }
+        } else if (!opts.video.pixelFormat.empty()) {
             if (opts.video.pixelFormat == "yuv420p") pixFmt = AV_PIX_FMT_YUV420P;
             else if (opts.video.pixelFormat == "yuv422p") pixFmt = AV_PIX_FMT_YUV422P;
             else if (opts.video.pixelFormat == "yuv444p") pixFmt = AV_PIX_FMT_YUV444P;
@@ -1317,11 +1407,19 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         if (opts.threads > 0) videoEncCtx->thread_count = opts.threads;
         videoEncCtx->thread_type = FF_THREAD_FRAME | FF_THREAD_SLICE;
 
-        if ((ret = avcodec_open2(videoEncCtx, videoEnc, nullptr)) < 0) {
+        // For HW encoding, we need to pass hw_frames_ctx via options
+        AVDictionary* encOpts = nullptr;
+        if (hwEncode && hwFramesCtx) {
+            // hw_frames_ctx is already set on videoEncCtx, no need for options
+        }
+
+        if ((ret = avcodec_open2(videoEncCtx, videoEnc, &encOpts)) < 0) {
+            av_dict_free(&encOpts);
             error.message = std::string("Failed to open video encoder: ") + av_err_to_string(ret);
             error.operation = "open";
             goto cleanup;
         }
+        av_dict_free(&encOpts);
 
         videoOutStream = avformat_new_stream(ofmtCtx, nullptr);
         if (!videoOutStream) {
@@ -1332,10 +1430,16 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         avcodec_parameters_from_context(videoOutStream->codecpar, videoEncCtx);
         videoOutStream->time_base = videoEncCtx->time_base;
 
-        // Setup SwsContext for scaling if dimensions differ
-        if (encWidth != videoDecCtx->width || encHeight != videoDecCtx->height) {
+        // Setup SwsContext for scaling if dimensions differ (only for SW encoding)
+        if (!hwEncode && (encWidth != videoDecCtx->width || encHeight != videoDecCtx->height)) {
             swsCtx = sws_getContext(videoDecCtx->width, videoDecCtx->height, videoDecCtx->pix_fmt,
                                    encWidth, encHeight, videoEncCtx->pix_fmt, SWS_BILINEAR, nullptr, nullptr, nullptr);
+        }
+
+        // If HW encoding is enabled but no filters specified, skip filter graph
+        // The encoder will handle SW->HW frame transfer internally if supported
+        if (hwEncode && hwFramesCtx && opts.video.filters.empty()) {
+            // No filter graph needed - encoder handles frame conversion
         }
 
         // Setup video filter graph if filters are specified
