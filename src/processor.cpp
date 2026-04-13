@@ -2149,6 +2149,8 @@ bool FFmpegProcessor::remux(const char* inputPath, const char* outputPath,
         pkt->pos = -1;
 
         if ((ret = av_interleaved_write_frame(ofmtCtx, pkt)) < 0) {
+                fprintf(stderr, "[CONCAT] Write failed: ret=%d stream#%d pts=%lld dts=%lld\n",
+                    ret, pkt->stream_index, (long long)pkt->pts, (long long)pkt->dts);
             error.message = std::string("Failed to write packet: ") + av_err_to_string(ret);
             error.operation = "write";
             error.timestamp = pkt->pts * av_q2d(inStream->time_base);
@@ -2221,8 +2223,9 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
 
     // Track cumulative timestamp offsets per stream (in output time_base)
     // Must be declared early to avoid goto skip issues
-    std::vector<int64_t> streamOffsets;
-    std::vector<int64_t> streamMaxDts;
+    std::vector<int64_t> streamOffsets;       // Cumulative offset to add to each packet
+    std::vector<int64_t> streamMaxDtsOut;     // Max DTS seen in OUTPUT time_base (reset per file, before offset)
+    std::vector<int64_t> streamMaxDtsWritten; // Max DTS actually written to output (after offset, cumulative)
     std::vector<AVRational> streamInTimeBases;
     bool timeBasesInitialized = false;
 
@@ -2268,7 +2271,8 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
 
     // Initialize tracking vectors
     streamOffsets.resize(ofmtCtx->nb_streams, 0);
-    streamMaxDts.resize(ofmtCtx->nb_streams, AV_NOPTS_VALUE);
+    streamMaxDtsOut.resize(ofmtCtx->nb_streams, AV_NOPTS_VALUE);
+    streamMaxDtsWritten.resize(ofmtCtx->nb_streams, AV_NOPTS_VALUE);
     streamInTimeBases.resize(ofmtCtx->nb_streams);
 
     // Open output file
@@ -2355,7 +2359,7 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
 
             // Update max DTS before rescaling (in input time_base)
             if (pkt->dts != AV_NOPTS_VALUE) {
-                int64_t* maxDts = &streamMaxDts[outStreamIdx];
+                int64_t* maxDts = &streamMaxDtsOut[outStreamIdx];
                 if (*maxDts == AV_NOPTS_VALUE || pkt->dts > *maxDts) {
                     *maxDts = pkt->dts;
                 }
@@ -2363,18 +2367,46 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
 
             pkt->stream_index = outStreamIdx;
             
-            // Rescale timestamps to output time_base
+            // Rescale timestamps to output time_base FIRST
             av_packet_rescale_ts(pkt, inStream->time_base, outStream->time_base);
             
-            // Add cumulative offset
-            if (pkt->pts != AV_NOPTS_VALUE) pkt->pts += streamOffsets[outStreamIdx];
-            if (pkt->dts != AV_NOPTS_VALUE) pkt->dts += streamOffsets[outStreamIdx];
+            // Track max DTS in OUTPUT time_base (after rescaling)
+            if (pkt->dts != AV_NOPTS_VALUE) {
+                int64_t* maxDts = &streamMaxDtsOut[outStreamIdx];
+                if (*maxDts == AV_NOPTS_VALUE || pkt->dts > *maxDts) {
+                    *maxDts = pkt->dts;
+                }
+            }
+            
+            // Add cumulative offset (already in output time_base)
+            if (pkt->pts != AV_NOPTS_VALUE) {
+                pkt->pts += streamOffsets[outStreamIdx];
+            }
+            if (pkt->dts != AV_NOPTS_VALUE) {
+                int64_t newDts = pkt->dts + streamOffsets[outStreamIdx];
+                // Ensure DTS is monotonically increasing
+                int64_t* maxWritten = &streamMaxDtsWritten[outStreamIdx];
+                if (*maxWritten != AV_NOPTS_VALUE && newDts <= *maxWritten) {
+                    // Need to increase offset to ensure monotonic DTS
+                    int64_t additionalOffset = *maxWritten - newDts + 1;
+                    streamOffsets[outStreamIdx] += additionalOffset;
+                    newDts = pkt->dts + streamOffsets[outStreamIdx];
+                    // Also adjust PTS to maintain PTS >= DTS relationship
+                    if (pkt->pts != AV_NOPTS_VALUE) {
+                        pkt->pts += additionalOffset;
+                    }
+                }
+                pkt->dts = newDts;
+                if (streamMaxDtsWritten[outStreamIdx] == AV_NOPTS_VALUE || newDts > streamMaxDtsWritten[outStreamIdx]) {
+                    streamMaxDtsWritten[outStreamIdx] = newDts;
+                }
+            }
             if (pkt->duration > 0) {
                 pkt->duration = av_rescale_q(pkt->duration, inStream->time_base, outStream->time_base);
             }
             pkt->pos = -1;
 
-            if ((ret = av_interleaved_write_frame(ofmtCtx, pkt)) < 0) {
+            if ((ret = av_write_frame(ofmtCtx, pkt)) < 0) {
                 error.message = std::string("Failed to write packet: ") + av_err_to_string(ret);
                 error.operation = "write";
                 error.timestamp = processedDuration;
@@ -2411,20 +2443,21 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
             }
         }
 
-        // After processing this file, update offsets for next file
-        // Flush decoder buffers
+        // After processing this file, update cumulative offsets for next file.
         avformat_close_input(&ifmtCtx);
 
-        // Calculate this file's duration and add to offsets
-        double fileDuration = probeDuration(inputPaths[fileIdx]);
+        fprintf(stderr, "[CONCAT] End of file #%d: maxDtsOut[video]=%lld maxDtsOut[audio]=%lld\n",
+            fileIdx, (long long)streamMaxDtsOut[0], (long long)streamMaxDtsOut[1]);
+
         for (unsigned int i = 0; i < ofmtCtx->nb_streams; i++) {
-            if (streamMaxDts[i] != AV_NOPTS_VALUE) {
-                // Convert file duration to timestamp units and add to offset
-                int64_t durationInTb = av_rescale_q(static_cast<int64_t>(fileDuration * AV_TIME_BASE), 
-                    AV_TIME_BASE_Q, ofmtCtx->streams[i]->time_base);
-                streamOffsets[i] += durationInTb;
+            if (streamMaxDtsOut[i] != AV_NOPTS_VALUE) {
+                streamOffsets[i] += streamMaxDtsOut[i] + 1;
             }
+            streamMaxDtsOut[i] = AV_NOPTS_VALUE;
         }
+        
+        fprintf(stderr, "[CONCAT] After file #%d: offset[video]=%lld offset[audio]=%lld\n",
+            fileIdx, (long long)streamOffsets[0], (long long)streamOffsets[1]);
     }
 
     av_write_trailer(ofmtCtx);
