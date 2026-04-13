@@ -2223,17 +2223,46 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
         goto cleanup;
     }
 
-    // Copy streams from first input
+    // Copy streams from first input - only video/audio streams
     for (unsigned int i = 0; i < ifmtCtx->nb_streams; i++) {
         AVStream* inStream = ifmtCtx->streams[i];
+        
+        // Skip non-video/audio streams (data, attachments, etc.)
+        if (inStream->codecpar->codec_type != AVMEDIA_TYPE_VIDEO && 
+            inStream->codecpar->codec_type != AVMEDIA_TYPE_AUDIO) {
+            continue;
+        }
+        
         AVStream* outStream = avformat_new_stream(ofmtCtx, nullptr);
         if (!outStream) {
             error.message = "Failed to create output stream";
             error.operation = "open";
             goto cleanup;
         }
-        avcodec_parameters_copy(outStream->codecpar, inStream->codecpar);
+        ret = avcodec_parameters_copy(outStream->codecpar, inStream->codecpar);
+        if (ret < 0) {
+            error.message = std::string("Failed to copy codec parameters: ") + av_err_to_string(ret);
+            error.operation = "open";
+            goto cleanup;
+        }
         outStream->time_base = inStream->time_base;
+        
+        // Ensure codec parameters are complete for muxer
+        outStream->codecpar->codec_tag = 0;
+        
+        // Explicitly copy additional parameters that muxers need
+        if (inStream->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
+            // Ensure sample_rate and frame_size are set
+            if (outStream->codecpar->sample_rate <= 0) {
+                outStream->codecpar->sample_rate = inStream->codecpar->sample_rate;
+            }
+            if (outStream->codecpar->frame_size <= 0) {
+                outStream->codecpar->frame_size = inStream->codecpar->frame_size;
+            }
+            if (outStream->codecpar->block_align <= 0) {
+                outStream->codecpar->block_align = inStream->codecpar->block_align;
+            }
+        }
     }
 
     // Close first input - will reopen each file during concat
@@ -2288,6 +2317,14 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
 
         while (av_read_frame(ifmtCtx, pkt) >= 0) {
             AVStream* inStream = ifmtCtx->streams[pkt->stream_index];
+            
+            // Skip packets from streams we didn't copy (data/attachments)
+            if (inStream->codecpar->codec_type != AVMEDIA_TYPE_VIDEO && 
+                inStream->codecpar->codec_type != AVMEDIA_TYPE_AUDIO) {
+                av_packet_unref(pkt);
+                continue;
+            }
+            
             AVStream* outStream = ofmtCtx->streams[pkt->stream_index];
 
             // Adjust timestamps - offset by processed duration
@@ -2299,6 +2336,8 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
                     inStream->time_base
                 );
                 pkt->pts += timeOffset;
+                // Ensure non-negative
+                if (pkt->pts < 0) pkt->pts = 0;
             }
             if (pkt->dts != AV_NOPTS_VALUE) {
                 int64_t timeOffset = av_rescale_q(
@@ -2307,6 +2346,8 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
                     inStream->time_base
                 );
                 pkt->dts += timeOffset;
+                // Ensure non-negative
+                if (pkt->dts < 0) pkt->dts = 0;
             }
             pkt->stream_index = outStream->index;
             pkt->pos = -1;
