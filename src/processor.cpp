@@ -1875,11 +1875,29 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             while (avcodec_receive_frame(videoDecCtx, frame) >= 0) {
                 AVFrame* encFrame = frame;
 
+                // HW decode: transfer frame from GPU to CPU memory if needed
+                AVFrame* swFrame = nullptr;
+                if (frame->hw_frames_ctx || frame->format == AV_PIX_FMT_CUDA ||
+                    frame->format == AV_PIX_FMT_QSV || frame->format == AV_PIX_FMT_VAAPI ||
+                    frame->format == AV_PIX_FMT_D3D11) {
+                    swFrame = av_frame_alloc();
+                    if (av_hwframe_transfer_data(swFrame, frame, 0) >= 0) {
+                        swFrame->pts = frame->pts;
+                        swFrame->pkt_dts = frame->pkt_dts;
+                        swFrame->duration = frame->duration;
+                        encFrame = swFrame;
+                    } else {
+                        av_frame_free(&swFrame);
+                        swFrame = nullptr;
+                    }
+                }
+
                 // Process through filter graph if configured
                 if (videoFilterGraph && videoBuffersrcCtx && videoBuffersinkCtx) {
-                    ret = av_buffersrc_add_frame_flags(videoBuffersrcCtx, frame, 0);
+                    ret = av_buffersrc_add_frame_flags(videoBuffersrcCtx, encFrame, 0);
                     if (ret < 0) {
                         av_frame_unref(frame);
+                        if (swFrame) av_frame_free(&swFrame);
                         continue;
                     }
 
@@ -1904,11 +1922,13 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         }
                         av_frame_unref(filteredFrame);
                     }
+                    av_frame_free(&filteredFrame);
                     av_frame_unref(frame);
+                    if (swFrame) av_frame_free(&swFrame);
                 } else {
-                    // Scale if needed (no filter graph)
+                    // Scale if needed (no filter graph) - use encFrame (already SW if HW decoded)
                     if (swsCtx) {
-                        sws_scale(swsCtx, frame->data, frame->linesize, 0, frame->height,
+                        sws_scale(swsCtx, encFrame->data, encFrame->linesize, 0, encFrame->height,
                                   scaledFrame->data, scaledFrame->linesize);
                         encFrame = scaledFrame;
                     }
@@ -1917,6 +1937,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                     if (ret < 0) {
                         if (encFrame == scaledFrame) av_frame_unref(encFrame);
                         av_frame_unref(frame);
+                        if (swFrame) av_frame_free(&swFrame);
                         continue;
                     }
 
@@ -1930,6 +1951,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
 
                     if (encFrame == scaledFrame) av_frame_unref(encFrame);
                     av_frame_unref(frame);
+                    if (swFrame) av_frame_free(&swFrame);
                 }
             }
 
@@ -2320,6 +2342,64 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
             goto cleanup;
         }
 
+        // For subsequent files, verify codecs match output streams (stream copy requires identical codecs)
+        if (fileIdx > 0) {
+            for (unsigned int i = 0; i < ifmtCtx->nb_streams; i++) {
+                AVMediaType type = ifmtCtx->streams[i]->codecpar->codec_type;
+                if (type != AVMEDIA_TYPE_VIDEO && type != AVMEDIA_TYPE_AUDIO) continue;
+
+                int outIdx = -1;
+                if (type == AVMEDIA_TYPE_VIDEO) {
+                    for (unsigned int j = 0; j < ofmtCtx->nb_streams; j++) {
+                        if (ofmtCtx->streams[j]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) { outIdx = j; break; }
+                    }
+                } else {
+                    for (unsigned int j = 0; j < ofmtCtx->nb_streams; j++) {
+                        if (ofmtCtx->streams[j]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) { outIdx = j; break; }
+                    }
+                }
+
+                if (outIdx >= 0) {
+                    AVCodecID inCodec = ifmtCtx->streams[i]->codecpar->codec_id;
+                    AVCodecID outCodec = ofmtCtx->streams[outIdx]->codecpar->codec_id;
+                    if (inCodec != outCodec) {
+                        const AVCodec* inCodecDesc = avcodec_find_decoder(inCodec);
+                        const AVCodec* outCodecDesc = avcodec_find_decoder(outCodec);
+                        error.message = std::string("Concat codec mismatch: file \"") + inputPaths[fileIdx] +
+                            "\" has " + (inCodecDesc ? inCodecDesc->name : "unknown") +
+                            " but output expects " + (outCodecDesc ? outCodecDesc->name : "unknown") +
+                            ". All files must have the same codec for stream-copy concat. " +
+                            "Use transcode() to convert files to a common format first.";
+                        error.operation = "open";
+                        avformat_close_input(&ifmtCtx);
+                        goto cleanup;
+                    }
+
+                    // Also check audio parameters for codec compatibility
+                    if (type == AVMEDIA_TYPE_AUDIO) {
+                        if (ifmtCtx->streams[i]->codecpar->sample_rate != ofmtCtx->streams[outIdx]->codecpar->sample_rate) {
+                            error.message = std::string("Concat sample rate mismatch: file \"") + inputPaths[fileIdx] +
+                                "\" has " + std::to_string(ifmtCtx->streams[i]->codecpar->sample_rate) + "Hz but output expects " +
+                                std::to_string(ofmtCtx->streams[outIdx]->codecpar->sample_rate) + "Hz. " +
+                                "All files must have the same sample rate for stream-copy concat.";
+                            error.operation = "open";
+                            avformat_close_input(&ifmtCtx);
+                            goto cleanup;
+                        }
+                        if (ifmtCtx->streams[i]->codecpar->ch_layout.nb_channels != ofmtCtx->streams[outIdx]->codecpar->ch_layout.nb_channels) {
+                            error.message = std::string("Concat channel count mismatch: file \"") + inputPaths[fileIdx] +
+                                "\" has " + std::to_string(ifmtCtx->streams[i]->codecpar->ch_layout.nb_channels) + " channels but output expects " +
+                                std::to_string(ofmtCtx->streams[outIdx]->codecpar->ch_layout.nb_channels) + " channels. " +
+                                "All files must have the same channel count for stream-copy concat.";
+                            error.operation = "open";
+                            avformat_close_input(&ifmtCtx);
+                            goto cleanup;
+                        }
+                    }
+                }
+            }
+        }
+
         // Build stream mapping: input stream index -> output stream index
         std::vector<int> streamMap(ifmtCtx->nb_streams, -1);
         int videoOutIdx = -1, audioOutIdx = -1;
@@ -2357,24 +2437,34 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
             AVStream* inStream = ifmtCtx->streams[inStreamIdx];
             AVStream* outStream = ofmtCtx->streams[outStreamIdx];
 
-            // Update max DTS before rescaling (in input time_base)
-            if (pkt->dts != AV_NOPTS_VALUE) {
-                int64_t* maxDts = &streamMaxDtsOut[outStreamIdx];
-                if (*maxDts == AV_NOPTS_VALUE || pkt->dts > *maxDts) {
-                    *maxDts = pkt->dts;
-                }
-            }
-
             pkt->stream_index = outStreamIdx;
             
-            // Rescale timestamps to output time_base FIRST
+            // Sanitize timestamps that are suspiciously close to AV_NOPTS_VALUE (garbage from some formats)
+            // Valid negative timestamps (edit lists) are typically small negatives, not near INT64_MIN
+            // Use a threshold: values within 1% of INT64 range from AV_NOPTS_VALUE are treated as invalid
+            const int64_t NOPTS_FUZZ = (INT64_MAX >> 10); // ~9 quintillion / 1024 = generous fuzz factor
+            if (pkt->dts != AV_NOPTS_VALUE && pkt->dts < (AV_NOPTS_VALUE + NOPTS_FUZZ)) {
+                pkt->dts = AV_NOPTS_VALUE;
+            }
+            if (pkt->pts != AV_NOPTS_VALUE && pkt->pts < (AV_NOPTS_VALUE + NOPTS_FUZZ)) {
+                pkt->pts = AV_NOPTS_VALUE;
+            }
+            
+            // Rescale timestamps to output time_base
             av_packet_rescale_ts(pkt, inStream->time_base, outStream->time_base);
             
-            // Track max DTS in OUTPUT time_base (after rescaling)
-            if (pkt->dts != AV_NOPTS_VALUE) {
+            // Track max timestamp (prefer DTS, fall back to PTS, only non-negative values)
+            int64_t trackTs = AV_NOPTS_VALUE;
+            if (pkt->dts != AV_NOPTS_VALUE && pkt->dts >= 0) {
+                trackTs = pkt->dts;
+            } else if (pkt->pts != AV_NOPTS_VALUE && pkt->pts >= 0) {
+                trackTs = pkt->pts;
+            }
+            
+            if (trackTs != AV_NOPTS_VALUE) {
                 int64_t* maxDts = &streamMaxDtsOut[outStreamIdx];
-                if (*maxDts == AV_NOPTS_VALUE || pkt->dts > *maxDts) {
-                    *maxDts = pkt->dts;
+                if (*maxDts == AV_NOPTS_VALUE || trackTs > *maxDts) {
+                    *maxDts = trackTs;
                 }
             }
             
@@ -2450,7 +2540,8 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
             fileIdx, (long long)streamMaxDtsOut[0], (long long)streamMaxDtsOut[1]);
 
         for (unsigned int i = 0; i < ofmtCtx->nb_streams; i++) {
-            if (streamMaxDtsOut[i] != AV_NOPTS_VALUE) {
+            // Only update offset from valid (non-negative) max DTS values
+            if (streamMaxDtsOut[i] != AV_NOPTS_VALUE && streamMaxDtsOut[i] >= 0) {
                 streamOffsets[i] += streamMaxDtsOut[i] + 1;
             }
             streamMaxDtsOut[i] = AV_NOPTS_VALUE;
@@ -2460,13 +2551,33 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
             fileIdx, (long long)streamOffsets[0], (long long)streamOffsets[1]);
     }
 
+    // Compute actual output duration from max DTS across all streams
+    int64_t maxDtsGlobal = 0;
+    for (unsigned int i = 0; i < ofmtCtx->nb_streams; i++) {
+        if (streamMaxDtsWritten[i] != AV_NOPTS_VALUE) {
+            int64_t dtsInAvTime = av_rescale_q(streamMaxDtsWritten[i], ofmtCtx->streams[i]->time_base, AV_TIME_BASE_Q);
+            if (dtsInAvTime > maxDtsGlobal) {
+                maxDtsGlobal = dtsInAvTime;
+            }
+        }
+    }
+    if (maxDtsGlobal > 0) {
+        ofmtCtx->duration = maxDtsGlobal;
+        for (unsigned int i = 0; i < ofmtCtx->nb_streams; i++) {
+            if (streamMaxDtsWritten[i] != AV_NOPTS_VALUE) {
+                ofmtCtx->streams[i]->duration = streamMaxDtsWritten[i] + 1;
+            }
+        }
+    }
+
     av_write_trailer(ofmtCtx);
 
     int64_t endTime = av_gettime();
-    result.duration = totalDuration;
+    double actualDuration = maxDtsGlobal > 0 ? static_cast<double>(maxDtsGlobal) / AV_TIME_BASE : totalDuration;
+    result.duration = actualDuration;
     result.size = totalBytes;
-    result.bitrate = totalDuration > 0 ? (totalBytes * 8 / totalDuration) : 0;
-    result.speed = totalDuration > 0 ? ((endTime - startTime) / 1000000.0) / totalDuration : 0;
+    result.bitrate = actualDuration > 0 ? (totalBytes * 8 / actualDuration) : 0;
+    result.speed = actualDuration > 0 ? ((endTime - startTime) / 1000000.0) / actualDuration : 0;
     result.timeMs = (endTime - startTime) / 1000;
     success = true;
 
