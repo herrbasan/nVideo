@@ -1,6 +1,6 @@
 # nVideo - Development Plan
 
-**Last Updated**: 2026-04-13 (Profiling complete — no optimization targets found)
+**Last Updated**: 2026-04-13 (Cache TTL: transmit-once pattern, 5 min default)
 
 **Spec**: [nVideo_spec.md](nVideo_spec.md)
 
@@ -99,16 +99,29 @@ Dedicated function to extract audio from video files (decode + re-encode).
 
 ### Phase A4: Caching System ✅ COMPLETE
 
-Hash-based cache to avoid redundant transcoding.
+Hash-based cache with transmit-once TTL to avoid redundant transcoding.
 
 - [x] Design cache key: `SHA256(input_path + input_mtime + JSON.stringify(config))`
 - [x] Implement cache lookup/store in JS layer (lib/index.js)
 - [x] Cache directory: `.nvideo-cache/` (configurable via `cacheDir`)
 - [x] Cache metadata: `cache.json` with entry info
-- [x] API: `cache: true/false`, `cacheDir`, `onCacheHit`, `onCacheMiss`
+- [x] API: `cache: true/false`, `cacheDir`, `cacheTTL`, `onCacheHit`, `onCacheMiss`
 - [x] `nVideo.clearCache()` — remove all or by age
 - [x] Integrated into `transcode()`, `remux()`, `convert()`, `extractAudio()`
 - [x] Tests: cache hit returns instantly (4ms vs 2960ms), cache miss transcodes, clearCache works (2026-04-13)
+- [x] **Transmit-once TTL** — default 5 min, retrieved entries deleted on next lookup (2026-04-13)
+
+#### Cache TTL Design (2026-04-13)
+
+| Feature | Behavior |
+|---------|----------|
+| Default TTL | 5 minutes |
+| Retrieved entries | Marked `retrievedAt`, deleted on next lookup |
+| Expired entries | Deleted during `lookupCache()` |
+| `cacheTTL: 0` | Infinite (no expiry, deleted only on retrieval or manual clear) |
+| Cleanup | On-demand during lookup — no timers, no background work |
+
+**Rationale**: Cache is meant for quick transmission of a file, not long-term storage. Once retrieved, the entry is dead weight. 5-minute TTL handles the case where the same transcode is called twice in quick succession.
 
 ### Phase A5: Hardware Acceleration ✅ COMPLETE
 

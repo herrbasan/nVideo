@@ -349,15 +349,18 @@ File-to-file operations can be expensive. The caching system avoids redundant wo
 .nvideo-cache/
 ├── abc123def456...mp4    # cached output file
 ├── 789xyz012abc...mkv
-└── cache.json            # metadata: { key → { input, config, outputPath, createdAt, size } }
+└── cache.json            # metadata: { key → { inputPath, createdAt, size, retrievedAt? } }
 ```
+
+**Transmit-once TTL**: Cache entries have a default 5-minute TTL. Once retrieved, the entry is marked for immediate deletion on the next cache operation. This prevents stale cache accumulation while supporting the common pattern of "transcode once, use the output, discard the cache."
 
 **API**:
 ```javascript
-// Cache enabled by default for transcode/convert/remux
+// Cache enabled by default for transcode/convert/remux/extractAudio
 nVideo.transcode('input.mkv', 'output.mp4', {
   cache: true,              // default: true
-  cacheDir: './.nvideo-cache', // default: os.tmpdir()/.nvideo-cache
+  cacheTTL: 5 * 60 * 1000,  // default: 5 minutes (0 = infinite)
+  cacheDir: './.nvideo-cache',
   video: { codec: 'libx264', crf: 23 },
   onCacheHit: (cachedPath) => console.log('Cache hit:', cachedPath),
   onCacheMiss: () => console.log('Cache miss, transcoding...')
@@ -369,8 +372,14 @@ nVideo.transcode('input.mkv', 'output.mp4', {
   video: { codec: 'libx264' }
 });
 
+// Infinite TTL (cache persists until retrieved or manually cleared)
+nVideo.transcode('input.mkv', 'output.mp4', {
+  cacheTTL: 0,
+  video: { codec: 'libx264' }
+});
+
 // Clear cache
-nVideo.clearCache();        // remove all cached files
+nVideo.clearCache();        // remove all cached files (including retrieved)
 nVideo.clearCache({ olderThan: 7 * 24 * 60 * 60 * 1000 }); // older than 7 days
 ```
 
@@ -378,12 +387,15 @@ nVideo.clearCache({ olderThan: 7 * 24 * 60 * 60 * 1000 }); // older than 7 days
 - Input file modified time changes → cache miss
 - Input file deleted → cache miss
 - Config differs → cache miss
-- Cache entry older than TTL → cache miss (default: no expiry)
+- Cache entry older than TTL → cache miss, entry deleted (default: 5 minutes)
+- Cache entry was retrieved → deleted on next lookup (transmit-once pattern)
 
 **Cache behavior**:
-- On cache hit: copy cached file to requested output path (fast), return immediately
+- On cache hit: copy cached file to requested output path (fast), mark entry as retrieved, return immediately
 - On cache miss: transcode normally, store output in cache, copy to output path
-- Cache entries are never deleted automatically (caller manages via `clearCache`)
+- Retrieved entries are deleted on the next cache operation (lookup or clearCache)
+- Expired entries are cleaned up during lookup — no timers, no background work
+- `cacheTTL: 0` disables TTL expiry (entries persist until retrieved or manually cleared)
 
 ### Hardware Acceleration
 
