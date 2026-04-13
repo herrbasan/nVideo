@@ -1,6 +1,6 @@
 # nVideo - Development Plan
 
-**Last Updated**: 2026-04-13 (Fix concat duration metadata, mixed format detection, HW decode)
+**Last Updated**: 2026-04-13 (Profiling complete — no optimization targets found)
 
 **Spec**: [nVideo_spec.md](nVideo_spec.md)
 
@@ -123,9 +123,9 @@ GPU-accelerated encode/decode via FFmpeg's hardware encoders.
 - [x] Tested: NVENC (h264_nvenc) working - 1187ms vs 14880ms software (12.5x faster)
 - [x] QSV partially works (depends on Intel GPU driver support) (2026-04-13)
 
-### Phase A6: Transcode Polish ⬜
+### Phase A6: Transcode Polish ✅ COMPLETE
 
-Fix remaining issues, optimize performance.
+Profiling complete — encoding dominates all operations, no optimization targets in nVideo code.
 
 - [x] Fix concat timestamp handling - time_base rescaling fixed (av_rescale_q)
 - [x] Rewrite concat to use FFmpeg concat demuxer (file list approach)
@@ -138,8 +138,19 @@ Fix remaining issues, optimize performance.
   - Uses av_write_frame instead of av_interleaved_write_frame
   - Tested: 2x 8.57s HEVC files → 17.63s output (within 3% of expected 17.13s)
 - [x] Fix remux progress stats - now uses packet timestamps instead of wall clock time
-- [ ] Profile hot paths: decode, filter, encode loops
-- [ ] Optimize filter graph setup (avoid redundant reinitialization)
+- [x] **Profiling hot paths** — encode dominates 93-99.7%, decode/filter/mux negligible (2026-04-13)
+- [x] **Filter graph optimization** — cancelled, scale filter overhead is 0.0% (2026-04-13)
+
+#### Profiling Results (2026-04-13)
+
+| Operation | Encode | Decode | Filter | Demux | Mux | Other |
+|-----------|--------|--------|--------|-------|-----|-------|
+| OGG→MP3 320k (340s) | 93.2% | 0.0% | - | 0.7% | 0.3% | 5.8% |
+| HEVC→H.264 1080p (8.6s) | 99.7%* | 0.0% | 0.0% | 0.2% | 0.0% | 0.0% |
+
+*Video encode is async/threaded (libx264), measured as "Encode async" between API calls.
+
+**Conclusion**: No optimization targets in nVideo code. Bottleneck is FFmpeg encoders.
 
 ---
 
