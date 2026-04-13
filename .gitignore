@@ -7,6 +7,7 @@ deps/
 dist/
 bin/
 test_media/
+.nvideo-cache
 
 # Files
 *.node
