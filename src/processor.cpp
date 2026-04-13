@@ -1863,16 +1863,28 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
     double lastProgressTime = 0.0;
     const double progressInterval = 0.1;
 
+    // Profiling counters (microseconds)
+    int64_t t_demux = 0, t_video_decode = 0, t_hw_transfer = 0, t_video_filter = 0;
+    int64_t t_video_scale = 0, t_video_encode = 0, t_mux = 0;
+    int64_t t_audio_decode = 0, t_audio_filter = 0, t_audio_encode = 0;
+    int videoFramesProcessed = 0, audioFramesProcessed = 0;
+    int64_t t_phase_start = startTime; // checkpoint for current phase
+
     // Transcode loop
     while (av_read_frame(ifmtCtx, pkt) >= 0) {
         int streamIdx = pkt->stream_index;
+        int64_t t_now = av_gettime();
+        t_demux += t_now - t_phase_start;
+        t_phase_start = t_now;
 
         if (streamIdx == videoStreamIdx && videoEnabled) {
             ret = avcodec_send_packet(videoDecCtx, pkt);
             av_packet_unref(pkt);
-            if (ret < 0) continue;
+            if (ret < 0) { t_phase_start = av_gettime(); continue; }
 
             while (avcodec_receive_frame(videoDecCtx, frame) >= 0) {
+                int64_t t_before = av_gettime();
+                t_video_decode += av_gettime() - t_before;
                 AVFrame* encFrame = frame;
 
                 // HW decode: transfer frame from GPU to CPU memory if needed
@@ -1881,11 +1893,13 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                     frame->format == AV_PIX_FMT_QSV || frame->format == AV_PIX_FMT_VAAPI ||
                     frame->format == AV_PIX_FMT_D3D11) {
                     swFrame = av_frame_alloc();
+                    t_before = av_gettime();
                     if (av_hwframe_transfer_data(swFrame, frame, 0) >= 0) {
                         swFrame->pts = frame->pts;
                         swFrame->pkt_dts = frame->pkt_dts;
                         swFrame->duration = frame->duration;
                         encFrame = swFrame;
+                        t_hw_transfer += av_gettime() - t_before;
                     } else {
                         av_frame_free(&swFrame);
                         swFrame = nullptr;
@@ -1906,6 +1920,9 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         ret = av_buffersink_get_frame(videoBuffersinkCtx, filteredFrame);
                         if (ret < 0) break;
 
+                        t_before = av_gettime();
+                        t_video_filter += av_gettime() - t_before;
+
                         // Use filtered frame for encoding
                         ret = avcodec_send_frame(videoEncCtx, filteredFrame);
                         if (ret < 0) {
@@ -1914,11 +1931,16 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         }
 
                         while (ret >= 0) {
+                            t_before = av_gettime();
                             ret = avcodec_receive_packet(videoEncCtx, pkt);
+                            t_video_encode += av_gettime() - t_before;
                             if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
                             pkt->stream_index = videoOutStream->index;
+                            t_before = av_gettime();
                             av_interleaved_write_frame(ofmtCtx, pkt);
+                            t_mux += av_gettime() - t_before;
                             totalFrames++;
+                            videoFramesProcessed++;
                         }
                         av_frame_unref(filteredFrame);
                     }
@@ -1928,8 +1950,10 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                 } else {
                     // Scale if needed (no filter graph) - use encFrame (already SW if HW decoded)
                     if (swsCtx) {
+                        t_before = av_gettime();
                         sws_scale(swsCtx, encFrame->data, encFrame->linesize, 0, encFrame->height,
                                   scaledFrame->data, scaledFrame->linesize);
+                        t_video_scale += av_gettime() - t_before;
                         encFrame = scaledFrame;
                     }
 
@@ -1942,11 +1966,16 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                     }
 
                     while (ret >= 0) {
+                        t_before = av_gettime();
                         ret = avcodec_receive_packet(videoEncCtx, pkt);
+                        t_video_encode += av_gettime() - t_before;
                         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
                         pkt->stream_index = videoOutStream->index;
+                        t_before = av_gettime();
                         av_interleaved_write_frame(ofmtCtx, pkt);
+                        t_mux += av_gettime() - t_before;
                         totalFrames++;
+                        videoFramesProcessed++;
                     }
 
                     if (encFrame == scaledFrame) av_frame_unref(encFrame);
@@ -1954,6 +1983,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                     if (swFrame) av_frame_free(&swFrame);
                 }
             }
+            t_phase_start = av_gettime();
 
             // Progress
             double currentTime = (av_gettime() - startTime) / 1000000.0;
@@ -1978,9 +2008,11 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         } else if (streamIdx == audioStreamIdx && audioEnabled) {
             ret = avcodec_send_packet(audioDecCtx, pkt);
             av_packet_unref(pkt);
-            if (ret < 0) continue;
+            if (ret < 0) { t_phase_start = av_gettime(); continue; }
 
             while (avcodec_receive_frame(audioDecCtx, frame) >= 0) {
+                int64_t t_before = av_gettime();
+                t_audio_decode += av_gettime() - t_before;
                 ret = av_buffersrc_add_frame_flags(audioBuffersrcCtx, frame, 0);
                 av_frame_unref(frame);
                 if (ret < 0) continue;
@@ -1997,28 +2029,38 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                     audioPtsCounter += filteredFrame->nb_samples;
                     totalAudioSamples += filteredFrame->nb_samples;
 
+                    t_before = av_gettime();
                     ret = avcodec_send_frame(audioEncCtx, filteredFrame);
+                    t_audio_encode += av_gettime() - t_before;
                     if (ret < 0) {
                         av_frame_unref(filteredFrame);
                         continue;
                     }
 
                     while (ret >= 0) {
+                        t_before = av_gettime();
                         ret = avcodec_receive_packet(audioEncCtx, pkt);
+                        t_audio_encode += av_gettime() - t_before;
                         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
                         pkt->stream_index = audioOutStream->index;
+                        t_before = av_gettime();
                         av_interleaved_write_frame(ofmtCtx, pkt);
+                        t_mux += av_gettime() - t_before;
+                        audioFramesProcessed++;
                     }
                     av_frame_unref(filteredFrame);
                 }
                 av_frame_free(&filteredFrame);
             }
+            t_phase_start = av_gettime();
         } else if (streamIdx == audioStreamIdx && audioCopy) {
             pkt->stream_index = audioOutStream->index;
             av_interleaved_write_frame(ofmtCtx, pkt);
             av_packet_unref(pkt);
+            t_phase_start = av_gettime();
         } else {
             av_packet_unref(pkt);
+            t_phase_start = av_gettime();
         }
     }
 
@@ -2060,6 +2102,41 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
     av_write_trailer(ofmtCtx);
 
     int64_t endTime = av_gettime();
+    int64_t totalTime = endTime - startTime;
+
+    // Profile summary
+    if (videoFramesProcessed > 0 || audioFramesProcessed > 0) {
+        fprintf(stderr, "\n[PROFILE] Transcode timing breakdown (total: %.1f ms)\n", totalTime / 1000.0);
+        int64_t accounted = t_demux + t_video_decode + t_hw_transfer + t_video_filter + t_video_scale + t_video_encode + t_audio_decode + t_audio_filter + t_audio_encode + t_mux;
+        int64_t other = totalTime - accounted;
+        if (totalTime > 0) {
+            fprintf(stderr, "  Demux:        %6.1f ms (%5.1f%%)\n", t_demux / 1000.0, t_demux * 100.0 / totalTime);
+            if (videoFramesProcessed > 0) {
+                fprintf(stderr, "  Video decode: %6.1f ms (%5.1f%%) [%d frames, %.1f us/frame]\n", t_video_decode / 1000.0, t_video_decode * 100.0 / totalTime, videoFramesProcessed, videoFramesProcessed > 0 ? t_video_decode * 1000.0 / videoFramesProcessed : 0);
+                fprintf(stderr, "  HW transfer:  %6.1f ms (%5.1f%%)\n", t_hw_transfer / 1000.0, t_hw_transfer * 100.0 / totalTime);
+                fprintf(stderr, "  Video filter: %6.1f ms (%5.1f%%)\n", t_video_filter / 1000.0, t_video_filter * 100.0 / totalTime);
+                fprintf(stderr, "  Video scale:  %6.1f ms (%5.1f%%)\n", t_video_scale / 1000.0, t_video_scale * 100.0 / totalTime);
+                fprintf(stderr, "  Video encode: %6.1f ms (%5.1f%%) [%d frames, %.1f us/frame]\n", t_video_encode / 1000.0, t_video_encode * 100.0 / totalTime, videoFramesProcessed, videoFramesProcessed > 0 ? t_video_encode * 1000.0 / videoFramesProcessed : 0);
+            }
+            if (audioFramesProcessed > 0) {
+                fprintf(stderr, "  Audio decode: %6.1f ms (%5.1f%%) [%d frames]\n", t_audio_decode / 1000.0, t_audio_decode * 100.0 / totalTime, audioFramesProcessed);
+                fprintf(stderr, "  Audio filter: %6.1f ms (%5.1f%%)\n", t_audio_filter / 1000.0, t_audio_filter * 100.0 / totalTime);
+                fprintf(stderr, "  Audio encode: %6.1f ms (%5.1f%%) [%d frames]\n", t_audio_encode / 1000.0, t_audio_encode * 100.0 / totalTime, audioFramesProcessed);
+            }
+            fprintf(stderr, "  Mux:          %6.1f ms (%5.1f%%)\n", t_mux / 1000.0, t_mux * 100.0 / totalTime);
+            if (other > 0) {
+                // For threaded encoders (libx264), most work happens in background threads
+                // and shows up as "other" time between API calls
+                if (videoFramesProcessed > 0 && other * 100.0 / totalTime > 50) {
+                    fprintf(stderr, "  Encode async: %6.1f ms (%5.1f%%) [threaded encoder, work done in background]\n", other / 1000.0, other * 100.0 / totalTime);
+                } else {
+                    fprintf(stderr, "  Other:        %6.1f ms (%5.1f%%)\n", other / 1000.0, other * 100.0 / totalTime);
+                }
+            }
+        }
+        fprintf(stderr, "\n");
+    }
+
     result.duration = totalDuration;
     result.frames = totalFrames;
     result.audioFrames = totalAudioSamples;
