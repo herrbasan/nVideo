@@ -1,8 +1,8 @@
 # nVideo Architecture Specification
 
-**Last Updated**: 2026-04-12
+**Last Updated**: 2026-04-13
 
-**Version**: 0.1.0 - Vision
+**Version**: 0.2.0 - Two-Pipeline Architecture
 
 ## Vision
 
@@ -96,48 +96,105 @@ nVideo takes the **architectural separation** from ffmpeg-napi-interface (pure C
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Two Data Paths
+### Two Pipelines
 
-nVideo has two fundamentally different data paths depending on the use case:
+nVideo has two fundamentally different pipelines with different goals, APIs, and performance characteristics:
+
+#### Pipeline A: Transcode (File → File) — PRIMARY
+
+**Goal**: Maximum performance file-to-file transcoding. Equivalent to `ffmpeg` CLI but with better progress, hardware acceleration support, and optional caching.
+
+**Use cases**: Transcode, remux, convert, concat, extract audio, extract stream — any operation where input is a file path and output is a file path.
+
+**Design**:
+- Input: file path(s) + configuration object
+- Output: file path (success/failure + stats)
+- Entire pipeline runs in C++ on async worker thread
+- Zero frames touch JavaScript memory
+- Supports hardware acceleration (NVENC, QSV, VAAPI) via codec selection
+- Optional caching: hash(input_path + config) → cached output path
+- Progress via callbacks (`napi_threadsafe_function`)
 
 ```
-Path A: Transcode to File (90% of usage)
-═══════════════════════════════════════
+Node.js                          C++ (FFmpeg)
+───────                          ────────────
+nVideo.transcode(                ┌─────────────────────┐
+  'input.mkv',                   │ avformat_open_input │
+  'output.mp4',                  │ av_read_frame       │
+  { video: {...} }  ──────────► │ avcodec_decode      │
+);                               │ avfilter (scale)    │
+                                 │ avcodec_encode      │
+callback()  ◄────────────────── │ av_interleaved_write│
+                                 │ av_write_trailer    │
+                                 └─────────────────────┘
+                                          │
+                                          ▼
+                                    output.mp4 (disk)
 
-  Node.js                          C++ (FFmpeg)
-  ───────                          ────────────
-  nVideo.transcode(                ┌─────────────────────┐
-    'input.mkv',                   │ avformat_open_input │
-    'output.mp4',                  │ av_read_frame       │
-    { video: {...} }  ──────────► │ avcodec_decode      │
-  );                               │ avfilter (scale)    │
-                                   │ avcodec_encode      │
-  callback()  ◄────────────────── │ av_interleaved_write│
-                                   │ av_write_trailer    │
-                                   └─────────────────────┘
-                                            │
-                                            ▼
-                                      output.mp4 (disk)
-
-  Zero frames pass through V8 heap.
-  Node.js thread is free during processing (async worker).
-
-Path B: Stream to JavaScript (real-time playback)
-═══════════════════════════════════════════════
-
-  Node.js                          C++ (FFmpeg)
-  ───────                          ────────────
-                                   ┌─────────────────────┐
-  input.readVideoFrame(buf) ─────► │ av_read_frame       │
-              │                     │ avcodec_decode      │
-              │                     │ sws_scale ──────────┼──► buf (V8 memory)
-              ▼                     └─────────────────────┘
-          { data, pts }
-              │
-              ▼
-        SharedArrayBuffer ──────────► AudioWorklet / VideoFrame
-        (zero-copy to renderer)
+Zero frames pass through V8 heap.
+Node.js thread is free during processing (async worker).
 ```
+
+**Operations**:
+| Function | Description | CLI Equivalent |
+|----------|-------------|----------------|
+| `transcode(input, output, opts)` | Full re-encode with filters | `ffmpeg -i in -vf ... -c:v ... out` |
+| `remux(input, output)` | Stream copy, no re-encode | `ffmpeg -i in -c copy out` |
+| `convert(input, output, opts)` | Shorthand with auto-defaults | `ffmpeg -i in out` |
+| `concat(files, output)` | Join multiple files | `ffmpeg -f concat -i list.txt out` |
+| `extractStream(input, output, index)` | Copy single stream | `ffmpeg -i in -map 0:a:0 -c copy out` |
+| `extractAudio(input, output, opts)` | Decode + re-encode audio | `ffmpeg -i video.mp4 -vn -c:a pcm_s16le out.wav` |
+
+#### Pipeline B: Streaming (Chunk → Chunk) — FUTURE
+
+**Goal**: Frame-by-frame decode into caller-owned buffers for real-time processing. Primary use case: TTS/STT services, audio analysis.
+
+**Use cases**: Real-time audio decode for speech-to-text, video frame extraction for analysis, AudioWorklet playback.
+
+**Design**:
+- Input: `openInput(path)` → decoder instance
+- Output: `readAudio(buffer)` / `readVideoFrame(buffer)` → decoded data in caller's buffer
+- Zero-copy: C++ writes directly into caller's `Float32Array` / `Uint8Array`
+- Caller controls decode loop, timing, and buffer allocation
+- Supports seek, filter graphs, pixel format selection
+
+```
+Node.js                          C++ (FFmpeg)
+───────                          ────────────
+                                 ┌─────────────────────┐
+input.readVideoFrame(buf) ─────► │ av_read_frame       │
+            │                     │ avcodec_decode      │
+            │                     │ sws_scale ──────────┼──► buf (V8 memory)
+            ▼                     └─────────────────────┘
+        { data, pts }
+            │
+            ▼
+      SharedArrayBuffer ──────────► AudioWorklet / VideoFrame
+      (zero-copy to renderer)
+```
+
+**Operations**:
+| Function | Description |
+|----------|-------------|
+| `openInput(path)` | Open file, returns decoder instance |
+| `input.openDecoder(streamIndex)` | Initialize decoder for specific stream |
+| `input.readAudio(numSamples)` | Decode + resample into Float32Array |
+| `input.readVideoFrame(buffer)` | Decode + scale into Uint8Array |
+| `input.seek(seconds)` | Jump to timestamp |
+| `input.close()` | Release resources |
+### Dual Audio Pipeline
+
+Audio processing uses two fundamentally different approaches depending on the data path:
+
+**Path A (Transcode to file)** — Always uses FFmpeg's filter graph (`abuffer → [user filters] → aformat → abuffersink`). The filter graph handles resampling, frame sizing, channel layout conversion, and timestamp propagation internally. This is the correct approach because FFmpeg manages the entire audio frame lifecycle, producing correctly-timestamped frames that match the encoder's requirements exactly. The `aformat` filter ensures output matches the encoder's sample format, sample rate, and channel layout.
+
+```
+abuffer (decoder output) → [user filters, e.g. volume=0.5] → aformat (encoder format) → abuffersink → encoder
+```
+
+**Path B (Streaming to JS)** — Uses `SwrContext` (libswresample) directly for manual frame-by-frame resampling into caller-owned buffers. This gives the caller explicit control over buffer allocation and timing, which is required for real-time AudioWorklet/SharedArrayBuffer consumption where the caller drives the decode loop.
+
+The manual SWR+chunking approach is **not used** for transcode-to-file because it requires reinventing frame sizing, PTS propagation, and buffer management that FFmpeg's filter graph already handles correctly. The filter graph approach eliminated the audio encoding bugs (missing timestamps, incorrect bitrate, frame_size warnings) that the manual chunking code produced.
 
 ## Project Structure
 
@@ -175,56 +232,55 @@ nVideo/
 
 ## Feature Scope
 
-### Phase 1: Utility Functions (No Streaming)
+### Pipeline A: Transcode (File → File) — PRIMARY
 
-The highest-value, most-used features. These alone justify nVideo over ffmpeg CLI.
+These are the highest-value features. Fast, fire-and-forget, minimal JS involvement. Justify nVideo over ffmpeg CLI.
 
-| Feature | Description | Equivalent CLI |
-|---------|-------------|----------------|
-| `probe()` | Metadata, streams, codec info, tags, chapters | `ffprobe` |
-| `thumbnail()` | Seek to timestamp, decode single frame, return pixel data | `ffmpeg -ss t -i f -vframes 1` |
-| `waveform()` | Full audio decode, compute peak amplitudes per point | (custom) |
-| `transcode()` | Full transcode pipeline, output directly to disk | `ffmpeg -i in -c:v ... -c:a ... out` |
-| `remux()` | Copy streams to new container without re-encode | `ffmpeg -i in -c copy out` |
-| `convert()` | Shorthand for common format conversions | `ffmpeg -i in out` |
+#### Tier 1: Core Operations (Done or Near-Done)
 
-### Phase 2: Native API (Frame-Level Access)
+| Feature | Status | Description | Equivalent CLI |
+|---------|--------|-------------|----------------|
+| `probe()` | ✅ Done | Metadata, streams, codec info, tags | `ffprobe` |
+| `thumbnail()` | ✅ Done | Seek + decode single frame, return RGB | `ffmpeg -ss t -i f -vframes 1` |
+| `waveform()` | ✅ Done | Full audio decode, peak amplitudes | (custom) |
+| `transcode()` | ⚠️ Near | Full re-encode pipeline, file→file | `ffmpeg -i in -c:v ... -c:a ... out` |
+| `remux()` | ✅ Done | Stream copy, no re-encode | `ffmpeg -i in -c copy out` |
+| `convert()` | ✅ Done | Shorthand with auto-defaults | `ffmpeg -i in out` |
 
-Expose FFmpeg's C API for advanced use cases.
+#### Tier 2: Transcode Enhancements (Next)
 
-| Feature | Description |
-|---------|-------------|
-| `openInput()` / `close()` | Open media file, enumerate streams |
-| `readPacket()` | Read raw packets (before decode) |
-| `readVideoFrame(buf)` | Decode video frame, zero-copy into caller's buffer |
-| `readAudio(buf)` | Decode audio, zero-copy into caller's Float32Array |
-| `seek(seconds)` | Instant seeking via `av_seek_frame` |
-| `setVideoFilter(graph)` | Apply FFmpeg filter graph to video stream |
-| `setAudioFilter(graph)` | Apply FFmpeg filter graph to audio stream |
-| `openOutput()` / `addStream()` | Open output, configure codecs |
-| `writePacket()` / `writeHeader()` / `writeTrailer()` | Manual muxing control |
+| Feature | Status | Description |
+|---------|--------|-------------|
+| `extractAudio()` | ⬜ TODO | Decode + re-encode audio from video (e.g., video.mp4 → output.wav/mp3) |
+| Hardware acceleration | ⬜ TODO | NVENC, QSV, VAAPI codec selection in transcode options |
+| CRF/preset support | ⚠️ Broken | `av_opt_set` linking issue with BtbN FFmpeg build |
+| Caching system | ⬜ TODO | Hash(input_path + config) → cached output, skip redundant work |
+| Concat fix | ⚠️ Broken | Timestamp handling produces "non monotonically increasing dts" |
+| Transcode benchmark | ⬜ TODO | Prove parity with ffmpeg CLI performance |
 
-### Phase 3: Streaming + Playback (SAB)
-
-Real-time decode into SharedArrayBuffer for Electron renderer consumption.
+#### Tier 3: Advanced Transcode
 
 | Feature | Description |
 |---------|-------------|
-| Video streaming | Frame-by-frame decode → SAB → VideoFrame API / Canvas |
-| Audio streaming | Chunk decode → SAB ring buffer → AudioWorklet |
-| Synchronized A/V | Locked audio/video clock for playback |
-| Buffer pool | Pre-allocated frame buffers, zero GC pressure in render loops |
-
-### Phase 4: Advanced
-
-| Feature | Description |
-|---------|-------------|
-| Complex filter graphs | `-filter_complex` equivalent, multi-input multi-output |
+| Complex filter graphs | `-filter_complex` equivalent, multi-input/output |
 | Stream mapping | Select/duplicate/remap streams (FFmpeg `-map`) |
-| Hardware acceleration | NVENC, QSV, VAAPI, VideoToolbox |
-| Subtitle extraction/burn-in |
-| HDR tone mapping |
-| Network streaming | RTMP, HLS, DASH output |
+| Subtitle extraction/burn-in | Extract subtitle tracks, burn into video |
+| HDR tone mapping | HDR10/HLG → SDR conversion |
+
+### Pipeline B: Streaming (Chunk → Chunk) — FUTURE
+
+Frame-level decode for real-time processing. Primary use case: TTS/STT services.
+
+| Feature | Status | Description |
+|---------|--------|-------------|
+| `openInput()` / `close()` | ✅ Done | Open file, returns decoder instance |
+| `readAudio()` | ✅ Done | Zero-copy decode into Float32Array |
+| `readVideoFrame()` | ✅ Done | Zero-copy decode into Uint8Array |
+| `seek()` | ✅ Done | Jump to timestamp |
+| AudioWorklet player | ⬜ TODO | SAB ring buffer + AudioWorklet for playback |
+| VideoFrame player | ⬜ TODO | SAB frame queue + VideoFrame/Canvas rendering |
+| Buffer pool | ⬜ TODO | Pre-allocated buffers, zero GC pressure |
+| Synchronized A/V | ⬜ TODO | Locked audio/video clock for playback |
 
 ## Zero-Copy Strategy
 
@@ -279,6 +335,100 @@ Main Thread                          Renderer (AudioWorklet / VideoFrame)
     │         ▲ write              read ▼     │
     │    decoder.read()           process()   │
 ```
+
+## Transcode Pipeline Details
+
+### Caching System
+
+File-to-file operations can be expensive. The caching system avoids redundant work by hashing the input file + configuration and reusing previous output.
+
+**Cache key**: `SHA256(input_path + input_mtime + JSON.stringify(config))`
+
+**Cache storage**: `.nvideo-cache/` directory (configurable)
+```
+.nvideo-cache/
+├── abc123def456...mp4    # cached output file
+├── 789xyz012abc...mkv
+└── cache.json            # metadata: { key → { input, config, outputPath, createdAt, size } }
+```
+
+**API**:
+```javascript
+// Cache enabled by default for transcode/convert/remux
+nVideo.transcode('input.mkv', 'output.mp4', {
+  cache: true,              // default: true
+  cacheDir: './.nvideo-cache', // default: os.tmpdir()/.nvideo-cache
+  video: { codec: 'libx264', crf: 23 },
+  onCacheHit: (cachedPath) => console.log('Cache hit:', cachedPath),
+  onCacheMiss: () => console.log('Cache miss, transcoding...')
+});
+
+// Disable cache for one-off operations
+nVideo.transcode('input.mkv', 'output.mp4', {
+  cache: false,
+  video: { codec: 'libx264' }
+});
+
+// Clear cache
+nVideo.clearCache();        // remove all cached files
+nVideo.clearCache({ olderThan: 7 * 24 * 60 * 60 * 1000 }); // older than 7 days
+```
+
+**Cache invalidation**:
+- Input file modified time changes → cache miss
+- Input file deleted → cache miss
+- Config differs → cache miss
+- Cache entry older than TTL → cache miss (default: no expiry)
+
+**Cache behavior**:
+- On cache hit: copy cached file to requested output path (fast), return immediately
+- On cache miss: transcode normally, store output in cache, copy to output path
+- Cache entries are never deleted automatically (caller manages via `clearCache`)
+
+### Hardware Acceleration
+
+Hardware encoders are selected via the `codec` option, matching FFmpeg's encoder names. nVideo does not auto-detect hardware — the caller specifies which encoder to use.
+
+**Supported hardware encoders**:
+| Encoder | Platform | Codec | Notes |
+|---------|----------|-------|-------|
+| `h264_nvenc` | NVIDIA GPU | H.264 | Fast, good quality |
+| `hevc_nvenc` | NVIDIA GPU | H.265 | 4K, HDR |
+| `av1_nvenc` | NVIDIA RTX 40xx | AV1 | Next-gen |
+| `h264_qsv` | Intel Quick Sync | H.264 | Integrated GPU |
+| `hevc_qsv` | Intel Quick Sync | H.265 | 4K |
+| `h264_vaapi` | Linux VA-API | H.264 | Intel/AMD on Linux |
+| `hevc_vaapi` | Linux VA-API | H.265 | 4K |
+
+**API**:
+```javascript
+// NVIDIA GPU encoding
+nVideo.transcode('input.mkv', 'output.mp4', {
+  video: { codec: 'h264_nvenc', width: 1920, height: 1080, preset: 'p4', cq: 23 },
+  audio: { codec: 'aac', bitrate: 128000 }
+});
+
+// Intel Quick Sync
+nVideo.transcode('input.mkv', 'output.mp4', {
+  video: { codec: 'h264_qsv', width: 1280, height: 720 },
+  audio: { codec: 'aac' }
+});
+
+// Hardware decode + encode (full GPU pipeline)
+nVideo.transcode('input.mkv', 'output.mp4', {
+  hwaccel: 'cuda',            // hardware decode: 'cuda', 'qsv', 'vaapi', or null
+  video: { codec: 'h264_nvenc', width: 1920, height: 1080 },
+  audio: { codec: 'aac' }
+});
+```
+
+**Hardware decode** (`hwaccel` option):
+- `'cuda'` — NVIDIA GPU decode (requires CUDA-capable GPU)
+- `'qsv'` — Intel Quick Sync decode
+- `'vaapi'` — Linux VA-API decode
+- `null` — software decode (default)
+
+When `hwaccel` is set, nVideo adds the appropriate FFmpeg flags (`-hwaccel cuda`, `-hwaccel_device 0`, etc.) and uses hardware pixel formats (`cuda`, `qsv`, `vaapi_vld`) throughout the pipeline.
 
 ## Supported Formats
 
@@ -455,8 +605,18 @@ nVideo.concat(['part1.mp4', 'part2.mp4', 'part3.mp4'], 'merged.mp4', {
 });
 // concat progress adds: fileIndex, totalFiles (which input file is being processed)
 
-// Extract single stream
+// Extract single stream (stream copy, no re-encode)
 nVideo.extractStream('input.mp4', 'output.aac', { streamIndex: 1 });
+
+// Extract audio from video (decode + re-encode)
+nVideo.extractAudio('video.mp4', 'output.wav');
+// → { duration: 245.7, size: 43000000, timeMs: 12000 }
+
+nVideo.extractAudio('video.mp4', 'output.mp3', {
+  codec: 'libmp3lame', bitrate: 320000,
+  onProgress: (p) => console.log(`${p.percent.toFixed(1)}%`)
+});
+// Equivalent to: ffmpeg -i video.mp4 -vn -c:a libmp3lame -b:a 320k output.mp3
 
 // Convert — common format shorthand
 nVideo.convert('input.wav', 'output.mp3', {
