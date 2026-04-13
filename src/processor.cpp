@@ -2139,6 +2139,7 @@ bool FFmpegProcessor::remux(const char* inputPath, const char* outputPath,
     int64_t totalBytes = 0;
     double lastProgressTime = 0.0;
     const double progressInterval = 0.1;
+    double processedTime = 0.0;
 
     while (av_read_frame(ifmtCtx, pkt) >= 0) {
         AVStream* inStream = ifmtCtx->streams[pkt->stream_index];
@@ -2156,16 +2157,24 @@ bool FFmpegProcessor::remux(const char* inputPath, const char* outputPath,
         }
 
         totalBytes += pkt->size;
+        
+        // Track processed time from packet timestamps
+        if (pkt->pts != AV_NOPTS_VALUE) {
+            double ptsSeconds = pkt->pts * av_q2d(inStream->time_base);
+            if (ptsSeconds > processedTime) {
+                processedTime = ptsSeconds;
+            }
+        }
 
         double currentTime = (av_gettime() - startTime) / 1000000.0;
         if (progressCallback && (currentTime - lastProgressTime) >= progressInterval) {
             TranscodeProgress prog = {};
-            prog.time = currentTime;
-            prog.percent = totalDuration > 0 ? (currentTime / totalDuration) * 100.0 : 0.0;
-            prog.speed = currentTime > 0 ? currentTime / (currentTime + 0.001) : 0.0;
+            prog.time = processedTime;
+            prog.percent = totalDuration > 0 ? (processedTime / totalDuration) * 100.0 : 0.0;
+            prog.speed = currentTime > 0 ? processedTime / currentTime : 0.0;
             prog.size = totalBytes;
             prog.estimatedDuration = totalDuration;
-            prog.eta = (prog.speed > 0) ? (totalDuration - currentTime) / prog.speed : 0.0;
+            prog.eta = (prog.speed > 0) ? (totalDuration - processedTime) / prog.speed : 0.0;
             progressCallback(prog);
             lastProgressTime = currentTime;
         }
@@ -2178,8 +2187,8 @@ bool FFmpegProcessor::remux(const char* inputPath, const char* outputPath,
     int64_t endTime = av_gettime();
     result.duration = totalDuration;
     result.size = totalBytes;
-    result.bitrate = result.size * 8 / (totalDuration > 0 ? totalDuration : 1);
-    result.speed = (endTime - startTime) / 1000000.0 / (totalDuration > 0 ? totalDuration : 1);
+    result.bitrate = totalDuration > 0 ? (totalBytes * 8 / totalDuration) : 0;
+    result.speed = totalDuration > 0 ? ((endTime - startTime) / 1000000.0) / totalDuration : 0;
     result.timeMs = (endTime - startTime) / 1000;
     success = true;
 
