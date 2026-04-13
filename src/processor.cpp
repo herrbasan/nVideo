@@ -2194,7 +2194,7 @@ cleanup:
     return success;
 }
 
-// Concat - join multiple files into one (stream copy)
+// Concat - join multiple files into one using concat demuxer
 bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char* outputPath,
                             TranscodeProgressCallback progressCallback,
                             TranscodeResult& result,
@@ -2205,29 +2205,71 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
 
     AVFormatContext* ifmtCtx = nullptr;
     AVFormatContext* ofmtCtx = nullptr;
-    AVPacket* pkt = av_packet_alloc();
+    AVPacket* pkt = nullptr;
     int ret = 0;
     bool success = false;
 
-    // Open first input to get format info
-    if ((ret = avformat_open_input(&ifmtCtx, inputPaths[0], nullptr, nullptr)) < 0) {
-        error.message = std::string("Failed to open first input: ") + av_err_to_string(ret);
+    // Create temporary file list for concat demuxer
+    std::string listPath = std::string(outputPath) + ".concat.txt";
+    FILE* listFile = fopen(listPath.c_str(), "w");
+    if (!listFile) {
+        error.message = "Failed to create concat list file";
         error.operation = "open";
         goto cleanup;
     }
 
-    // Create output context based on first input's format
+    for (int i = 0; i < numInputs; i++) {
+        // Escape single quotes in file paths
+        std::string path = inputPaths[i];
+        size_t pos = 0;
+        while ((pos = path.find("'", pos)) != std::string::npos) {
+            path.replace(pos, 1, "'\\''");
+            pos += 4;
+        }
+        fprintf(listFile, "file '%s'\n", path.c_str());
+    }
+    fclose(listFile);
+    listFile = nullptr;
+
+    // Open concat demuxer
+    AVDictionary* demuxOpts = nullptr;
+    av_dict_set(&demuxOpts, "safe", "0", 0); // Allow non-safe file paths
+    
+    // Find concat demuxer
+    const AVInputFormat* concatFmt = av_find_input_format("concat");
+    if (!concatFmt) {
+        av_dict_free(&demuxOpts);
+        error.message = "Concat demuxer not found";
+        error.operation = "open";
+        goto cleanup;
+    }
+    
+    if ((ret = avformat_open_input(&ifmtCtx, listPath.c_str(), concatFmt, &demuxOpts)) < 0) {
+        av_dict_free(&demuxOpts);
+        error.message = std::string("Failed to open concat demuxer: ") + av_err_to_string(ret);
+        error.operation = "open";
+        goto cleanup;
+    }
+    av_dict_free(&demuxOpts);
+
+    if ((ret = avformat_find_stream_info(ifmtCtx, nullptr)) < 0) {
+        error.message = std::string("Failed to find stream info: ") + av_err_to_string(ret);
+        error.operation = "open";
+        goto cleanup;
+    }
+
+    // Create output context
     if ((ret = avformat_alloc_output_context2(&ofmtCtx, nullptr, nullptr, outputPath)) < 0) {
         error.message = std::string("Failed to create output context: ") + av_err_to_string(ret);
         error.operation = "open";
         goto cleanup;
     }
 
-    // Copy streams from first input - only video/audio streams
+    // Copy all streams from concat demuxer
     for (unsigned int i = 0; i < ifmtCtx->nb_streams; i++) {
         AVStream* inStream = ifmtCtx->streams[i];
         
-        // Skip non-video/audio streams (data, attachments, etc.)
+        // Skip non-video/audio streams
         if (inStream->codecpar->codec_type != AVMEDIA_TYPE_VIDEO && 
             inStream->codecpar->codec_type != AVMEDIA_TYPE_AUDIO) {
             continue;
@@ -2246,28 +2288,8 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
             goto cleanup;
         }
         outStream->time_base = inStream->time_base;
-        
-        // Ensure codec parameters are complete for muxer
         outStream->codecpar->codec_tag = 0;
-        
-        // Explicitly copy additional parameters that muxers need
-        if (inStream->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
-            // Ensure sample_rate and frame_size are set
-            if (outStream->codecpar->sample_rate <= 0) {
-                outStream->codecpar->sample_rate = inStream->codecpar->sample_rate;
-            }
-            if (outStream->codecpar->frame_size <= 0) {
-                outStream->codecpar->frame_size = inStream->codecpar->frame_size;
-            }
-            if (outStream->codecpar->block_align <= 0) {
-                outStream->codecpar->block_align = inStream->codecpar->block_align;
-            }
-        }
     }
-
-    // Close first input - will reopen each file during concat
-    avformat_close_input(&ifmtCtx);
-    ifmtCtx = nullptr;
 
     // Open output file
     if (!(ofmtCtx->oformat->flags & AVFMT_NOFILE)) {
@@ -2297,75 +2319,82 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
     double lastProgressTime = 0.0;
     const double progressInterval = 0.1;
     double processedDuration = 0.0;
+    int currentFileIdx = 0;
+    double currentFileDuration = 0.0;
+    double currentFileProgress = 0.0;
 
-    // Process each input file
-    for (int fileIdx = 0; fileIdx < numInputs; fileIdx++) {
-        if ((ret = avformat_open_input(&ifmtCtx, inputPaths[fileIdx], nullptr, nullptr)) < 0) {
-            error.message = std::string("Failed to open input file ") + std::to_string(fileIdx) + ": " + av_err_to_string(ret);
-            error.operation = "open";
-            goto cleanup;
+    pkt = av_packet_alloc();
+
+    // Read packets from concat demuxer and write to output
+    while (av_read_frame(ifmtCtx, pkt) >= 0) {
+        AVStream* inStream = ifmtCtx->streams[pkt->stream_index];
+        
+        // Skip non-video/audio streams
+        if (inStream->codecpar->codec_type != AVMEDIA_TYPE_VIDEO && 
+            inStream->codecpar->codec_type != AVMEDIA_TYPE_AUDIO) {
+            av_packet_unref(pkt);
+            continue;
         }
-
-        // Get duration of this file
-        double fileDuration = 0.0;
-        if (ifmtCtx->duration != AV_NOPTS_VALUE) {
-            fileDuration = static_cast<double>(ifmtCtx->duration) / AV_TIME_BASE;
-        }
-
-        // Reset packet
-        av_packet_unref(pkt);
-
-        while (av_read_frame(ifmtCtx, pkt) >= 0) {
-            AVStream* inStream = ifmtCtx->streams[pkt->stream_index];
-            
-            // Skip packets from streams we didn't copy (data/attachments)
-            if (inStream->codecpar->codec_type != AVMEDIA_TYPE_VIDEO && 
-                inStream->codecpar->codec_type != AVMEDIA_TYPE_AUDIO) {
-                av_packet_unref(pkt);
-                continue;
+        
+        // Find corresponding output stream
+        int outStreamIdx = -1;
+        for (unsigned int j = 0; j < ofmtCtx->nb_streams; j++) {
+            if (ofmtCtx->streams[j]->codecpar->codec_type == inStream->codecpar->codec_type) {
+                // Match by stream type and relative position
+                int inTypeCount = 0, outTypeCount = 0;
+                for (unsigned int k = 0; k < ifmtCtx->nb_streams; k++) {
+                    if (ifmtCtx->streams[k]->codecpar->codec_type == inStream->codecpar->codec_type) {
+                        if (k == pkt->stream_index) break;
+                        inTypeCount++;
+                    }
+                }
+                for (unsigned int k = 0; k < ofmtCtx->nb_streams; k++) {
+                    if (ofmtCtx->streams[k]->codecpar->codec_type == inStream->codecpar->codec_type) {
+                        if (outTypeCount == inTypeCount) {
+                            outStreamIdx = k;
+                            break;
+                        }
+                        outTypeCount++;
+                    }
+                }
+                break;
             }
+        }
+        
+        if (outStreamIdx >= 0) {
+            pkt->stream_index = outStreamIdx;
             
-            AVStream* outStream = ofmtCtx->streams[pkt->stream_index];
-
-            // Adjust timestamps - offset by processed duration
-            // CRITICAL: Must rescale offset to the stream's time_base units
+            // Rescale timestamps from input to output time_base
             if (pkt->pts != AV_NOPTS_VALUE) {
-                int64_t timeOffset = av_rescale_q(
-                    static_cast<int64_t>(processedDuration * AV_TIME_BASE),
-                    AV_TIME_BASE_Q,
-                    inStream->time_base
-                );
-                pkt->pts += timeOffset;
-                // Ensure non-negative
-                if (pkt->pts < 0) pkt->pts = 0;
+                pkt->pts = av_rescale_q(pkt->pts, inStream->time_base, ofmtCtx->streams[outStreamIdx]->time_base);
             }
             if (pkt->dts != AV_NOPTS_VALUE) {
-                int64_t timeOffset = av_rescale_q(
-                    static_cast<int64_t>(processedDuration * AV_TIME_BASE),
-                    AV_TIME_BASE_Q,
-                    inStream->time_base
-                );
-                pkt->dts += timeOffset;
-                // Ensure non-negative
-                if (pkt->dts < 0) pkt->dts = 0;
+                pkt->dts = av_rescale_q(pkt->dts, inStream->time_base, ofmtCtx->streams[outStreamIdx]->time_base);
             }
-            pkt->stream_index = outStream->index;
+            if (pkt->duration > 0) {
+                pkt->duration = av_rescale_q(pkt->duration, inStream->time_base, ofmtCtx->streams[outStreamIdx]->time_base);
+            }
             pkt->pos = -1;
 
             if ((ret = av_interleaved_write_frame(ofmtCtx, pkt)) < 0) {
                 error.message = std::string("Failed to write packet: ") + av_err_to_string(ret);
                 error.operation = "write";
-                error.timestamp = pkt->pts * av_q2d(inStream->time_base) - processedDuration;
+                error.timestamp = processedDuration;
                 error.stream = pkt->stream_index;
                 av_packet_unref(pkt);
                 goto cleanup;
             }
 
             totalBytes += pkt->size;
-            av_packet_unref(pkt);
         }
-
-        processedDuration += fileDuration;
+        
+        // Track progress
+        if (pkt->pts != AV_NOPTS_VALUE) {
+            double ptsSeconds = pkt->pts * av_q2d(ofmtCtx->streams[pkt->stream_index]->time_base);
+            processedDuration = ptsSeconds;
+        }
+        
+        av_packet_unref(pkt);
 
         // Progress callback
         currentTime = (av_gettime() - startTime) / 1000000.0;
@@ -2380,9 +2409,6 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
             progressCallback(prog);
             lastProgressTime = currentTime;
         }
-
-        avformat_close_input(&ifmtCtx);
-        ifmtCtx = nullptr;
     }
 
     av_write_trailer(ofmtCtx);
@@ -2390,8 +2416,8 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
     int64_t endTime = av_gettime();
     result.duration = totalDuration;
     result.size = totalBytes;
-    result.bitrate = result.size * 8 / (totalDuration > 0 ? totalDuration : 1);
-    result.speed = (endTime - startTime) / 1000000.0 / (totalDuration > 0 ? totalDuration : 1);
+    result.bitrate = totalDuration > 0 ? (totalBytes * 8 / totalDuration) : 0;
+    result.speed = totalDuration > 0 ? ((endTime - startTime) / 1000000.0) / totalDuration : 0;
     result.timeMs = (endTime - startTime) / 1000;
     success = true;
 
@@ -2402,6 +2428,11 @@ cleanup:
         avio_closep(&ofmtCtx->pb);
     }
     if (ofmtCtx) avformat_free_context(ofmtCtx);
+    
+    // Remove temporary list file
+    if (!listPath.empty()) {
+        remove(listPath.c_str());
+    }
 
     return success;
 }
