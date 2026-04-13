@@ -1293,10 +1293,24 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             }
         }
 
-        // CRF and Preset via priv_data struct assignment (x264)
-        if (opts.video.crf > 0 || !opts.video.preset.empty()) {
-            // Use avcodec_parameters_from_context which handles priv_data copy
-            // Or set directly via the codec's specific options
+        // CRF and Preset via av_opt_set on priv_data (x264/x265)
+        if (opts.video.crf > 0) {
+            char crfStr[16];
+            snprintf(crfStr, sizeof(crfStr), "%d", opts.video.crf);
+            ret = av_opt_set(videoEncCtx->priv_data, "crf", crfStr, 0);
+            if (ret < 0) {
+                error.message = std::string("Failed to set CRF: ") + av_err_to_string(ret);
+                error.operation = "open";
+                goto cleanup;
+            }
+        }
+        if (!opts.video.preset.empty()) {
+            ret = av_opt_set(videoEncCtx->priv_data, "preset", opts.video.preset.c_str(), 0);
+            if (ret < 0) {
+                error.message = std::string("Failed to set preset: ") + av_err_to_string(ret);
+                error.operation = "open";
+                goto cleanup;
+            }
         }
 
         // Configure video encoder threading
