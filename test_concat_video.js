@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const assetsDir = 'D:/Work/_GIT/MediaService/tests/assets';
-const outputDir = path.join(__dirname, 'test_output');
+const outputDir = 'D:/Work/_GIT/nVideo/test_media/test_output';
 
 if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
