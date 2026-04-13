@@ -1,6 +1,6 @@
 # nVideo - Development Plan
 
-**Last Updated**: 2026-04-13 (Video concat timestamp fix)
+**Last Updated**: 2026-04-13 (Fix concat duration metadata, mixed format detection, HW decode)
 
 **Spec**: [nVideo_spec.md](nVideo_spec.md)
 
@@ -180,9 +180,7 @@ Pre-allocated buffers for zero-GC streaming loops.
 
 | Issue | Impact | Priority |
 |-------|--------|----------|
-| Audio concat duration metadata | Output shows single file duration instead of total | Low (playback works, metadata wrong) |
-| Concat mixed formats | Can't concat different audio formats (e.g., FLAC + MP3 → MP3) | Medium |
-| HW decode + SW encode | "bad dst image pointers" warnings when using hwaccel with software encoder | Medium |
+| Audio concat duration metadata (FLAC) | FLAC container doesn't support duration update after write | Low (playback works, metadata wrong for FLAC only) |
 | FFmpeg crashes on corrupt files | Error handling can't catch | Low (FFmpeg limitation) |
 
 ## Success Criteria
@@ -198,4 +196,7 @@ Pre-allocated buffers for zero-GC streaming loops.
 | Zero-copy verified | No intermediate copies in decode path | ✅ Verified |
 | Electron compatible | MSVC build, no crashes in renderer | ✅ Verified |
 | Concat video | Matches expected duration (within 5%) | ✅ 17.63s vs 17.13s (2.9% diff) |
+| Concat audio duration | Matches expected duration (within 5%) | ✅ 120.03s vs 120s (0.0% diff) |
+| Mixed format concat | Clear error message before processing | ✅ Codec mismatch detection with guidance |
+| HW decode + SW encode | No warnings, proper frame transfer | ✅ av_hwframe_transfer_data fix |
 | Memory | No leaks in 1-hour streaming loop | ⬜ Not tested |
