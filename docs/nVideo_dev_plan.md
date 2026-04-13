@@ -120,11 +120,12 @@ GPU-accelerated encode/decode via FFmpeg's hardware encoders.
 - [x] Tested: NVENC (h264_nvenc) working - 1187ms vs 14880ms software (12.5x faster)
 - [x] QSV partially works (depends on Intel GPU driver support) (2026-04-13)
 
-### Phase A6: Transcode Polish ⬜
+### Phase A6: Transcode Polish ⬜ NEXT
 
 Fix remaining issues, optimize performance.
 
-- [ ] Fix concat timestamp handling — "non monotonically increasing dts"
+- [x] Fix concat timestamp handling - time_base rescaling fixed (av_rescale_q)
+- [ ] Fix concat codec parameters - "sample rate not set" / "codec frame size not set" errors
 - [ ] Fix remux progress stats — totalBytes not properly accumulated
 - [ ] Profile hot paths: decode, filter, encode loops
 - [ ] Optimize filter graph setup (avoid redundant reinitialization)

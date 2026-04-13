@@ -2291,9 +2291,21 @@ bool FFmpegProcessor::concat(const char** inputPaths, int numInputs, const char*
             AVStream* outStream = ofmtCtx->streams[pkt->stream_index];
 
             // Adjust timestamps - offset by processed duration
+            // CRITICAL: Must rescale offset to the stream's time_base units
             if (pkt->pts != AV_NOPTS_VALUE) {
-                int64_t timeOffset = static_cast<int64_t>(processedDuration * AV_TIME_BASE);
+                int64_t timeOffset = av_rescale_q(
+                    static_cast<int64_t>(processedDuration * AV_TIME_BASE),
+                    AV_TIME_BASE_Q,
+                    inStream->time_base
+                );
                 pkt->pts += timeOffset;
+            }
+            if (pkt->dts != AV_NOPTS_VALUE) {
+                int64_t timeOffset = av_rescale_q(
+                    static_cast<int64_t>(processedDuration * AV_TIME_BASE),
+                    AV_TIME_BASE_Q,
+                    inStream->time_base
+                );
                 pkt->dts += timeOffset;
             }
             pkt->stream_index = outStream->index;
