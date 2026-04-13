@@ -255,7 +255,7 @@ These are the highest-value features. Fast, fire-and-forget, minimal JS involvem
 | Hardware acceleration | ⬜ TODO | NVENC, QSV, VAAPI codec selection in transcode options |
 | CRF/preset support | ⚠️ Broken | `av_opt_set` linking issue with BtbN FFmpeg build |
 | Caching system | ⬜ TODO | Hash(input_path + config) → cached output, skip redundant work |
-| Concat fix | ⚠️ Broken | Timestamp handling produces "non monotonically increasing dts" |
+| Concat fix | ✅ Done | Manual per-file processing with cumulative DTS offset tracking |
 | Transcode benchmark | ⬜ TODO | Prove parity with ffmpeg CLI performance |
 
 #### Tier 3: Advanced Transcode

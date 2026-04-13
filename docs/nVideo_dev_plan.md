@@ -1,6 +1,6 @@
 # nVideo - Development Plan
 
-**Last Updated**: 2026-04-13
+**Last Updated**: 2026-04-13 (Video concat timestamp fix)
 
 **Spec**: [nVideo_spec.md](nVideo_spec.md)
 
@@ -127,7 +127,13 @@ Fix remaining issues, optimize performance.
 - [x] Fix concat timestamp handling - time_base rescaling fixed (av_rescale_q)
 - [x] Rewrite concat to use FFmpeg concat demuxer (file list approach)
 - [x] Audio concat working (MP3 tested)
-- [ ] Video concat timestamp issues - "non monotonically increasing dts" still occurs
+- [x] Video concat timestamp issues - FIXED (2026-04-13)
+  - Replaced concat demuxer with manual per-file processing
+  - Cumulative DTS offset tracking per stream
+  - Handles negative start times (edit lists in MOV/MP4)
+  - Dynamic offset adjustment when PTS < DTS would occur
+  - Uses av_write_frame instead of av_interleaved_write_frame
+  - Tested: 2x 8.57s HEVC files → 17.63s output (within 3% of expected 17.13s)
 - [x] Fix remux progress stats - now uses packet timestamps instead of wall clock time
 - [ ] Profile hot paths: decode, filter, encode loops
 - [ ] Optimize filter graph setup (avoid redundant reinitialization)
@@ -171,8 +177,9 @@ Pre-allocated buffers for zero-GC streaming loops.
 
 | Issue | Impact | Priority |
 |-------|--------|----------|
-| Concat timestamps invalid | Joined files may not play correctly | Medium |
-| Remux progress stats incomplete | UI shows wrong file size | Low |
+| Audio concat duration metadata | Output shows single file duration instead of total | Low (playback works, metadata wrong) |
+| Concat mixed formats | Can't concat different audio formats (e.g., FLAC + MP3 → MP3) | Medium |
+| HW decode + SW encode | "bad dst image pointers" warnings when using hwaccel with software encoder | Medium |
 | FFmpeg crashes on corrupt files | Error handling can't catch | Low (FFmpeg limitation) |
 
 ## Success Criteria
@@ -187,4 +194,5 @@ Pre-allocated buffers for zero-GC streaming loops.
 | Transcode progress | Fires every ~100ms, accurate ETA | ✅ Working |
 | Zero-copy verified | No intermediate copies in decode path | ✅ Verified |
 | Electron compatible | MSVC build, no crashes in renderer | ✅ Verified |
+| Concat video | Matches expected duration (within 5%) | ✅ 17.63s vs 17.13s (2.9% diff) |
 | Memory | No leaks in 1-hour streaming loop | ⬜ Not tested |
