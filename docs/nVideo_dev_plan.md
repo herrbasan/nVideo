@@ -31,6 +31,7 @@
 | `audio/mdjam_step2.ogg` | OGG | 340.2s | 5MB | Vorbis stereo |
 
 **Test Output**: `test_media/test_output/` — temporary output files from ad-hoc tests (gitignored).
+**Test Scripts**: `test_media/*.js` — ad-hoc test scripts (gitignored).
 
 ---
 
