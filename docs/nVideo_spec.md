@@ -267,9 +267,9 @@ These are the highest-value features. Fast, fire-and-forget, minimal JS involvem
 | Subtitle extraction/burn-in | Extract subtitle tracks, burn into video |
 | HDR tone mapping | HDR10/HLG → SDR conversion |
 
-### Pipeline B: Streaming (Chunk → Chunk) — FUTURE
+### Pipeline B: Streaming (Chunk → Chunk) — COMPLETE
 
-Frame-level decode for real-time processing. Primary use case: TTS/STT services.
+Frame-level decode for real-time processing. Primary use case: audio/video playback in Electron.
 
 | Feature | Status | Description |
 |---------|--------|-------------|
@@ -277,10 +277,10 @@ Frame-level decode for real-time processing. Primary use case: TTS/STT services.
 | `readAudio()` | ✅ Done | Zero-copy decode into Float32Array |
 | `readVideoFrame()` | ✅ Done | Zero-copy decode into Uint8Array |
 | `seek()` | ✅ Done | Jump to timestamp |
-| AudioWorklet player | ⬜ TODO | SAB ring buffer + AudioWorklet for playback |
-| VideoFrame player | ⬜ TODO | SAB frame queue + VideoFrame/Canvas rendering |
-| Buffer pool | ⬜ TODO | Pre-allocated buffers, zero GC pressure |
-| Synchronized A/V | ⬜ TODO | Locked audio/video clock for playback |
+| AudioWorklet player | ✅ Done | SAB ring buffer + AudioWorklet for playback |
+| VideoFrame player | ✅ Done | SAB frame queue + Canvas rendering |
+| Buffer pool | ✅ Done | Pre-allocated buffers, zero GC pressure |
+| Synchronized A/V | ✅ Done | Locked audio/video clock for playback |
 
 ## Zero-Copy Strategy
 
@@ -691,28 +691,115 @@ input.close();
 output.close();
 ```
 
-### Streaming — Frame-by-Frame Decode into SAB (Phase 3)
+### Streaming Players — SAB Ring Buffer + AudioWorklet/Canvas (Phase B2/B3)
 
 The differentiator. Impossible with CLI wrappers.
+
+#### AudioStreamPlayer
 
 ```javascript
 const nVideo = require('nvideo');
 
-const input = nVideo.openInput('input.mp4');
-input.openDecoder(0);  // video
+const audioContext = new AudioContext();
+const player = new nVideo.AudioStreamPlayer(audioContext);
 
-// Zero-copy into SharedArrayBuffer — consumed by renderer
-const sab = new SharedArrayBuffer(1920 * 1080 * 4);
-const view = new Uint8Array(sab);
+await player.open('song.mp3');
+// → { duration: 245.7, sampleRate: 44100, channels: 2, totalFrames: 10814400 }
 
-let frame;
-while ((frame = input.readVideoFrame(view)) !== null) {
-  // frame.data === view (same memory, zero-copy)
-  // Renderer reads from SAB via VideoFrame API — no postMessage, no copy
-  postToRenderer({ sab, width: frame.width, height: frame.height, pts: frame.pts });
-}
+player.onEnded(() => console.log('Track finished'));
+player.onPosition((time, duration) => console.log(`${time.toFixed(1)}s / ${duration.toFixed(1)}s`));
 
-input.close();
+player.play();         // start playback
+player.seek(30);       // jump to 30 seconds
+player.pause();        // pause (disconnects worklet, saves CPU)
+player.resume();       // resume
+player.setLoop(true);  // gapless looping
+player.setVolume(0.5); // set volume
+player.getCurrentTime(); // → 30.5 (seconds)
+player.dispose();      // release all resources
+```
+
+**Architecture**: AudioWorklet processor embedded as blob URL (no external file). SAB ring buffer with 12-slot Int32 control buffer. Drift-corrected setTimeout feed loop at 20ms. Worklet reuse across track switches when sample rate matches.
+
+**Control Buffer Layout** (12 Int32 slots):
+| Slot | Purpose |
+|------|---------|
+| `WRITE_PTR` | Main thread write position (frames) |
+| `READ_PTR` | Worklet read position (frames) |
+| `STATE` | 0=stopped, 1=playing, 2=paused |
+| `SAMPLE_RATE` | Audio sample rate |
+| `CHANNELS` | Channel count (always 2) |
+| `LOOP_ENABLED` | 1=loop, 0=no loop |
+| `LOOP_START` | Loop start frame |
+| `LOOP_END` | Loop end frame |
+| `TOTAL_FRAMES` | Frames to play (updated on seek/EOF) |
+| `UNDERRUN_COUNT` | Buffer underrun counter |
+| `START_TIME_HI` | Scheduled start time (float64 high 32 bits) |
+| `START_TIME_LO` | Scheduled start time (float64 low 32 bits) |
+
+#### VideoStreamPlayer
+
+```javascript
+const nVideo = require('nvideo');
+
+const player = new nVideo.VideoStreamPlayer({
+  canvas: document.getElementById('canvas'),
+  width: 1280,
+  height: 720
+});
+
+await player.open('video.mp4');
+// → { duration: 119.9, width: 1280, height: 720, fps: 29.97, totalFrames: 3593 }
+
+player.onFrame((frame) => {
+  // frame = { frameNum, pts, keyframe, buffered }
+});
+
+player.play();
+player.seek(60);
+player.getCurrentTime(); // → 60.2 (seconds)
+player.dispose();
+```
+
+**Architecture**: Frame queue + canvas 2D rendering. SAB ring buffer for decoded RGB frames. Separate feed loop (16ms) and render loop (at video FPS). Position tracking via frame number extrapolation.
+
+#### AVStreamPlayer (Synchronized A/V)
+
+```javascript
+const nVideo = require('nvideo');
+
+const av = new nVideo.AVStreamPlayer({
+  audioContext: new AudioContext(),
+  canvas: document.getElementById('canvas'),
+  openInput: nVideo.openInput
+});
+
+await av.openAudio('movie.mp4');
+await av.openVideo('movie.mp4');
+av.play();
+av.seek(60);
+av.setLoop(true);
+av.dispose();
+```
+
+#### BufferPool
+
+```javascript
+const pool = nVideo.createBufferPool({
+  audioBufferSize: 8192,    // Float32Array size
+  audioBufferCount: 8,      // Pre-allocated count
+  videoBufferSize: 1920*1080*3, // Uint8Array size
+  videoBufferCount: 8       // Pre-allocated count
+});
+
+const audioBuf = pool.acquireAudio(4096);
+// ... use buffer ...
+pool.releaseAudio(audioBuf);
+
+console.log(pool.stats);
+// → { audioTotal: 8, audioFree: 7, audioAcquired: 1, audioPeak: 1, ... }
+
+pool.dispose();
 ```
 
 ### API ↔ FFmpeg C API Mapping
@@ -1037,13 +1124,12 @@ onError: (err) => {
 
 ## Future Considerations
 
-- Hardware acceleration (NVENC, QSV, VAAPI, VideoToolbox)
+- Hardware acceleration (NVENC, QSV, VAAPI, VideoToolbox) — decode side
 - Multi-track mixing
 - Subtitle burn-in / extraction
 - HDR tone mapping
 - Real-time streaming (RTMP, HLS, DASH)
 - Frame-accurate editing (cut, concat, trim)
-- Buffer pool API for zero-GC streaming loops
 - Async workers for blocking decode operations
 - Native pixel format passthrough (skip YUV→RGB when not needed)
 - Stream mapping (FFmpeg `-map` equivalent)
