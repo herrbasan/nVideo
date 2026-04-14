@@ -196,13 +196,17 @@ AudioWorklet and VideoFrame players for real-time playback.
 - [x] Low/high watermark buffering
 - [x] Exported via nVideo.AudioStreamPlayer and nVideo.VideoStreamPlayer
 
-### Phase B3: Buffer Pool ⬜ FUTURE
+### Phase B3: Buffer Pool ✅ COMPLETE
 
 Pre-allocated buffers for zero-GC streaming loops.
 
-- [ ] `nVideo.createBufferPool(opts)` — acquire/release pattern
-- [ ] Integrate into streaming decode loop
-- [ ] Benchmark: GC pressure with vs without pool
+- [x] `lib/buffer-pool.js` — BufferPool, RingBuffer, AVStreamPlayer
+- [x] BufferPool: acquire/release pattern for audio (Float32Array) and video (Uint8Array)
+- [x] RingBuffer: pure JS single-producer, single-consumer ring buffer
+- [x] AVStreamPlayer: synchronized audio + video playback with shared clock
+- [x] Factory functions: `nVideo.createBufferPool()`, `nVideo.createRingBuffer()`
+- [x] Pool stats tracking (total, free, acquired, peak)
+- [x] Auto-expand when requested size exceeds pool capacity
 
 ---
 
