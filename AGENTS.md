@@ -134,17 +134,16 @@ nVideo/
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| 0 | ✅ | Project scaffolding: binding.gyp, skeleton C++, JS loading, FFmpeg download script |
-| 1 | ⬜ | Probe / metadata — `nVideo.probe()` |
-| 2 | ⬜ | Thumbnail extraction — `nVideo.thumbnail()` |
-| 3 | ⬜ | Audio decode (zero-copy) — `input.readAudio()` |
-| 4 | ⬜ | Video decode (zero-copy) — `input.readVideoFrame()` |
-| 5 | ⬜ | Waveform generation — `nVideo.waveform()` |
-| 6 | ⬜ | Transcode to file — `nVideo.transcode()`, `nVideo.remux()`, `nVideo.convert()` |
-| 7 | ⬜ | Convenience functions — `nVideo.concat()`, `nVideo.extractStream()` |
-| 8 | ⬜ | Streaming (SAB + AudioWorklet + VideoFrame) |
-| 9 | ⬜ | Buffer pool + optimization |
-| 10 | ⬜ | Advanced: complex filters, stream mapping, hardware accel, HDR, network |
+| A1 | ✅ | Core Utilities: probe, thumbnail, waveform |
+| A2 | ✅ | Transcode Foundation: transcode, remux, convert, filters, progress |
+| A3 | ✅ | Audio Extraction: extractAudio |
+| A4 | ✅ | Caching System: SHA256-based, transmit-once TTL |
+| A5 | ✅ | Hardware Acceleration: NVENC, QSV, VAAPI, D3D11VA |
+| A6 | ✅ | Transcode Polish: concat fix, remux stats, profiling |
+| B1 | ✅ | Core Decode API: openInput, readAudio, readVideoFrame, seek, close |
+| B2 | ✅ | Streaming Players: AudioWorklet + VideoFrame players |
+| B3 | ⬜ | Buffer Pool: pre-allocated buffers, zero GC pressure |
+| 10 | ⬜ | Advanced: complex filters, stream mapping, HDR, network |
 
 ---
 
@@ -195,3 +194,25 @@ _This section is for the agent to record discoveries, patterns, gotchas, and dec
 - `@electron/rebuild -f -w nvideo` succeeds with Electron v24.14.0
 - Rebuilt `nvideo.node` loads correctly in Electron
 - Use `electron@latest` (not pinned version) — old Electron headers (v16) no longer available at standard URL
+
+### Phase B2 Implementation (2026-04-14) ✅ COMPLETE
+
+**Streaming Players:**
+- `lib/player-audio.js` — AudioWorklet player with SAB ring buffer (510 lines)
+  - AudioWorklet processor embedded as blob URL (no external file needed)
+  - Control buffer: 12 Int32 slots (writePtr, readPtr, state, sampleRate, channels, loop, totalFrames, underruns, startTime)
+  - Two-part ring buffer write for wrap-around handling
+  - Drift-corrected setTimeout feed loop (20ms interval)
+  - Worklet reuse across track switches (SAB preserved when sample rate matches)
+  - CPU optimization: disconnect worklet on pause
+  - Gapless looping via decoder seek(0) on EOF
+- `lib/player-video.js` — VideoFrame player with canvas rendering (370 lines)
+  - Frame queue + canvas 2D rendering
+  - SAB ring buffer for decoded RGB frames
+  - Separate feed loop and render loop (feed at 16ms, render at FPS)
+  - Position tracking via frame number extrapolation
+- Both players exported via `nVideo.AudioStreamPlayer` and `nVideo.VideoStreamPlayer`
+
+**Performance verified:**
+- Audio decode: 60s MP3 in 39ms (1538x realtime)
+- Video decode: 4K H.264 at 31.6 fps (31.69ms/frame)

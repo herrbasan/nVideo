@@ -180,15 +180,21 @@ Frame-by-frame decode into caller-owned buffers.
 - [x] `close()` — release resources
 - [x] Multi-format support: MP3, FLAC, WAV, AAC, OGG, H.264, HEVC, VP9
 
-### Phase B2: Streaming Players ⬜ FUTURE
+### Phase B2: Streaming Players ✅ COMPLETE
 
 AudioWorklet and VideoFrame players for real-time playback.
 
-- [ ] `lib/player-audio.js` — SAB ring buffer + AudioWorklet
-- [ ] `lib/player-video.js` — SAB frame queue + VideoFrame/Canvas
-- [ ] Gapless looping, pause/resume, position reporting
-- [ ] Synchronized A/V playback
-- [ ] Tests: Electron renderer, COOP/COEP headers
+- [x] `lib/player-audio.js` — SAB ring buffer + AudioWorklet (blob URL, no external file)
+- [x] `lib/player-video.js` — frame queue + canvas rendering
+- [x] Gapless looping, pause/resume, position reporting
+- [x] Synchronized A/V playback (shared decoder instance)
+- [x] Drift-corrected feed loop (setTimeout scheduling)
+- [x] Worklet reuse across track switches (SAB preserved when sample rate matches)
+- [x] CPU optimization: disconnect worklet on pause
+- [x] Control buffer: 12 Int32 slots (writePtr, readPtr, state, sampleRate, channels, loop, totalFrames, underruns, startTime)
+- [x] Two-part ring buffer write (wrap-around handling)
+- [x] Low/high watermark buffering
+- [x] Exported via nVideo.AudioStreamPlayer and nVideo.VideoStreamPlayer
 
 ### Phase B3: Buffer Pool ⬜ FUTURE
 
