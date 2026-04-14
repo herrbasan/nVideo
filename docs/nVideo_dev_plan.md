@@ -1,6 +1,6 @@
 # nVideo - Development Plan
 
-**Last Updated**: 2026-04-13 (Cache TTL: transmit-once pattern, 5 min default)
+**Last Updated**: 2026-04-14 (Streaming players + buffer pool complete)
 
 **Spec**: [nVideo_spec.md](nVideo_spec.md)
 
@@ -47,7 +47,7 @@ Maximum performance file-to-file transcoding. Equivalent to `ffmpeg` CLI but wit
 
 **Design**: Input file path → C++ pipeline → output file path. Zero JS involvement during processing.
 
-### Pipeline B: Streaming (Chunk → Chunk) — FUTURE
+### Pipeline B: Streaming (Chunk → Chunk) — COMPLETE
 
 Frame-by-frame decode into caller-owned buffers. Primary use case: TTS/STT services.
 

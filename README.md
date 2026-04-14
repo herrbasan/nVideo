@@ -50,10 +50,9 @@ nVideo.extractAudio('video.mp4', 'output.wav');
 
 // Stream audio decode (zero-copy)
 const input = nVideo.openInput('input.mp4');
-const audioBuffer = new Float32Array(4096);
-let samplesRead;
-while ((samplesRead = input.readAudio(audioBuffer)) > 0) {
-  // audioBuffer contains interleaved float32 stereo — zero-copy
+let result;
+while ((result = input.readAudio(4096)) && result.samples > 0) {
+  // result.data is Float32Array with interleaved stereo samples — zero-copy
 }
 input.close();
 ```

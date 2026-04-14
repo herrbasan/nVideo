@@ -88,7 +88,8 @@ nVideo/
 ├── lib/
 │   ├── index.js             # JS entry point, convenience layer
 │   ├── player-video.js      # Video streaming player (SAB + VideoFrame)
-│   └── player-audio.js      # Audio streaming player (SAB + AudioWorklet)
+│   ├── player-audio.js      # Audio streaming player (SAB + AudioWorklet)
+│   └── buffer-pool.js       # BufferPool, RingBuffer, AVStreamPlayer
 ├── deps/
 │   └── ffmpeg/              # Pre-built FFmpeg shared libs (BtbN)
 │       ├── include/         # Headers
@@ -142,7 +143,7 @@ nVideo/
 | A6 | ✅ | Transcode Polish: concat fix, remux stats, profiling |
 | B1 | ✅ | Core Decode API: openInput, readAudio, readVideoFrame, seek, close |
 | B2 | ✅ | Streaming Players: AudioWorklet + VideoFrame players |
-| B3 | ⬜ | Buffer Pool: pre-allocated buffers, zero GC pressure |
+| B3 | ✅ | Buffer Pool: pre-allocated buffers, zero GC pressure |
 | 10 | ⬜ | Advanced: complex filters, stream mapping, HDR, network |
 
 ---

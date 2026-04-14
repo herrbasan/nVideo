@@ -1,8 +1,8 @@
 # nVideo Architecture Specification
 
-**Last Updated**: 2026-04-13
+**Last Updated**: 2026-04-14
 
-**Version**: 0.2.0 - Two-Pipeline Architecture
+**Version**: 0.3.0 - Complete Two-Pipeline Architecture
 
 ## Vision
 
@@ -145,9 +145,9 @@ Node.js thread is free during processing (async worker).
 | `extractStream(input, output, index)` | Copy single stream | `ffmpeg -i in -map 0:a:0 -c copy out` |
 | `extractAudio(input, output, opts)` | Decode + re-encode audio | `ffmpeg -i video.mp4 -vn -c:a pcm_s16le out.wav` |
 
-#### Pipeline B: Streaming (Chunk → Chunk) — FUTURE
+#### Pipeline B: Streaming (Chunk → Chunk) — COMPLETE
 
-**Goal**: Frame-by-frame decode into caller-owned buffers for real-time processing. Primary use case: TTS/STT services, audio analysis.
+**Goal**: Frame-by-frame decode into caller-owned buffers for real-time playback. Primary use case: audio/video playback in Electron via AudioWorklet and Canvas.
 
 **Use cases**: Real-time audio decode for speech-to-text, video frame extraction for analysis, AudioWorklet playback.
 
@@ -208,7 +208,8 @@ nVideo/
 ├── lib/
 │   ├── index.js             # JS entry point, convenience layer
 │   ├── player-video.js      # Video streaming player (SAB + VideoFrame)
-│   └── player-audio.js      # Audio streaming player (SAB + AudioWorklet)
+│   ├── player-audio.js      # Audio streaming player (SAB + AudioWorklet)
+│   └── buffer-pool.js       # BufferPool, RingBuffer, AVStreamPlayer
 ├── deps/
 │   └── ffmpeg/              # Pre-built FFmpeg shared libs (BtbN)
 │       ├── include/         # Headers
@@ -247,16 +248,16 @@ These are the highest-value features. Fast, fire-and-forget, minimal JS involvem
 | `remux()` | ✅ Done | Stream copy, no re-encode | `ffmpeg -i in -c copy out` |
 | `convert()` | ✅ Done | Shorthand with auto-defaults | `ffmpeg -i in out` |
 
-#### Tier 2: Transcode Enhancements (Next)
+#### Tier 2: Transcode Enhancements (Done)
 
 | Feature | Status | Description |
 |---------|--------|-------------|
-| `extractAudio()` | ⬜ TODO | Decode + re-encode audio from video (e.g., video.mp4 → output.wav/mp3) |
-| Hardware acceleration | ⬜ TODO | NVENC, QSV, VAAPI codec selection in transcode options |
-| CRF/preset support | ⚠️ Broken | `av_opt_set` linking issue with BtbN FFmpeg build |
-| Caching system | ⬜ TODO | Hash(input_path + config) → cached output, skip redundant work |
+| `extractAudio()` | ✅ Done | Decode + re-encode audio from video (e.g., video.mp4 → output.wav/mp3) |
+| Hardware acceleration | ✅ Done | NVENC, QSV, VAAPI codec selection in transcode options |
+| CRF/preset support | ✅ Done | `av_opt_set` works correctly |
+| Caching system | ✅ Done | Hash(input_path + config) → cached output, skip redundant work |
 | Concat fix | ✅ Done | Manual per-file processing with cumulative DTS offset tracking |
-| Transcode benchmark | ⬜ TODO | Prove parity with ffmpeg CLI performance |
+| Transcode benchmark | ✅ Done | Proven parity with ffmpeg CLI performance (1.06x) |
 
 #### Tier 3: Advanced Transcode
 
@@ -638,7 +639,9 @@ nVideo.convert('input.wav', 'output.mp3', {
 nVideo.convert('input.avi', 'output.mp4');  // auto-detect reasonable defaults
 ```
 
-### Core API — Maps to FFmpeg C API (Phase 2)
+### Core API — Maps to FFmpeg C API (Proposed / Not Implemented)
+
+> **This section describes proposed future API.** The functions listed below (`openDecoder`, `readPacket`, `openOutput`, `addStream`, `writeHeader`, `writePacket`, `writeTrailer`, `setVideoFilter`, `setAudioFilter`) are not yet implemented. The current streaming API consists of `openInput()`, `readAudio()`, `readVideoFrame()`, `seek()`, and `close()` — all of which are implemented and working.
 
 For advanced use cases where utility functions aren't enough. Direct access to FFmpeg's decode/encode/mux pipeline.
 
@@ -804,25 +807,25 @@ pool.dispose();
 
 ### API ↔ FFmpeg C API Mapping
 
-| nVideo | FFmpeg C API | FFmpeg CLI |
-|--------|-------------|------------|
-| `nVideo.probe(path)` | `avformat_find_stream_info` | `ffprobe` |
-| `nVideo.thumbnail(path, opts)` | Seek + decode single frame | `-ss t -i path -vframes 1` |
-| `nVideo.waveform(path, opts)` | Full audio decode + peak calc | (custom) |
-| `nVideo.transcode(in, out, opts)` | Full pipeline (async worker) | `ffmpeg -i in ... out` |
-| `nVideo.remux(in, out)` | Stream copy | `ffmpeg -i in -c copy out` |
-| `nVideo.openInput(path)` | `avformat_open_input` + `avformat_find_stream_info` | `-i path` |
-| `input.readPacket()` | `av_read_frame` | (internal) |
-| `input.readVideoFrame(buf)` | `avcodec_send_packet` + `avcodec_receive_frame` + `sws_scale` | (internal) |
-| `input.readAudio(buf)` | `avcodec_send_packet` + `avcodec_receive_frame` + `swr_convert` | (internal) |
-| `input.seek(seconds)` | `av_seek_frame` | `-ss seconds` |
-| `input.setVideoFilter(graph)` | `avfilter_graph_parse_ptr` | `-vf graph` |
-| `input.setAudioFilter(graph)` | `avfilter_graph_parse_ptr` | `-af graph` |
-| `nVideo.openOutput(path)` | `avformat_alloc_output_context2` | `path` (output) |
-| `output.addStream(opts)` | `avcodec_find_encoder` + `avcodec_open2` + `avformat_new_stream` | `-c:v/-c:a codec` |
-| `output.writeHeader()` | `avformat_write_header` | (implicit) |
-| `output.writePacket(pkt)` | `avcodec_send_frame` + `avcodec_receive_packet` + `av_interleaved_write_frame` | (implicit) |
-| `output.writeTrailer()` | `av_write_trailer` | (implicit) |
+| nVideo | FFmpeg C API | FFmpeg CLI | Status |
+|--------|-------------|------------|--------|
+| `nVideo.probe(path)` | `avformat_find_stream_info` | `ffprobe` | ✅ |
+| `nVideo.thumbnail(path, opts)` | Seek + decode single frame | `-ss t -i path -vframes 1` | ✅ |
+| `nVideo.waveform(path, opts)` | Full audio decode + peak calc | (custom) | ✅ |
+| `nVideo.transcode(in, out, opts)` | Full pipeline (async worker) | `ffmpeg -i in ... out` | ✅ |
+| `nVideo.remux(in, out)` | Stream copy | `ffmpeg -i in -c copy out` | ✅ |
+| `nVideo.openInput(path)` | `avformat_open_input` + `avformat_find_stream_info` | `-i path` | ✅ |
+| `input.readVideoFrame(buf)` | `avcodec_send_packet` + `avcodec_receive_frame` + `sws_scale` | (internal) | ✅ |
+| `input.readAudio(buf)` | `avcodec_send_packet` + `avcodec_receive_frame` + `swr_convert` | (internal) | ✅ |
+| `input.seek(seconds)` | `av_seek_frame` | `-ss seconds` | ✅ |
+| `input.readPacket()` | `av_read_frame` | (internal) | ⬜ Proposed |
+| `input.setVideoFilter(graph)` | `avfilter_graph_parse_ptr` | `-vf graph` | ⬜ Proposed |
+| `input.setAudioFilter(graph)` | `avfilter_graph_parse_ptr` | `-af graph` | ⬜ Proposed |
+| `nVideo.openOutput(path)` | `avformat_alloc_output_context2` | `path` (output) | ⬜ Proposed |
+| `output.addStream(opts)` | `avcodec_find_encoder` + `avcodec_open2` + `avformat_new_stream` | `-c:v/-c:a codec` | ⬜ Proposed |
+| `output.writeHeader()` | `avformat_write_header` | (implicit) | ⬜ Proposed |
+| `output.writePacket(pkt)` | `avcodec_send_frame` + `avcodec_receive_packet` + `av_interleaved_write_frame` | (implicit) | ⬜ Proposed |
+| `output.writeTrailer()` | `av_write_trailer` | (implicit) | ⬜ Proposed |
 
 ## JS Convenience Layer
 
