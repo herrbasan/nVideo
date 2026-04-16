@@ -1650,6 +1650,11 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                 goto cleanup;
             }
 
+            // Derive channel layout from channel count when mask is 0 (common for WAV/PCM files)
+            if (audioDecCtx->ch_layout.u.mask == 0) {
+                av_channel_layout_default(&audioDecCtx->ch_layout, audioDecCtx->ch_layout.nb_channels);
+            }
+
             const AVFilter* audioBuffersrc = avfilter_get_by_name("abuffer");
             if (!audioBuffersrc) {
                 error.message = "Audio buffer source filter not found";
@@ -2901,6 +2906,11 @@ bool FFmpegProcessor::extractAudio(const char* inputPath, const char* outputPath
 
     audioFilterGraph = avfilter_graph_alloc();
     if (!audioFilterGraph) { error.message = "Failed to allocate audio filter graph"; error.operation = "open"; goto cleanup; }
+
+    // Derive channel layout from channel count when mask is 0 (common for WAV/PCM files)
+    if (audioDecCtx->ch_layout.u.mask == 0) {
+        av_channel_layout_default(&audioDecCtx->ch_layout, audioDecCtx->ch_layout.nb_channels);
+    }
 
     const AVFilter* audioBuffersrc = avfilter_get_by_name("abuffer");
     if (!audioBuffersrc) { error.message = "Audio buffer source filter not found"; error.operation = "open"; goto cleanup; }
