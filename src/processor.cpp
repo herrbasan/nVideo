@@ -2120,6 +2120,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             totalAudioSamples += flushFrame->nb_samples;
             if (avcodec_send_frame(audioEncCtx, flushFrame) >= 0) {
                 while (avcodec_receive_packet(audioEncCtx, pkt) >= 0) {
+                    av_packet_rescale_ts(pkt, audioEncCtx->time_base, audioOutStream->time_base);
                     pkt->stream_index = audioOutStream->index;
                     av_interleaved_write_frame(ofmtCtx, pkt);
                 }
@@ -2132,6 +2133,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
     if (videoEnabled && videoEncCtx) {
         avcodec_send_frame(videoEncCtx, nullptr);
         while (avcodec_receive_packet(videoEncCtx, pkt) >= 0) {
+            av_packet_rescale_ts(pkt, videoEncCtx->time_base, videoOutStream->time_base);
             pkt->stream_index = videoOutStream->index;
             av_interleaved_write_frame(ofmtCtx, pkt);
         }
@@ -2139,6 +2141,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
     if (audioEnabled && audioEncCtx) {
         avcodec_send_frame(audioEncCtx, nullptr);
         while (avcodec_receive_packet(audioEncCtx, pkt) >= 0) {
+            av_packet_rescale_ts(pkt, audioEncCtx->time_base, audioOutStream->time_base);
             pkt->stream_index = audioOutStream->index;
             av_interleaved_write_frame(ofmtCtx, pkt);
         }
@@ -3061,6 +3064,7 @@ bool FFmpegProcessor::extractAudio(const char* inputPath, const char* outputPath
                 while (ret >= 0) {
                     ret = avcodec_receive_packet(audioEncCtx, pkt);
                     if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
+                    av_packet_rescale_ts(pkt, audioEncCtx->time_base, audioOutStream->time_base);
                     pkt->stream_index = audioOutStream->index;
                     av_interleaved_write_frame(ofmtCtx, pkt);
                 }
@@ -3091,6 +3095,7 @@ bool FFmpegProcessor::extractAudio(const char* inputPath, const char* outputPath
         totalAudioSamples += flushFrame->nb_samples;
         if (avcodec_send_frame(audioEncCtx, flushFrame) >= 0) {
             while (avcodec_receive_packet(audioEncCtx, pkt) >= 0) {
+                av_packet_rescale_ts(pkt, audioEncCtx->time_base, audioOutStream->time_base);
                 pkt->stream_index = audioOutStream->index;
                 av_interleaved_write_frame(ofmtCtx, pkt);
             }
@@ -3101,7 +3106,8 @@ bool FFmpegProcessor::extractAudio(const char* inputPath, const char* outputPath
 
     avcodec_send_frame(audioEncCtx, nullptr);
     while (avcodec_receive_packet(audioEncCtx, pkt) >= 0) {
-        pkt->stream_index = audioOutStream->index;
+                av_packet_rescale_ts(pkt, audioEncCtx->time_base, audioOutStream->time_base);
+                pkt->stream_index = audioOutStream->index;
         av_interleaved_write_frame(ofmtCtx, pkt);
     }
 
