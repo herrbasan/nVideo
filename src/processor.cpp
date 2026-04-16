@@ -1727,15 +1727,17 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                 goto cleanup;
             }
 
-            char nsamplesArgs[64];
-            snprintf(nsamplesArgs, sizeof(nsamplesArgs), "n=%d", audioEncCtx->frame_size);
-            AVFilterContext* asetnsamplesCtx = nullptr;
-            ret = avfilter_graph_create_filter(&asetnsamplesCtx, asetnsamplesFilter, "asetnsamples",
-                                                nsamplesArgs, nullptr, audioFilterGraph);
-            if (ret < 0) {
-                error.message = std::string("Failed to create asetnsamples filter: ") + av_err_to_string(ret);
-                error.operation = "open";
-                goto cleanup;
+AVFilterContext* asetnsamplesCtx = nullptr;
+              if (audioEncCtx->frame_size > 0) {
+                  char nsamplesArgs[64];
+                  snprintf(nsamplesArgs, sizeof(nsamplesArgs), "n=%d", audioEncCtx->frame_size);
+                  ret = avfilter_graph_create_filter(&asetnsamplesCtx, asetnsamplesFilter, "asetnsamples",
+                                                      nsamplesArgs, nullptr, audioFilterGraph);
+                  if (ret < 0) {
+                      error.message = std::string("Failed to create asetnsamples filter: ") + av_err_to_string(ret);
+                      error.operation = "open";
+                      goto cleanup;
+                  }
             }
 
             // Build the chain: src → [user filters] → aformat → asetnsamples → sink
@@ -1790,19 +1792,28 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                 }
             }
 
-            // aformat → asetnsamples → sink
-            ret = avfilter_link(aformatCtx, 0, asetnsamplesCtx, 0);
-            if (ret < 0) {
-                error.message = std::string("Failed to link audio: aformat → asetnsamples: ") + av_err_to_string(ret);
-                error.operation = "open";
-                goto cleanup;
-            }
+// aformat → (asetnsamples) → sink
+              if (asetnsamplesCtx) {
+                  ret = avfilter_link(aformatCtx, 0, asetnsamplesCtx, 0);
+                  if (ret < 0) {
+                      error.message = std::string("Failed to link audio: aformat → asetnsamples: ") + av_err_to_string(ret);
+                      error.operation = "open";
+                      goto cleanup;
+                  }
 
-            ret = avfilter_link(asetnsamplesCtx, 0, audioBuffersinkCtx, 0);
-            if (ret < 0) {
-                error.message = std::string("Failed to link audio: asetnsamples → sink: ") + av_err_to_string(ret);
-                error.operation = "open";
-                goto cleanup;
+                  ret = avfilter_link(asetnsamplesCtx, 0, audioBuffersinkCtx, 0);
+                  if (ret < 0) {
+                      error.message = std::string("Failed to link audio: asetnsamples → sink: ") + av_err_to_string(ret);
+                      error.operation = "open";
+                      goto cleanup;
+                  }
+              } else {
+                  ret = avfilter_link(aformatCtx, 0, audioBuffersinkCtx, 0);
+                  if (ret < 0) {
+                      error.message = std::string("Failed to link audio: aformat → sink: ") + av_err_to_string(ret);
+                      error.operation = "open";
+                      goto cleanup;
+                  }
             }
 
             ret = avfilter_graph_config(audioFilterGraph, nullptr);
