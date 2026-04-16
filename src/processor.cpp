@@ -1860,6 +1860,11 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         av_frame_get_buffer(scaledFrame, 0);
     }
 
+    // Pre-allocate reusable frames for the transcode loop to avoid malloc overhead per-frame
+    AVFrame* swVideoFrame = av_frame_alloc();
+    AVFrame* videoFilteredFrame = av_frame_alloc();
+    AVFrame* audioFilteredFrame = av_frame_alloc();
+
     int64_t startTime = av_gettime();
     int64_t totalFrames = 0;
     int64_t totalAudioSamples = 0;
@@ -1897,7 +1902,8 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                 if (frame->hw_frames_ctx || frame->format == AV_PIX_FMT_CUDA ||
                     frame->format == AV_PIX_FMT_QSV || frame->format == AV_PIX_FMT_VAAPI ||
                     frame->format == AV_PIX_FMT_D3D11) {
-                    swFrame = av_frame_alloc();
+                    swFrame = swVideoFrame;
+                    av_frame_unref(swFrame);
                     t_before = av_gettime();
                     if (av_hwframe_transfer_data(swFrame, frame, 0) >= 0) {
                         swFrame->pts = frame->pts;
@@ -1906,7 +1912,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         encFrame = swFrame;
                         t_hw_transfer += av_gettime() - t_before;
                     } else {
-                        av_frame_free(&swFrame);
+                        av_frame_unref(swFrame);
                         swFrame = nullptr;
                     }
                 }
@@ -1920,7 +1926,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         continue;
                     }
 
-                    AVFrame* filteredFrame = av_frame_alloc();
+                    AVFrame* filteredFrame = videoFilteredFrame;
                     while (true) {
                         ret = av_buffersink_get_frame(videoBuffersinkCtx, filteredFrame);
                         if (ret < 0) break;
@@ -1940,7 +1946,11 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                             ret = avcodec_receive_packet(videoEncCtx, pkt);
                             t_video_encode += av_gettime() - t_before;
                             if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
+                            
+                            // Rescale timestamps from encoder time_base to output stream time_base
+                            av_packet_rescale_ts(pkt, videoEncCtx->time_base, videoOutStream->time_base);
                             pkt->stream_index = videoOutStream->index;
+                            
                             t_before = av_gettime();
                             av_interleaved_write_frame(ofmtCtx, pkt);
                             t_mux += av_gettime() - t_before;
@@ -1949,22 +1959,40 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         }
                         av_frame_unref(filteredFrame);
                     }
-                    av_frame_free(&filteredFrame);
                     av_frame_unref(frame);
                     if (swFrame) av_frame_free(&swFrame);
                 } else {
                     // Scale if needed (no filter graph) - use encFrame (already SW if HW decoded)
                     if (swsCtx) {
                         t_before = av_gettime();
+                        
+                        // ESSENTIAL DATA PLUMBING INSIGHT:
+                        // Do NOT use av_frame_make_writable(scaledFrame) here! If the encoder still holds
+                        // a lock on the scaledFrame buffer from the previous iteration, make_writable will 
+                        // allocate a new buffer AND perform a deep memcpy of the entire 1080p/4K pixel payload 
+                        // just to give us a fresh lock, which sws_scale will then immediately overwrite, 
+                        // wasting massive RAM bandwidth. Instead, we safely unref the frame, re-apply the 
+                        // properties, and allocate a fresh zero-copy buffer block.
+                        av_frame_unref(scaledFrame);
+                        scaledFrame->format = videoEncCtx->pix_fmt;
+                        scaledFrame->width = videoEncCtx->width;
+                        scaledFrame->height = videoEncCtx->height;
+                        av_frame_get_buffer(scaledFrame, 32);
+
                         sws_scale(swsCtx, encFrame->data, encFrame->linesize, 0, encFrame->height,
                                   scaledFrame->data, scaledFrame->linesize);
+                        
+                        // Pass along PTS and duration
+                        scaledFrame->pts = encFrame->pts;
+                        scaledFrame->pkt_dts = encFrame->pkt_dts;
+                        scaledFrame->duration = encFrame->duration;
+                        
                         t_video_scale += av_gettime() - t_before;
                         encFrame = scaledFrame;
                     }
 
                     ret = avcodec_send_frame(videoEncCtx, encFrame);
                     if (ret < 0) {
-                        if (encFrame == scaledFrame) av_frame_unref(encFrame);
                         av_frame_unref(frame);
                         if (swFrame) av_frame_free(&swFrame);
                         continue;
@@ -1975,7 +2003,10 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         ret = avcodec_receive_packet(videoEncCtx, pkt);
                         t_video_encode += av_gettime() - t_before;
                         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
+                        
+                        av_packet_rescale_ts(pkt, videoEncCtx->time_base, videoOutStream->time_base);
                         pkt->stream_index = videoOutStream->index;
+                        
                         t_before = av_gettime();
                         av_interleaved_write_frame(ofmtCtx, pkt);
                         t_mux += av_gettime() - t_before;
@@ -1983,7 +2014,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         videoFramesProcessed++;
                     }
 
-                    if (encFrame == scaledFrame) av_frame_unref(encFrame);
+                    // Leave scaledFrame alone; we will unref it dynamically on the next pass if necessary.
                     av_frame_unref(frame);
                     if (swFrame) av_frame_free(&swFrame);
                 }
@@ -1997,15 +2028,22 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                 prog.time = currentTime;
                 prog.percent = totalDuration > 0 ? (currentTime / totalDuration) * 100.0 : 0.0;
                 prog.speed = currentTime > 0 ? currentTime / (currentTime + 0.001) : 0.0;
+                prog.size = ofmtCtx->pb ? avio_size(ofmtCtx->pb) : 0;
+                prog.bitrate = prog.size * 8 / (currentTime > 0 ? currentTime : 1);
                 prog.frames = totalFrames;
                 prog.fps = currentTime > 0 ? totalFrames / currentTime : 0.0;
                 prog.audioFrames = totalAudioSamples;
+                prog.audioTime = audioPtsCounter / (audioEncCtx ? (double)audioEncCtx->sample_rate : 44100.0);
                 prog.estimatedDuration = totalDuration;
+                if (prog.percent > 0) prog.estimatedSize = (int64_t)(prog.size / (prog.percent / 100.0));
                 prog.eta = (prog.speed > 0) ? (totalDuration - currentTime) / prog.speed : 0.0;
+                prog.dupFrames = dupFrames;
+                prog.dropFrames = dropFrames;
                 progressCallback(prog);
                 lastProgressTime = currentTime;
             }
         } else if (streamIdx == videoStreamIdx && videoCopy) {
+            av_packet_rescale_ts(pkt, ifmtCtx->streams[videoStreamIdx]->time_base, videoOutStream->time_base);
             pkt->stream_index = videoOutStream->index;
             av_interleaved_write_frame(ofmtCtx, pkt);
             av_packet_unref(pkt);
@@ -2022,7 +2060,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                 av_frame_unref(frame);
                 if (ret < 0) continue;
 
-                AVFrame* filteredFrame = av_frame_alloc();
+                AVFrame* filteredFrame = audioFilteredFrame;
                 while (true) {
                     ret = av_buffersink_get_frame(audioBuffersinkCtx, filteredFrame);
                     if (ret < 0) break;
@@ -2047,7 +2085,10 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                         ret = avcodec_receive_packet(audioEncCtx, pkt);
                         t_audio_encode += av_gettime() - t_before;
                         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
+                        
+                        av_packet_rescale_ts(pkt, audioEncCtx->time_base, audioOutStream->time_base);
                         pkt->stream_index = audioOutStream->index;
+                        
                         t_before = av_gettime();
                         av_interleaved_write_frame(ofmtCtx, pkt);
                         t_mux += av_gettime() - t_before;
@@ -2055,10 +2096,10 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
                     }
                     av_frame_unref(filteredFrame);
                 }
-                av_frame_free(&filteredFrame);
             }
             t_phase_start = av_gettime();
         } else if (streamIdx == audioStreamIdx && audioCopy) {
+            av_packet_rescale_ts(pkt, ifmtCtx->streams[audioStreamIdx]->time_base, audioOutStream->time_base);
             pkt->stream_index = audioOutStream->index;
             av_interleaved_write_frame(ofmtCtx, pkt);
             av_packet_unref(pkt);
@@ -2072,7 +2113,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
     // Flush audio filter graph — drain remaining buffered samples from asetnsamples
     if (audioEnabled && audioBuffersrcCtx && audioBuffersinkCtx) {
         av_buffersrc_add_frame(audioBuffersrcCtx, nullptr);
-        AVFrame* flushFrame = av_frame_alloc();
+        AVFrame* flushFrame = audioFilteredFrame;
         while (av_buffersink_get_frame(audioBuffersinkCtx, flushFrame) >= 0) {
             flushFrame->pts = audioPtsCounter;
             audioPtsCounter += flushFrame->nb_samples;
@@ -2085,7 +2126,6 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             }
             av_frame_unref(flushFrame);
         }
-        av_frame_free(&flushFrame);
     }
 
     // Flush encoders
@@ -2156,6 +2196,9 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
 
 cleanup:
     if (scaledFrame) av_frame_free(&scaledFrame);
+    if (swVideoFrame) av_frame_free(&swVideoFrame);
+    if (videoFilteredFrame) av_frame_free(&videoFilteredFrame);
+    if (audioFilteredFrame) av_frame_free(&audioFilteredFrame);
     if (frame) av_frame_free(&frame);
     if (pkt) av_packet_free(&pkt);
     if (videoDecCtx) avcodec_free_context(&videoDecCtx);
