@@ -1189,6 +1189,22 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
     AVStream* videoOutStream = nullptr;
     AVStream* audioOutStream = nullptr;
 
+    // Audio pipeline (declared at function scope for goto cleanup access)
+    AVCodecContext* audioDecCtx = nullptr;
+    AVCodecContext* audioEncCtx = nullptr;
+    AVFilterGraph* audioFilterGraph = nullptr;
+    AVFilterContext* audioBuffersrcCtx = nullptr;
+    AVFilterContext* audioBuffersinkCtx = nullptr;
+
+    // Frame buffers (declared at function scope for goto cleanup access)
+    AVFrame* swVideoFrame = nullptr;
+    AVFrame* videoFilteredFrame = nullptr;
+    AVFrame* audioFilteredFrame = nullptr;
+
+    // Hardware contexts (declared at function scope for cleanup)
+    AVBufferRef* hwDeviceCtx = nullptr;
+    AVBufferRef* hwFramesCtx = nullptr;
+
     // Open input
     if ((ret = avformat_open_input(&ifmtCtx, inputPath, nullptr, nullptr)) < 0) {
         error.message = std::string("Failed to open input: ") + av_err_to_string(ret);
@@ -1251,7 +1267,6 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         videoDecCtx->thread_type = FF_THREAD_FRAME | FF_THREAD_SLICE;
 
         // Hardware decode setup
-        AVBufferRef* hwDeviceCtx = nullptr;
         bool hwDecode = !opts.hwaccel.empty();
         if (hwDecode) {
             hwDeviceCtx = createHwDeviceContext(opts.hwaccel.c_str());
@@ -1298,7 +1313,6 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         // Pixel format - check if hardware encoder
         AVPixelFormat pixFmt = AV_PIX_FMT_YUV420P;
         bool hwEncode = !opts.hwaccel.empty();
-        AVBufferRef* hwFramesCtx = nullptr;
 
         if (hwEncode && hwDeviceCtx) {
             // Get supported pixel formats from encoder
@@ -1384,12 +1398,15 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         }
 
         // CRF and Preset via av_opt_set on priv_data (x264/x265)
+        // NVENC codecs use 'cq' instead of 'crf'
         if (opts.video.crf > 0) {
             char crfStr[16];
             snprintf(crfStr, sizeof(crfStr), "%d", opts.video.crf);
-            ret = av_opt_set(videoEncCtx->priv_data, "crf", crfStr, 0);
+            bool isNvenc = (opts.video.codec.find("nvenc") != std::string::npos);
+            const char* optName = isNvenc ? "cq" : "crf";
+            ret = av_opt_set(videoEncCtx->priv_data, optName, crfStr, 0);
             if (ret < 0) {
-                error.message = std::string("Failed to set CRF: ") + av_err_to_string(ret);
+                error.message = std::string("Failed to set ") + optName + ": " + av_err_to_string(ret);
                 error.operation = "open";
                 goto cleanup;
             }
@@ -1556,11 +1573,6 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
     }
 
     // Audio encoding pipeline (filter graph only — SWR reserved for streaming path)
-    AVCodecContext* audioDecCtx = nullptr;
-    AVCodecContext* audioEncCtx = nullptr;
-    AVFilterGraph* audioFilterGraph = nullptr;
-    AVFilterContext* audioBuffersrcCtx = nullptr;
-    AVFilterContext* audioBuffersinkCtx = nullptr;
     bool audioEnabled = (audioStreamIdx >= 0 && !opts.audio.codec.empty() && opts.audio.codec != "copy");
     bool audioCopy = (audioStreamIdx >= 0 && opts.audio.codec == "copy");
 
@@ -1872,9 +1884,9 @@ AVFilterContext* asetnsamplesCtx = nullptr;
     }
 
     // Pre-allocate reusable frames for the transcode loop to avoid malloc overhead per-frame
-    AVFrame* swVideoFrame = av_frame_alloc();
-    AVFrame* videoFilteredFrame = av_frame_alloc();
-    AVFrame* audioFilteredFrame = av_frame_alloc();
+    swVideoFrame = av_frame_alloc();
+    videoFilteredFrame = av_frame_alloc();
+    audioFilteredFrame = av_frame_alloc();
 
     int64_t startTime = av_gettime();
     int64_t totalFrames = 0;
@@ -2222,6 +2234,8 @@ cleanup:
     if (swsCtx) sws_freeContext(swsCtx);
     if (videoFilterGraph) avfilter_graph_free(&videoFilterGraph);
     if (audioFilterGraph) avfilter_graph_free(&audioFilterGraph);
+    if (hwFramesCtx) av_buffer_unref(&hwFramesCtx);
+    if (hwDeviceCtx) av_buffer_unref(&hwDeviceCtx);
     if (ofmtCtx && !(ofmtCtx->oformat->flags & AVFMT_NOFILE)) {
         avio_closep(&ofmtCtx->pb);
     }
