@@ -1,0 +1,5650 @@
+{
+  "all": [
+    {
+      "name": "aap",
+      "description": "Apply Affine Projection algorithm to first audio stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "abench",
+      "description": "Benchmark part of a filtergraph.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "acompressor",
+      "description": "Audio compressor.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "acontrast",
+      "description": "Simple audio dynamic range compression/expansion filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "acopy",
+      "description": "Copy the input audio unchanged to the output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "acue",
+      "description": "Delay filtering to match a cue.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "acrossfade",
+      "description": "Cross fade two input audio streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "acrossover",
+      "description": "Split audio into per-bands streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "acrusher",
+      "description": "Reduce audio bit resolution.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adeclick",
+      "description": "Remove impulsive noise from input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adeclip",
+      "description": "Remove clipping from input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adecorrelate",
+      "description": "Apply decorrelation to input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adelay",
+      "description": "Delay one or more audio channels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adenorm",
+      "description": "Remedy denormals by adding extremely low-level noise.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aderivative",
+      "description": "Compute derivative of input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adrc",
+      "description": "Audio Spectral Dynamic Range Controller.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adynamicequalizer",
+      "description": "Apply Dynamic Equalization of input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adynamicsmooth",
+      "description": "Apply Dynamic Smoothing of input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aecho",
+      "description": "Add echoing to the audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aemphasis",
+      "description": "Audio emphasis.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aeval",
+      "description": "Filter audio signal according to a specified expression.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aexciter",
+      "description": "Enhance high frequency part of audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afade",
+      "description": "Fade in/out input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afftdn",
+      "description": "Denoise audio samples using FFT.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afftfilt",
+      "description": "Apply arbitrary expressions to samples in frequency domain.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afir",
+      "description": "Apply Finite Impulse Response filter with supplied coefficients in additional stream(s).",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aformat",
+      "description": "Convert the input audio to one of the specified formats.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afreqshift",
+      "description": "Apply frequency shifting to input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afwtdn",
+      "description": "Denoise audio stream using Wavelets.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "agate",
+      "description": "Audio gate.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aiir",
+      "description": "Apply Infinite Impulse Response filter with supplied coefficients.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aintegral",
+      "description": "Compute integral of input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ainterleave",
+      "description": "Temporally interleave audio inputs.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "alatency",
+      "description": "Report audio filtering latency.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "alimiter",
+      "description": "Audio lookahead limiter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "allpass",
+      "description": "Apply a two-pole all-pass filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aloop",
+      "description": "Loop audio samples.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "amerge",
+      "description": "Merge two or more audio streams into a single multi-channel stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ametadata",
+      "description": "Manipulate audio frame metadata.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "amix",
+      "description": "Audio mixing.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "amultiply",
+      "description": "Multiply two audio streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "anequalizer",
+      "description": "Apply high-order audio parametric multi band equalizer.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "anlmdn",
+      "description": "Reduce broadband noise from stream using Non-Local Means.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "anlmf",
+      "description": "Apply Normalized Least-Mean-Fourth algorithm to first audio stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "anlms",
+      "description": "Apply Normalized Least-Mean-Squares algorithm to first audio stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "anull",
+      "description": "Pass the source unchanged to the output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "apad",
+      "description": "Pad audio with silence.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aperms",
+      "description": "Set permissions for the output audio frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aphaser",
+      "description": "Add a phasing effect to the audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aphaseshift",
+      "description": "Apply phase shifting to input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "apsnr",
+      "description": "Measure Audio Peak Signal-to-Noise Ratio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "apsyclip",
+      "description": "Audio Psychoacoustic Clipper.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "apulsator",
+      "description": "Audio pulsator.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "arealtime",
+      "description": "Slow down filtering to match realtime.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aresample",
+      "description": "Resample audio data.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "areverse",
+      "description": "Reverse an audio clip.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "arls",
+      "description": "Apply Recursive Least Squares algorithm to first audio stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "arnndn",
+      "description": "Reduce noise from speech using Recurrent Neural Networks.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asdr",
+      "description": "Measure Audio Signal-to-Distortion Ratio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asegment",
+      "description": "Segment audio stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aselect",
+      "description": "Select audio frames to pass in output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asendcmd",
+      "description": "Send commands to filters.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asetnsamples",
+      "description": "Set the number of samples for each output audio frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asetpts",
+      "description": "Set PTS for the output audio frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asetrate",
+      "description": "Change the sample rate without altering the data.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asettb",
+      "description": "Set timebase for the audio output link.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ashowinfo",
+      "description": "Show textual information for each audio frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asidedata",
+      "description": "Manipulate audio frame side data.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asisdr",
+      "description": "Measure Audio Scale-Invariant Signal-to-Distortion Ratio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asoftclip",
+      "description": "Audio Soft Clipper.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aspectralstats",
+      "description": "Show frequency domain statistics about audio frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asplit",
+      "description": "Pass on the audio input to N audio outputs.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "astats",
+      "description": "Show time domain statistics about audio frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "astreamselect",
+      "description": "Select audio streams",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asubboost",
+      "description": "Boost subwoofer frequencies.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asubcut",
+      "description": "Cut subwoofer frequencies.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asupercut",
+      "description": "Cut super frequencies.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asuperpass",
+      "description": "Apply high order Butterworth band-pass filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "asuperstop",
+      "description": "Apply high order Butterworth band-stop filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "atempo",
+      "description": "Adjust audio tempo.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "atilt",
+      "description": "Apply spectral tilt to audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "atrim",
+      "description": "Pick one continuous section from the input, drop the rest.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "axcorrelate",
+      "description": "Cross-correlate two audio streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "azmq",
+      "description": "Receive commands through ZMQ and broker them to filters.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bandpass",
+      "description": "Apply a two-pole Butterworth band-pass filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bandreject",
+      "description": "Apply a two-pole Butterworth band-reject filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bass",
+      "description": "Boost or cut lower frequencies.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "biquad",
+      "description": "Apply a biquad IIR filter with the given coefficients.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "channelmap",
+      "description": "Remap audio channels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "channelsplit",
+      "description": "Split audio into per-channel streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "chorus",
+      "description": "Add a chorus effect to the audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "compand",
+      "description": "Compress or expand audio dynamic range.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "compensationdelay",
+      "description": "Audio Compensation Delay Line.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "crossfeed",
+      "description": "Apply headphone crossfeed filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "crystalizer",
+      "description": "Simple audio noise sharpening filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dcshift",
+      "description": "Apply a DC shift to the audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deesser",
+      "description": "Apply de-essing to the audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dialoguenhance",
+      "description": "Audio Dialogue Enhancement.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "drmeter",
+      "description": "Measure audio dynamic range.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dynaudnorm",
+      "description": "Dynamic Audio Normalizer.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "earwax",
+      "description": "Widen the stereo image.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ebur128",
+      "description": "EBU R128 scanner.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "equalizer",
+      "description": "Apply two-pole peaking equalization (EQ) filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "extrastereo",
+      "description": "Increase difference between stereo audio channels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "firequalizer",
+      "description": "Finite Impulse Response Equalizer.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "flanger",
+      "description": "Apply a flanging effect to the audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "haas",
+      "description": "Apply Haas Stereo Enhancer.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hdcd",
+      "description": "Apply High Definition Compatible Digital (HDCD) decoding.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "headphone",
+      "description": "Apply headphone binaural spatialization with HRTFs in additional streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "highpass",
+      "description": "Apply a high-pass filter with 3dB point frequency.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "highshelf",
+      "description": "Apply a high shelf filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "join",
+      "description": "Join multiple audio streams into multi-channel output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "loudnorm",
+      "description": "EBU R128 loudness normalization",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lowpass",
+      "description": "Apply a low-pass filter with 3dB point frequency.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lowshelf",
+      "description": "Apply a low shelf filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lv2",
+      "description": "Apply LV2 effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mcompand",
+      "description": "Multiband Compress or expand audio dynamic range.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pan",
+      "description": "Remix channels with coefficients (panning).",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "replaygain",
+      "description": "ReplayGain scanner.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "rubberband",
+      "description": "Apply time-stretching and pitch-shifting.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sidechaincompress",
+      "description": "Sidechain compressor.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sidechaingate",
+      "description": "Audio sidechain gate.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "silencedetect",
+      "description": "Detect silence.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "silenceremove",
+      "description": "Remove silence.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "speechnorm",
+      "description": "Speech Normalizer.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "stereotools",
+      "description": "Apply various stereo tools.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "stereowiden",
+      "description": "Apply stereo widening effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "superequalizer",
+      "description": "Apply 18 band equalization filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "surround",
+      "description": "Apply audio surround upmix filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tiltshelf",
+      "description": "Apply a tilt shelf filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "treble",
+      "description": "Boost or cut upper frequencies.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tremolo",
+      "description": "Apply tremolo effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vibrato",
+      "description": "Apply vibrato effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "virtualbass",
+      "description": "Audio Virtual Bass.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "volume",
+      "description": "Change input volume.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "volumedetect",
+      "description": "Detect audio volume.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "whisper",
+      "description": "Transcribe audio using whisper.cpp.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aevalsrc",
+      "description": "Generate an audio signal generated by an expression.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afdelaysrc",
+      "description": "Generate a Fractional delay FIR coefficients.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afireqsrc",
+      "description": "Generate a FIR equalizer coefficients audio stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "afirsrc",
+      "description": "Generate a FIR coefficients audio stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "anoisesrc",
+      "description": "Generate a noise audio signal.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "anullsrc",
+      "description": "Null audio source, return empty audio frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hilbert",
+      "description": "Generate a Hilbert transform FIR coefficients.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sinc",
+      "description": "Generate a sinc kaiser-windowed low-pass, high-pass, band-pass, or band-reject FIR coefficients.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sine",
+      "description": "Generate sine wave audio signal.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "anullsink",
+      "description": "Do absolutely nothing with the input audio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "addroi",
+      "description": "Add region of interest to frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "alphaextract",
+      "description": "Extract an alpha channel as a grayscale image component.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "alphamerge",
+      "description": "Copy the luma value of the second input into the alpha channel of the first input.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "amplify",
+      "description": "Amplify changes between successive video frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ass",
+      "description": "Render ASS subtitles onto input video using the libass library.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "atadenoise",
+      "description": "Apply an Adaptive Temporal Averaging Denoiser.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "avgblur",
+      "description": "Apply Average Blur filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "avgblur_opencl",
+      "description": "Apply average blur filter",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "avgblur_vulkan",
+      "description": "Apply avgblur mask to input video",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "backgroundkey",
+      "description": "Turns a static background into transparency.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bbox",
+      "description": "Compute bounding box for each frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bench",
+      "description": "Benchmark part of a filtergraph.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bilateral",
+      "description": "Apply Bilateral filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bilateral_cuda",
+      "description": "GPU accelerated bilateral filter",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bitplanenoise",
+      "description": "Measure bit plane noise.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "blackdetect",
+      "description": "Detect video intervals that are (almost) black.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "blackdetect_vulkan",
+      "description": "Detect video intervals that are (almost) black.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "blackframe",
+      "description": "Detect frames that are (almost) black.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "blend",
+      "description": "Blend two video frames into each other.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "blend_vulkan",
+      "description": "Blend two video frames in Vulkan",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "blockdetect",
+      "description": "Blockdetect filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "blurdetect",
+      "description": "Blurdetect filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bm3d",
+      "description": "Block-Matching 3D denoiser.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "boxblur",
+      "description": "Blur the input.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "boxblur_opencl",
+      "description": "Apply boxblur filter to input video",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bwdif",
+      "description": "Deinterlace the input image.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bwdif_cuda",
+      "description": "Deinterlace CUDA frames",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "bwdif_vulkan",
+      "description": "Deinterlace Vulkan frames via bwdif",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "cas",
+      "description": "Contrast Adaptive Sharpen.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ccrepack",
+      "description": "Repack CEA-708 closed caption metadata",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "chromaber_vulkan",
+      "description": "Offset chroma of input video (chromatic aberration)",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "chromahold",
+      "description": "Turns a certain color range into gray.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "chromakey",
+      "description": "Turns a certain color into transparency. Operates on YUV colors.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "chromakey_cuda",
+      "description": "GPU accelerated chromakey filter",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "chromanr",
+      "description": "Reduce chrominance noise.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "chromashift",
+      "description": "Shift chroma.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ciescope",
+      "description": "Video CIE scope.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "codecview",
+      "description": "Visualize information about some codecs.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorbalance",
+      "description": "Adjust the color balance.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorchannelmixer",
+      "description": "Adjust colors by mixing color channels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorcontrast",
+      "description": "Adjust color contrast between RGB components.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorcorrect",
+      "description": "Adjust color white balance selectively for blacks and whites.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colordetect",
+      "description": "Detect video color properties.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorize",
+      "description": "Overlay a solid color on the video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorkey",
+      "description": "Turns a certain color into transparency. Operates on RGB colors.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorkey_opencl",
+      "description": "Turns a certain color into transparency. Operates on RGB colors.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorhold",
+      "description": "Turns a certain color range into gray. Operates on RGB colors.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorlevels",
+      "description": "Adjust the color levels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colormap",
+      "description": "Apply custom Color Maps to video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colormatrix",
+      "description": "Convert color matrix.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorspace",
+      "description": "Convert between colorspaces.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorspace_cuda",
+      "description": "CUDA accelerated video color converter",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colortemperature",
+      "description": "Adjust color temperature of video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "convolution",
+      "description": "Apply convolution filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "convolution_opencl",
+      "description": "Apply convolution mask to input video",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "convolve",
+      "description": "Convolve first video stream with second video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "copy",
+      "description": "Copy the input video unchanged to the output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "corr",
+      "description": "Calculate the correlation between two video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "cover_rect",
+      "description": "Find and cover a user specified object.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "crop",
+      "description": "Crop the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "cropdetect",
+      "description": "Auto-detect crop size.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "cue",
+      "description": "Delay filtering to match a cue.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "curves",
+      "description": "Adjust components curves.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "datascope",
+      "description": "Video data analysis.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dblur",
+      "description": "Apply Directional Blur filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dctdnoiz",
+      "description": "Denoise frames using 2D DCT.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deband",
+      "description": "Debands video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deblock",
+      "description": "Deblock video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "decimate",
+      "description": "Decimate frames (post field matching filter).",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deconvolve",
+      "description": "Deconvolve first video stream with second video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dedot",
+      "description": "Reduce cross-luminance and cross-color.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deflate",
+      "description": "Apply deflate effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deflicker",
+      "description": "Remove temporal frame luminance variations.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deinterlace_qsv",
+      "description": "Quick Sync Video \"deinterlacing\"",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deinterlace_d3d12",
+      "description": "Deinterlacing using Direct3D12 Video Processor",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deinterlace_vaapi",
+      "description": "Deinterlacing of VAAPI surfaces",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dejudder",
+      "description": "Remove judder produced by pullup.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "delogo",
+      "description": "Remove logo from input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "denoise_vaapi",
+      "description": "VAAPI VPP for de-noise",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deshake",
+      "description": "Stabilize shaky video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "deshake_opencl",
+      "description": "Feature-point based video stabilization filter",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "despill",
+      "description": "Despill video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "detelecine",
+      "description": "Apply an inverse telecine pattern.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dilation",
+      "description": "Apply dilation effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "dilation_opencl",
+      "description": "Apply dilation effect",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "displace",
+      "description": "Displace pixels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "doubleweave",
+      "description": "Weave input video fields into double number of frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "drawbox",
+      "description": "Draw a colored box on the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "drawgraph",
+      "description": "Draw a graph using input video metadata.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "drawgrid",
+      "description": "Draw a colored grid on the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "drawtext",
+      "description": "Draw text on top of video frames using libfreetype library.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "edgedetect",
+      "description": "Detect and draw edge.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "elbg",
+      "description": "Apply posterize effect, using the ELBG algorithm.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "entropy",
+      "description": "Measure video frames entropy.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "epx",
+      "description": "Scale the input using EPX algorithm.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "eq",
+      "description": "Adjust brightness, contrast, gamma, and saturation.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "erosion",
+      "description": "Apply erosion effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "erosion_opencl",
+      "description": "Apply erosion effect",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "estdif",
+      "description": "Apply Edge Slope Tracing deinterlace.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "exposure",
+      "description": "Adjust exposure of the video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "extractplanes",
+      "description": "Extract planes as grayscale frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fade",
+      "description": "Fade in/out input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "feedback",
+      "description": "Apply feedback video filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fftdnoiz",
+      "description": "Denoise frames using 3D FFT.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fftfilt",
+      "description": "Apply arbitrary expressions to pixels in frequency domain.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "field",
+      "description": "Extract a field from the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fieldhint",
+      "description": "Field matching using hints.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fieldmatch",
+      "description": "Field matching for inverse telecine.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fieldorder",
+      "description": "Set the field order.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fillborders",
+      "description": "Fill borders of the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "find_rect",
+      "description": "Find a user specified object.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "flip_vulkan",
+      "description": "Flip both horizontally and vertically",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "floodfill",
+      "description": "Fill area with same color with another color.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "format",
+      "description": "Convert the input video to one of the specified pixel formats.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fps",
+      "description": "Force constant framerate.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "framepack",
+      "description": "Generate a frame packed stereoscopic video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "framerate",
+      "description": "Upsamples or downsamples progressive source between specified frame rates.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "framestep",
+      "description": "Select one frame every N frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "freezedetect",
+      "description": "Detects frozen video input.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "freezeframes",
+      "description": "Freeze video frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "frei0r",
+      "description": "Apply a frei0r effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fspp",
+      "description": "Apply Fast Simple Post-processing filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "fsync",
+      "description": "Synchronize video frames from external source.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "gblur",
+      "description": "Apply Gaussian Blur filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "gblur_vulkan",
+      "description": "Gaussian Blur in Vulkan",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "geq",
+      "description": "Apply generic equation to each pixel.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "gradfun",
+      "description": "Debands video quickly using gradients.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "graphmonitor",
+      "description": "Show various filtergraph stats.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "grayworld",
+      "description": "Adjust white balance using LAB gray world algorithm",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "greyedge",
+      "description": "Estimates scene illumination by grey edge assumption.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "guided",
+      "description": "Apply Guided filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "haldclut",
+      "description": "Adjust colors using a Hald CLUT.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hflip",
+      "description": "Horizontally flip the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hflip_vulkan",
+      "description": "Horizontally flip the input video in Vulkan",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "histeq",
+      "description": "Apply global color histogram equalization.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "histogram",
+      "description": "Compute and draw a histogram.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hqdn3d",
+      "description": "Apply a High Quality 3D Denoiser.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hqx",
+      "description": "Scale the input by 2, 3 or 4 using the hq*x magnification algorithm.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hstack",
+      "description": "Stack video inputs horizontally.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hsvhold",
+      "description": "Turns a certain HSV range into gray.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hsvkey",
+      "description": "Turns a certain HSV range into transparency. Operates on YUV colors.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hue",
+      "description": "Adjust the hue and saturation of the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "huesaturation",
+      "description": "Apply hue-saturation-intensity adjustments.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hwdownload",
+      "description": "Download a hardware frame to a normal frame",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hwmap",
+      "description": "Map hardware frames",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hwupload",
+      "description": "Upload a normal frame to a hardware frame",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hwupload_cuda",
+      "description": "Upload a system memory frame to a CUDA device.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hysteresis",
+      "description": "Grow first stream into second stream by connecting components.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "identity",
+      "description": "Calculate the Identity between two video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "idet",
+      "description": "Interlace detect Filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "il",
+      "description": "Deinterleave or interleave fields.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "inflate",
+      "description": "Apply inflate effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "interlace",
+      "description": "Convert progressive video into interlaced.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "interlace_vulkan",
+      "description": "Convert progressive video into interlaced.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "interleave",
+      "description": "Temporally interleave video inputs.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "kerndeint",
+      "description": "Apply kernel deinterlacing to the input.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "kirsch",
+      "description": "Apply kirsch operator.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lagfun",
+      "description": "Slowly update darker pixels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "latency",
+      "description": "Report video filtering latency.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lcevc",
+      "description": "LCEVC",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lenscorrection",
+      "description": "Rectify the image by correcting for lens distortion.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "libplacebo",
+      "description": "Apply various GPU filters from libplacebo",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "libvmaf",
+      "description": "Calculate the VMAF between two video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "limitdiff",
+      "description": "Apply filtering with limiting difference.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "limiter",
+      "description": "Limit pixels components to the specified range.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "loop",
+      "description": "Loop video frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lumakey",
+      "description": "Turns a certain luma into transparency.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lut",
+      "description": "Compute and apply a lookup table to the RGB/YUV input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lut1d",
+      "description": "Adjust colors using a 1D LUT.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lut2",
+      "description": "Compute and apply a lookup table from two video inputs.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lut3d",
+      "description": "Adjust colors using a 3D LUT.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lutrgb",
+      "description": "Compute and apply a lookup table to the RGB input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "lutyuv",
+      "description": "Compute and apply a lookup table to the YUV input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "maskedclamp",
+      "description": "Clamp first stream with second stream and third stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "maskedmax",
+      "description": "Apply filtering with maximum difference of two streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "maskedmerge",
+      "description": "Merge first stream with second stream using third stream as mask.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "maskedmin",
+      "description": "Apply filtering with minimum difference of two streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "maskedthreshold",
+      "description": "Pick pixels comparing absolute difference of two streams with threshold.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "maskfun",
+      "description": "Create Mask.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mcdeint",
+      "description": "Apply motion compensating deinterlacing.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "median",
+      "description": "Apply Median filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mergeplanes",
+      "description": "Merge planes.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mestimate",
+      "description": "Generate motion vectors.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mestimate_d3d12",
+      "description": "Generate motion vectors using D3D12 hardware acceleration.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "metadata",
+      "description": "Manipulate video frame metadata.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "midequalizer",
+      "description": "Apply Midway Equalization.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "minterpolate",
+      "description": "Frame rate conversion using Motion Interpolation.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mix",
+      "description": "Mix video inputs.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "monochrome",
+      "description": "Convert video to gray using custom color filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "morpho",
+      "description": "Apply Morphological filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mpdecimate",
+      "description": "Remove near-duplicate frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "msad",
+      "description": "Calculate the MSAD between two video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "multiply",
+      "description": "Multiply first video stream with second video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "negate",
+      "description": "Negate input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "nlmeans",
+      "description": "Non-local means denoiser.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "nlmeans_opencl",
+      "description": "Non-local means denoiser through OpenCL",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "nlmeans_vulkan",
+      "description": "Non-local means denoiser (Vulkan)",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "nnedi",
+      "description": "Apply neural network edge directed interpolation intra-only deinterlacer.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "noformat",
+      "description": "Force libavfilter not to use any of the specified pixel formats for the input to the next filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "noise",
+      "description": "Add noise.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "normalize",
+      "description": "Normalize RGB video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "null",
+      "description": "Pass the source unchanged to the output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "oscilloscope",
+      "description": "2D Video Oscilloscope.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "overlay",
+      "description": "Overlay a video source on top of the input.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "overlay_opencl",
+      "description": "Overlay one video on top of another",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "overlay_qsv",
+      "description": "Quick Sync Video overlay.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "overlay_vaapi",
+      "description": "Overlay one video on top of another",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "overlay_vulkan",
+      "description": "Overlay a source on top of another",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "overlay_cuda",
+      "description": "Overlay one video on top of another using CUDA",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "owdenoise",
+      "description": "Denoise using wavelets.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pad",
+      "description": "Pad the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pad_cuda",
+      "description": "CUDA-based GPU padding filter",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pad_opencl",
+      "description": "Pad the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "palettegen",
+      "description": "Find the optimal palette for a given stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "paletteuse",
+      "description": "Use a palette to downsample an input video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "perms",
+      "description": "Set permissions for the output video frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "perspective",
+      "description": "Correct the perspective of video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "phase",
+      "description": "Phase shift fields.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "photosensitivity",
+      "description": "Filter out photosensitive epilepsy seizure-inducing flashes.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pixdesctest",
+      "description": "Test pixel format definitions.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pixelize",
+      "description": "Pixelize video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pixscope",
+      "description": "Pixel data analysis.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pp7",
+      "description": "Apply Postprocessing 7 filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "premultiply",
+      "description": "PreMultiply first stream with first plane of second stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "premultiply_dynamic",
+      "description": "Premultiply or unpremultiply an image in-place, as needed.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "prewitt",
+      "description": "Apply prewitt operator.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "prewitt_opencl",
+      "description": "Apply prewitt operator",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "procamp_vaapi",
+      "description": "ProcAmp (color balance) adjustments for hue, saturation, brightness, contrast",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "program_opencl",
+      "description": "Filter video using an OpenCL program",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pseudocolor",
+      "description": "Make pseudocolored video frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "psnr",
+      "description": "Calculate the PSNR between two video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pullup",
+      "description": "Pullup from field sequence to frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "qp",
+      "description": "Change video quantization parameters.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "random",
+      "description": "Return random frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "readeia608",
+      "description": "Read EIA-608 Closed Caption codes from input video and write them to frame metadata.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "readvitc",
+      "description": "Read vertical interval timecode and write it to frame metadata.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "realtime",
+      "description": "Slow down filtering to match realtime.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "remap",
+      "description": "Remap pixels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "remap_opencl",
+      "description": "Remap pixels using OpenCL.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "removegrain",
+      "description": "Remove grain.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "removelogo",
+      "description": "Remove a TV logo based on a mask image.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "repeatfields",
+      "description": "Hard repeat fields based on MPEG repeat field flag.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "reverse",
+      "description": "Reverse a clip.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "rgbashift",
+      "description": "Shift RGBA.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "roberts",
+      "description": "Apply roberts cross operator.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "roberts_opencl",
+      "description": "Apply roberts operator",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "rotate",
+      "description": "Rotate the input image.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sab",
+      "description": "Apply shape adaptive blur.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scale",
+      "description": "Scale the input video size and/or convert the image format.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vpp_amf",
+      "description": "AMF video scaling and format conversion",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sr_amf",
+      "description": "AMF HQ video upscaling",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scale_cuda",
+      "description": "GPU accelerated video resizer",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scale_d3d11",
+      "description": "Scale video using Direct3D11",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scale_d3d12",
+      "description": "Scale video using Direct3D12",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scale_qsv",
+      "description": "Quick Sync Video \"scaling and format conversion\"",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scale_vaapi",
+      "description": "Scale to/from VAAPI surfaces.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scale_vulkan",
+      "description": "Scale Vulkan frames",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scale2ref",
+      "description": "Scale the input video size and/or convert the image format to the given reference.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scdet",
+      "description": "Detect video scene change",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scdet_vulkan",
+      "description": "Detect video scene change",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scharr",
+      "description": "Apply scharr operator.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "scroll",
+      "description": "Scroll input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "segment",
+      "description": "Segment video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "select",
+      "description": "Select video frames to pass in output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "selectivecolor",
+      "description": "Apply CMYK adjustments to specific color ranges.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sendcmd",
+      "description": "Send commands to filters.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "separatefields",
+      "description": "Split input video frames into fields.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "setdar",
+      "description": "Set the frame display aspect ratio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "setfield",
+      "description": "Force field for the output video frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "setparams",
+      "description": "Force field, or color property for the output video frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "setpts",
+      "description": "Set PTS for the output video frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "setrange",
+      "description": "Force color range for the output video frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "setsar",
+      "description": "Set the pixel sample aspect ratio.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "settb",
+      "description": "Set timebase for the video output link.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sharpness_vaapi",
+      "description": "VAAPI VPP for sharpness",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "shear",
+      "description": "Shear transform the input image.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showinfo",
+      "description": "Show textual information for each video frame.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showpalette",
+      "description": "Display frame palette.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "shuffleframes",
+      "description": "Shuffle video frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "shufflepixels",
+      "description": "Shuffle video pixels.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "shuffleplanes",
+      "description": "Shuffle video planes.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sidedata",
+      "description": "Manipulate video frame side data.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "signalstats",
+      "description": "Generate statistics from video analysis.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "signature",
+      "description": "Calculate the MPEG-7 video signature",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "siti",
+      "description": "Calculate spatial information (SI) and temporal information (TI).",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "smartblur",
+      "description": "Blur the input video without impacting the outlines.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sobel",
+      "description": "Apply sobel operator.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sobel_opencl",
+      "description": "Apply sobel operator",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "split",
+      "description": "Pass on the input to N video outputs.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "spp",
+      "description": "Apply a simple post processing filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ssim",
+      "description": "Calculate the SSIM between two video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ssim360",
+      "description": "Calculate the SSIM between two 360 video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "stereo3d",
+      "description": "Convert video stereoscopic 3D view.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "streamselect",
+      "description": "Select video streams",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "subtitles",
+      "description": "Render text subtitles onto input video using the libass library.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "super2xsai",
+      "description": "Scale the input by 2x using the Super2xSaI pixel art algorithm.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "swaprect",
+      "description": "Swap 2 rectangular objects in video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "swapuv",
+      "description": "Swap U and V components.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tblend",
+      "description": "Blend successive frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "telecine",
+      "description": "Apply a telecine pattern.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "thistogram",
+      "description": "Compute and draw a temporal histogram.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "threshold",
+      "description": "Threshold first video stream using other video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "thumbnail",
+      "description": "Select the most representative frame in a given sequence of consecutive frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "thumbnail_cuda",
+      "description": "Select the most representative frame in a given sequence of consecutive frames using CUDA.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tile",
+      "description": "Tile several successive frames together.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tiltandshift",
+      "description": "Generate a tilt-and-shift'd video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tinterlace",
+      "description": "Perform temporal field interlacing.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tlut2",
+      "description": "Compute and apply a lookup table from two successive frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tmedian",
+      "description": "Pick median pixels from successive frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tmidequalizer",
+      "description": "Apply Temporal Midway Equalization.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tmix",
+      "description": "Mix successive video frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tonemap",
+      "description": "Conversion to/from different dynamic ranges.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tonemap_opencl",
+      "description": "Perform HDR to SDR conversion with tonemapping.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tonemap_vaapi",
+      "description": "VAAPI VPP for tone-mapping",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "tpad",
+      "description": "Temporarily pad video frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "transpose",
+      "description": "Transpose input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "transpose_opencl",
+      "description": "Transpose input video",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "transpose_vaapi",
+      "description": "VAAPI VPP for transpose",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "transpose_vulkan",
+      "description": "Transpose Vulkan Filter",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "trim",
+      "description": "Pick one continuous section from the input, drop the rest.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "unpremultiply",
+      "description": "UnPreMultiply first stream with first plane of second stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "unsharp",
+      "description": "Sharpen or blur the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "unsharp_opencl",
+      "description": "Apply unsharp mask to input video",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "untile",
+      "description": "Untile a frame into a sequence of frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "uspp",
+      "description": "Apply Ultra Simple / Slow Post-processing filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "v360",
+      "description": "Convert 360 projection of video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "v360_vulkan",
+      "description": "Convert 360 projection of video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vaguedenoiser",
+      "description": "Apply a Wavelet based Denoiser.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "varblur",
+      "description": "Apply Variable Blur filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vectorscope",
+      "description": "Video vectorscope.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vflip",
+      "description": "Flip the input video vertically.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vflip_vulkan",
+      "description": "Vertically flip the input video in Vulkan",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vfrdet",
+      "description": "Variable frame rate detect filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vibrance",
+      "description": "Boost or alter saturation.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vidstabdetect",
+      "description": "Extract relative transformations, pass 1 of 2 for stabilization (see vidstabtransform for pass 2).",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vidstabtransform",
+      "description": "Transform the frames, pass 2 of 2 for stabilization (see vidstabdetect for pass 1).",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vif",
+      "description": "Calculate the VIF between two video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vignette",
+      "description": "Make or reverse a vignette effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vmafmotion",
+      "description": "Calculate the VMAF Motion score.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vpp_qsv",
+      "description": "Quick Sync Video \"VPP\"",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vstack",
+      "description": "Stack video inputs vertically.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "w3fdif",
+      "description": "Apply Martin Weston three field deinterlace.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "waveform",
+      "description": "Video waveform monitor.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "weave",
+      "description": "Weave input video fields into frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xbr",
+      "description": "Scale the input using xBR algorithm.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xcorrelate",
+      "description": "Cross-correlate first video stream with second video stream.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xfade",
+      "description": "Cross fade one video with another video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xfade_opencl",
+      "description": "Cross fade one video with another video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xfade_vulkan",
+      "description": "Cross fade one video with another video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xmedian",
+      "description": "Pick median pixels from several video inputs.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xpsnr",
+      "description": "Calculate the extended perceptually weighted peak signal-to-noise ratio (XPSNR) between two video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xstack",
+      "description": "Stack video inputs into custom layout.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "yadif",
+      "description": "Deinterlace the input image.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "yadif_cuda",
+      "description": "Deinterlace CUDA frames",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "yaepblur",
+      "description": "Yet another edge preserving blur filter.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "zmq",
+      "description": "Receive commands through ZMQ and broker them to filters.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "zoompan",
+      "description": "Apply Zoom & Pan effect.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "zscale",
+      "description": "Apply resizing, colorspace and bit depth conversion.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hstack_vaapi",
+      "description": "\"VA-API\" hstack",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vstack_vaapi",
+      "description": "\"VA-API\" vstack",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xstack_vaapi",
+      "description": "\"VA-API\" xstack",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "hstack_qsv",
+      "description": "\"Quick Sync Video\" hstack",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vstack_qsv",
+      "description": "\"Quick Sync Video\" vstack",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "xstack_qsv",
+      "description": "\"Quick Sync Video\" xstack",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pad_vaapi",
+      "description": "Pad the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "drawbox_vaapi",
+      "description": "Draw a colored box on the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "allrgb",
+      "description": "Generate all RGB colors.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "allyuv",
+      "description": "Generate all yuv colors.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "vsrc_amf",
+      "description": "AMD AMF screen capture",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "cellauto",
+      "description": "Create pattern generated by an elementary cellular automaton.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "color",
+      "description": "Provide an uniformly colored input.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "color_vulkan",
+      "description": "Generate a constant color (Vulkan)",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorchart",
+      "description": "Generate color checker chart.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "colorspectrum",
+      "description": "Generate colors spectrum.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ddagrab",
+      "description": "Grab Windows Desktop images using Desktop Duplication API",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "frei0r_src",
+      "description": "Generate a frei0r source.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "gfxcapture",
+      "description": "Capture graphics/screen content as a video source",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "gradients",
+      "description": "Draw a gradients.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "haldclutsrc",
+      "description": "Provide an identity Hald CLUT.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "life",
+      "description": "Create life.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mandelbrot",
+      "description": "Render a Mandelbrot fractal.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "mptestsrc",
+      "description": "Generate various test pattern.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "nullsrc",
+      "description": "Null video source, return unprocessed video frames.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "openclsrc",
+      "description": "Generate video using an OpenCL program",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pal75bars",
+      "description": "Generate PAL 75% color bars.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "pal100bars",
+      "description": "Generate PAL 100% color bars.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "perlin",
+      "description": "Generate Perlin noise",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "rgbtestsrc",
+      "description": "Generate RGB test pattern.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "sierpinski",
+      "description": "Render a Sierpinski fractal.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "smptebars",
+      "description": "Generate SMPTE color bars.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "smptehdbars",
+      "description": "Generate SMPTE HD color bars.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "testsrc",
+      "description": "Generate test pattern.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "testsrc2",
+      "description": "Generate another test pattern.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "yuvtestsrc",
+      "description": "Generate YUV test pattern.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "zoneplate",
+      "description": "Generate zone-plate.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "nullsink",
+      "description": "Do absolutely nothing with the input video.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "a3dscope",
+      "description": "Convert input audio to 3d scope video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "abitscope",
+      "description": "Convert input audio to audio bit scope video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "adrawgraph",
+      "description": "Draw a graph using input audio metadata.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "agraphmonitor",
+      "description": "Show various filtergraph stats.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "ahistogram",
+      "description": "Convert input audio to histogram video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "aphasemeter",
+      "description": "Convert input audio to phase meter video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "avectorscope",
+      "description": "Convert input audio to vectorscope video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "concat",
+      "description": "Concatenate audio and video streams.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showcqt",
+      "description": "Convert input audio to a CQT (Constant/Clamped Q Transform) spectrum video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showcwt",
+      "description": "Convert input audio to a CWT (Continuous Wavelet Transform) spectrum video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showfreqs",
+      "description": "Convert input audio to a frequencies video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showspatial",
+      "description": "Convert input audio to a spatial video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showspectrum",
+      "description": "Convert input audio to a spectrum video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showspectrumpic",
+      "description": "Convert input audio to a spectrum video output single picture.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showvolume",
+      "description": "Convert input audio volume to video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showwaves",
+      "description": "Convert input audio to a video output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "showwavespic",
+      "description": "Convert input audio to a video output single picture.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "spectrumsynth",
+      "description": "Convert input spectrum videos to audio output.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "avsynctest",
+      "description": "Generate an Audio Video Sync Test.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "amovie",
+      "description": "Read audio from a movie source.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "movie",
+      "description": "Read from a movie source.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "abuffer",
+      "description": "Buffer audio frames, and make them accessible to the filterchain.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "buffer",
+      "description": "Buffer video frames, and make them accessible to the filterchain.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "abuffersink",
+      "description": "Buffer audio frames, and make them available to the end of the filter graph.",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "name": "buffersink",
+      "description": "Buffer video frames, and make them available to the end of the filter graph.",
+      "inputs": [],
+      "outputs": []
+    }
+  ],
+  "byType": {
+    "video": [
+      {
+        "name": "ametadata",
+        "description": "Manipulate audio frame metadata.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aperms",
+        "description": "Set permissions for the output audio frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aselect",
+        "description": "Select audio frames to pass in output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asetnsamples",
+        "description": "Set the number of samples for each output audio frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asetpts",
+        "description": "Set PTS for the output audio frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "ashowinfo",
+        "description": "Show textual information for each audio frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asidedata",
+        "description": "Manipulate audio frame side data.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aspectralstats",
+        "description": "Show frequency domain statistics about audio frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "astats",
+        "description": "Show time domain statistics about audio frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "earwax",
+        "description": "Widen the stereo image.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vibrato",
+        "description": "Apply vibrato effect.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "anullsrc",
+        "description": "Null audio source, return empty audio frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "addroi",
+        "description": "Add region of interest to frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "alphaextract",
+        "description": "Extract an alpha channel as a grayscale image component.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "amplify",
+        "description": "Amplify changes between successive video frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "ass",
+        "description": "Render ASS subtitles onto input video using the libass library.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "avgblur",
+        "description": "Apply Average Blur filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "avgblur_vulkan",
+        "description": "Apply avgblur mask to input video",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "bbox",
+        "description": "Compute bounding box for each frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "blackdetect",
+        "description": "Detect video intervals that are (almost) black.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "blackdetect_vulkan",
+        "description": "Detect video intervals that are (almost) black.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "blackframe",
+        "description": "Detect frames that are (almost) black.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "blend",
+        "description": "Blend two video frames into each other.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "blend_vulkan",
+        "description": "Blend two video frames in Vulkan",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "boxblur_opencl",
+        "description": "Apply boxblur filter to input video",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "bwdif",
+        "description": "Deinterlace the input image.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "bwdif_cuda",
+        "description": "Deinterlace CUDA frames",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "bwdif_vulkan",
+        "description": "Deinterlace Vulkan frames via bwdif",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "chromaber_vulkan",
+        "description": "Offset chroma of input video (chromatic aberration)",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "ciescope",
+        "description": "Video CIE scope.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "colordetect",
+        "description": "Detect video color properties.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "colorize",
+        "description": "Overlay a solid color on the video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "colormap",
+        "description": "Apply custom Color Maps to video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "colorspace_cuda",
+        "description": "CUDA accelerated video color converter",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "colortemperature",
+        "description": "Adjust color temperature of video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "convolution_opencl",
+        "description": "Apply convolution mask to input video",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "convolve",
+        "description": "Convolve first video stream with second video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "copy",
+        "description": "Copy the input video unchanged to the output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "corr",
+        "description": "Calculate the correlation between two video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "crop",
+        "description": "Crop the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "datascope",
+        "description": "Video data analysis.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "dctdnoiz",
+        "description": "Denoise frames using 2D DCT.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deband",
+        "description": "Debands video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deblock",
+        "description": "Deblock video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "decimate",
+        "description": "Decimate frames (post field matching filter).",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deconvolve",
+        "description": "Deconvolve first video stream with second video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deflicker",
+        "description": "Remove temporal frame luminance variations.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deinterlace_qsv",
+        "description": "Quick Sync Video \"deinterlacing\"",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deinterlace_d3d12",
+        "description": "Deinterlacing using Direct3D12 Video Processor",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "delogo",
+        "description": "Remove logo from input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deshake",
+        "description": "Stabilize shaky video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deshake_opencl",
+        "description": "Feature-point based video stabilization filter",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "despill",
+        "description": "Despill video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "displace",
+        "description": "Displace pixels.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "doubleweave",
+        "description": "Weave input video fields into double number of frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "drawbox",
+        "description": "Draw a colored box on the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "drawgraph",
+        "description": "Draw a graph using input video metadata.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "drawgrid",
+        "description": "Draw a colored grid on the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "drawtext",
+        "description": "Draw text on top of video frames using libfreetype library.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "entropy",
+        "description": "Measure video frames entropy.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "eq",
+        "description": "Adjust brightness, contrast, gamma, and saturation.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "exposure",
+        "description": "Adjust exposure of the video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "extractplanes",
+        "description": "Extract planes as grayscale frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "fade",
+        "description": "Fade in/out input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "feedback",
+        "description": "Apply feedback video filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "fftdnoiz",
+        "description": "Denoise frames using 3D FFT.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "fftfilt",
+        "description": "Apply arbitrary expressions to pixels in frequency domain.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "field",
+        "description": "Extract a field from the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "fillborders",
+        "description": "Fill borders of the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "format",
+        "description": "Convert the input video to one of the specified pixel formats.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "fps",
+        "description": "Force constant framerate.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "framepack",
+        "description": "Generate a frame packed stereoscopic video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "framestep",
+        "description": "Select one frame every N frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "freezedetect",
+        "description": "Detects frozen video input.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "freezeframes",
+        "description": "Freeze video frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "fsync",
+        "description": "Synchronize video frames from external source.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "geq",
+        "description": "Apply generic equation to each pixel.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "gradfun",
+        "description": "Debands video quickly using gradients.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hflip",
+        "description": "Horizontally flip the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hflip_vulkan",
+        "description": "Horizontally flip the input video in Vulkan",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hqdn3d",
+        "description": "Apply a High Quality 3D Denoiser.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hstack",
+        "description": "Stack video inputs horizontally.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hue",
+        "description": "Adjust the hue and saturation of the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hwdownload",
+        "description": "Download a hardware frame to a normal frame",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hwmap",
+        "description": "Map hardware frames",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hwupload",
+        "description": "Upload a normal frame to a hardware frame",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hwupload_cuda",
+        "description": "Upload a system memory frame to a CUDA device.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "identity",
+        "description": "Calculate the Identity between two video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "interlace",
+        "description": "Convert progressive video into interlaced.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "interlace_vulkan",
+        "description": "Convert progressive video into interlaced.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "interleave",
+        "description": "Temporally interleave video inputs.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "lagfun",
+        "description": "Slowly update darker pixels.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "latency",
+        "description": "Report video filtering latency.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "lenscorrection",
+        "description": "Rectify the image by correcting for lens distortion.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "libvmaf",
+        "description": "Calculate the VMAF between two video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "limiter",
+        "description": "Limit pixels components to the specified range.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "loop",
+        "description": "Loop video frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "lut",
+        "description": "Compute and apply a lookup table to the RGB/YUV input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "lut2",
+        "description": "Compute and apply a lookup table from two video inputs.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "lutrgb",
+        "description": "Compute and apply a lookup table to the RGB input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "lutyuv",
+        "description": "Compute and apply a lookup table to the YUV input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "maskedthreshold",
+        "description": "Pick pixels comparing absolute difference of two streams with threshold.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "metadata",
+        "description": "Manipulate video frame metadata.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "mix",
+        "description": "Mix video inputs.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "monochrome",
+        "description": "Convert video to gray using custom color filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "mpdecimate",
+        "description": "Remove near-duplicate frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "msad",
+        "description": "Calculate the MSAD between two video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "multiply",
+        "description": "Multiply first video stream with second video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "negate",
+        "description": "Negate input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "noformat",
+        "description": "Force libavfilter not to use any of the specified pixel formats for the input to the next filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "normalize",
+        "description": "Normalize RGB video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "oscilloscope",
+        "description": "2D Video Oscilloscope.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "overlay",
+        "description": "Overlay a video source on top of the input.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "overlay_opencl",
+        "description": "Overlay one video on top of another",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "overlay_qsv",
+        "description": "Quick Sync Video overlay.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "overlay_vaapi",
+        "description": "Overlay one video on top of another",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "overlay_cuda",
+        "description": "Overlay one video on top of another using CUDA",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "pad",
+        "description": "Pad the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "pad_opencl",
+        "description": "Pad the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "perms",
+        "description": "Set permissions for the output video frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "perspective",
+        "description": "Correct the perspective of video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "pixdesctest",
+        "description": "Test pixel format definitions.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "pixelize",
+        "description": "Pixelize video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "premultiply_dynamic",
+        "description": "Premultiply or unpremultiply an image in-place, as needed.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "program_opencl",
+        "description": "Filter video using an OpenCL program",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "pseudocolor",
+        "description": "Make pseudocolored video frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "psnr",
+        "description": "Calculate the PSNR between two video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "pullup",
+        "description": "Pullup from field sequence to frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "qp",
+        "description": "Change video quantization parameters.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "random",
+        "description": "Return random frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "readeia608",
+        "description": "Read EIA-608 Closed Caption codes from input video and write them to frame metadata.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "readvitc",
+        "description": "Read vertical interval timecode and write it to frame metadata.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "remap",
+        "description": "Remap pixels.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "remap_opencl",
+        "description": "Remap pixels using OpenCL.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "removegrain",
+        "description": "Remove grain.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "removelogo",
+        "description": "Remove a TV logo based on a mask image.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "rotate",
+        "description": "Rotate the input image.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scale",
+        "description": "Scale the input video size and/or convert the image format.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vpp_amf",
+        "description": "AMF video scaling and format conversion",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "sr_amf",
+        "description": "AMF HQ video upscaling",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scale_cuda",
+        "description": "GPU accelerated video resizer",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scale_d3d11",
+        "description": "Scale video using Direct3D11",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scale_d3d12",
+        "description": "Scale video using Direct3D12",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scale_qsv",
+        "description": "Quick Sync Video \"scaling and format conversion\"",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scale_vulkan",
+        "description": "Scale Vulkan frames",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scale2ref",
+        "description": "Scale the input video size and/or convert the image format to the given reference.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scdet",
+        "description": "Detect video scene change",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scdet_vulkan",
+        "description": "Detect video scene change",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "scroll",
+        "description": "Scroll input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "segment",
+        "description": "Segment video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "select",
+        "description": "Select video frames to pass in output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "separatefields",
+        "description": "Split input video frames into fields.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "setdar",
+        "description": "Set the frame display aspect ratio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "setfield",
+        "description": "Force field for the output video frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "setparams",
+        "description": "Force field, or color property for the output video frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "setpts",
+        "description": "Set PTS for the output video frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "setrange",
+        "description": "Force color range for the output video frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "settb",
+        "description": "Set timebase for the video output link.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "shear",
+        "description": "Shear transform the input image.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showinfo",
+        "description": "Show textual information for each video frame.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showpalette",
+        "description": "Display frame palette.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "shuffleframes",
+        "description": "Shuffle video frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "shufflepixels",
+        "description": "Shuffle video pixels.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "shuffleplanes",
+        "description": "Shuffle video planes.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "sidedata",
+        "description": "Manipulate video frame side data.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "signalstats",
+        "description": "Generate statistics from video analysis.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "signature",
+        "description": "Calculate the MPEG-7 video signature",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "smartblur",
+        "description": "Blur the input video without impacting the outlines.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "split",
+        "description": "Pass on the input to N video outputs.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "ssim",
+        "description": "Calculate the SSIM between two video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "ssim360",
+        "description": "Calculate the SSIM between two 360 video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "stereo3d",
+        "description": "Convert video stereoscopic 3D view.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "streamselect",
+        "description": "Select video streams",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "subtitles",
+        "description": "Render text subtitles onto input video using the libass library.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "super2xsai",
+        "description": "Scale the input by 2x using the Super2xSaI pixel art algorithm.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "swaprect",
+        "description": "Swap 2 rectangular objects in video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "tblend",
+        "description": "Blend successive frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "threshold",
+        "description": "Threshold first video stream using other video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "thumbnail",
+        "description": "Select the most representative frame in a given sequence of consecutive frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "thumbnail_cuda",
+        "description": "Select the most representative frame in a given sequence of consecutive frames using CUDA.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "tile",
+        "description": "Tile several successive frames together.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "tiltandshift",
+        "description": "Generate a tilt-and-shift'd video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "tlut2",
+        "description": "Compute and apply a lookup table from two successive frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "tmedian",
+        "description": "Pick median pixels from successive frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "tmix",
+        "description": "Mix successive video frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "tpad",
+        "description": "Temporarily pad video frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "transpose",
+        "description": "Transpose input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "transpose_opencl",
+        "description": "Transpose input video",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "trim",
+        "description": "Pick one continuous section from the input, drop the rest.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "unsharp",
+        "description": "Sharpen or blur the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "unsharp_opencl",
+        "description": "Apply unsharp mask to input video",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "untile",
+        "description": "Untile a frame into a sequence of frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "v360",
+        "description": "Convert 360 projection of video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "v360_vulkan",
+        "description": "Convert 360 projection of video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vaguedenoiser",
+        "description": "Apply a Wavelet based Denoiser.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "varblur",
+        "description": "Apply Variable Blur filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vectorscope",
+        "description": "Video vectorscope.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vflip",
+        "description": "Flip the input video vertically.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vflip_vulkan",
+        "description": "Vertically flip the input video in Vulkan",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vfrdet",
+        "description": "Variable frame rate detect filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vibrance",
+        "description": "Boost or alter saturation.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vidstabdetect",
+        "description": "Extract relative transformations, pass 1 of 2 for stabilization (see vidstabtransform for pass 2).",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vidstabtransform",
+        "description": "Transform the frames, pass 2 of 2 for stabilization (see vidstabdetect for pass 1).",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vif",
+        "description": "Calculate the VIF between two video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vignette",
+        "description": "Make or reverse a vignette effect.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vmafmotion",
+        "description": "Calculate the VMAF Motion score.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vpp_qsv",
+        "description": "Quick Sync Video \"VPP\"",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vstack",
+        "description": "Stack video inputs vertically.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "waveform",
+        "description": "Video waveform monitor.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "weave",
+        "description": "Weave input video fields into frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "xcorrelate",
+        "description": "Cross-correlate first video stream with second video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "xfade",
+        "description": "Cross fade one video with another video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "xfade_opencl",
+        "description": "Cross fade one video with another video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "xfade_vulkan",
+        "description": "Cross fade one video with another video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "xmedian",
+        "description": "Pick median pixels from several video inputs.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "xpsnr",
+        "description": "Calculate the extended perceptually weighted peak signal-to-noise ratio (XPSNR) between two video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "xstack",
+        "description": "Stack video inputs into custom layout.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "yadif",
+        "description": "Deinterlace the input image.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "yadif_cuda",
+        "description": "Deinterlace CUDA frames",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vstack_vaapi",
+        "description": "\"VA-API\" vstack",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "hstack_qsv",
+        "description": "\"Quick Sync Video\" hstack",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vstack_qsv",
+        "description": "\"Quick Sync Video\" vstack",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "xstack_qsv",
+        "description": "\"Quick Sync Video\" xstack",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "pad_vaapi",
+        "description": "Pad the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "drawbox_vaapi",
+        "description": "Draw a colored box on the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "vsrc_amf",
+        "description": "AMD AMF screen capture",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "color",
+        "description": "Provide an uniformly colored input.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "ddagrab",
+        "description": "Grab Windows Desktop images using Desktop Duplication API",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "gfxcapture",
+        "description": "Capture graphics/screen content as a video source",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "nullsrc",
+        "description": "Null video source, return unprocessed video frames.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "openclsrc",
+        "description": "Generate video using an OpenCL program",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "nullsink",
+        "description": "Do absolutely nothing with the input video.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "a3dscope",
+        "description": "Convert input audio to 3d scope video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "abitscope",
+        "description": "Convert input audio to audio bit scope video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "ahistogram",
+        "description": "Convert input audio to histogram video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aphasemeter",
+        "description": "Convert input audio to phase meter video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "avectorscope",
+        "description": "Convert input audio to vectorscope video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "avsynctest",
+        "description": "Generate an Audio Video Sync Test.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "abuffer",
+        "description": "Buffer audio frames, and make them accessible to the filterchain.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "buffer",
+        "description": "Buffer video frames, and make them accessible to the filterchain.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "abuffersink",
+        "description": "Buffer audio frames, and make them available to the end of the filter graph.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "buffersink",
+        "description": "Buffer video frames, and make them available to the end of the filter graph.",
+        "inputs": [],
+        "outputs": []
+      }
+    ],
+    "audio": [
+      {
+        "name": "aap",
+        "description": "Apply Affine Projection algorithm to first audio stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "abench",
+        "description": "Benchmark part of a filtergraph.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "acompressor",
+        "description": "Audio compressor.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "acontrast",
+        "description": "Simple audio dynamic range compression/expansion filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "acopy",
+        "description": "Copy the input audio unchanged to the output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "acue",
+        "description": "Delay filtering to match a cue.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "acrossfade",
+        "description": "Cross fade two input audio streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "acrossover",
+        "description": "Split audio into per-bands streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "acrusher",
+        "description": "Reduce audio bit resolution.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adeclick",
+        "description": "Remove impulsive noise from input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adeclip",
+        "description": "Remove clipping from input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adecorrelate",
+        "description": "Apply decorrelation to input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adelay",
+        "description": "Delay one or more audio channels.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adenorm",
+        "description": "Remedy denormals by adding extremely low-level noise.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aderivative",
+        "description": "Compute derivative of input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adrc",
+        "description": "Audio Spectral Dynamic Range Controller.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adynamicequalizer",
+        "description": "Apply Dynamic Equalization of input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adynamicsmooth",
+        "description": "Apply Dynamic Smoothing of input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aecho",
+        "description": "Add echoing to the audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aemphasis",
+        "description": "Audio emphasis.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aeval",
+        "description": "Filter audio signal according to a specified expression.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aexciter",
+        "description": "Enhance high frequency part of audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afade",
+        "description": "Fade in/out input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afftdn",
+        "description": "Denoise audio samples using FFT.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afftfilt",
+        "description": "Apply arbitrary expressions to samples in frequency domain.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afir",
+        "description": "Apply Finite Impulse Response filter with supplied coefficients in additional stream(s).",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aformat",
+        "description": "Convert the input audio to one of the specified formats.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afreqshift",
+        "description": "Apply frequency shifting to input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afwtdn",
+        "description": "Denoise audio stream using Wavelets.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "agate",
+        "description": "Audio gate.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aiir",
+        "description": "Apply Infinite Impulse Response filter with supplied coefficients.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aintegral",
+        "description": "Compute integral of input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "ainterleave",
+        "description": "Temporally interleave audio inputs.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "alatency",
+        "description": "Report audio filtering latency.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "alimiter",
+        "description": "Audio lookahead limiter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "allpass",
+        "description": "Apply a two-pole all-pass filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aloop",
+        "description": "Loop audio samples.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "amerge",
+        "description": "Merge two or more audio streams into a single multi-channel stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "amix",
+        "description": "Audio mixing.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "amultiply",
+        "description": "Multiply two audio streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "anequalizer",
+        "description": "Apply high-order audio parametric multi band equalizer.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "anlmdn",
+        "description": "Reduce broadband noise from stream using Non-Local Means.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "anlmf",
+        "description": "Apply Normalized Least-Mean-Fourth algorithm to first audio stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "anlms",
+        "description": "Apply Normalized Least-Mean-Squares algorithm to first audio stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "anull",
+        "description": "Pass the source unchanged to the output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "apad",
+        "description": "Pad audio with silence.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aphaser",
+        "description": "Add a phasing effect to the audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aphaseshift",
+        "description": "Apply phase shifting to input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "apsnr",
+        "description": "Measure Audio Peak Signal-to-Noise Ratio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "apsyclip",
+        "description": "Audio Psychoacoustic Clipper.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "apulsator",
+        "description": "Audio pulsator.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "arealtime",
+        "description": "Slow down filtering to match realtime.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aresample",
+        "description": "Resample audio data.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "areverse",
+        "description": "Reverse an audio clip.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "arls",
+        "description": "Apply Recursive Least Squares algorithm to first audio stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "arnndn",
+        "description": "Reduce noise from speech using Recurrent Neural Networks.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asdr",
+        "description": "Measure Audio Signal-to-Distortion Ratio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asegment",
+        "description": "Segment audio stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asendcmd",
+        "description": "Send commands to filters.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asetrate",
+        "description": "Change the sample rate without altering the data.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asettb",
+        "description": "Set timebase for the audio output link.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asisdr",
+        "description": "Measure Audio Scale-Invariant Signal-to-Distortion Ratio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asoftclip",
+        "description": "Audio Soft Clipper.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asplit",
+        "description": "Pass on the audio input to N audio outputs.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "astreamselect",
+        "description": "Select audio streams",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asubboost",
+        "description": "Boost subwoofer frequencies.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asubcut",
+        "description": "Cut subwoofer frequencies.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asupercut",
+        "description": "Cut super frequencies.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asuperpass",
+        "description": "Apply high order Butterworth band-pass filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "asuperstop",
+        "description": "Apply high order Butterworth band-stop filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "atempo",
+        "description": "Adjust audio tempo.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "atilt",
+        "description": "Apply spectral tilt to audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "atrim",
+        "description": "Pick one continuous section from the input, drop the rest.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "axcorrelate",
+        "description": "Cross-correlate two audio streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "azmq",
+        "description": "Receive commands through ZMQ and broker them to filters.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "channelmap",
+        "description": "Remap audio channels.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "channelsplit",
+        "description": "Split audio into per-channel streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "chorus",
+        "description": "Add a chorus effect to the audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "compand",
+        "description": "Compress or expand audio dynamic range.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "compensationdelay",
+        "description": "Audio Compensation Delay Line.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "crystalizer",
+        "description": "Simple audio noise sharpening filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "dcshift",
+        "description": "Apply a DC shift to the audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "deesser",
+        "description": "Apply de-essing to the audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "dialoguenhance",
+        "description": "Audio Dialogue Enhancement.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "drmeter",
+        "description": "Measure audio dynamic range.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "dynaudnorm",
+        "description": "Dynamic Audio Normalizer.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "equalizer",
+        "description": "Apply two-pole peaking equalization (EQ) filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "extrastereo",
+        "description": "Increase difference between stereo audio channels.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "flanger",
+        "description": "Apply a flanging effect to the audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "join",
+        "description": "Join multiple audio streams into multi-channel output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "loudnorm",
+        "description": "EBU R128 loudness normalization",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "mcompand",
+        "description": "Multiband Compress or expand audio dynamic range.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "pan",
+        "description": "Remix channels with coefficients (panning).",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "sidechaingate",
+        "description": "Audio sidechain gate.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "surround",
+        "description": "Apply audio surround upmix filter.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "virtualbass",
+        "description": "Audio Virtual Bass.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "volume",
+        "description": "Change input volume.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "volumedetect",
+        "description": "Detect audio volume.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "whisper",
+        "description": "Transcribe audio using whisper.cpp.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "aevalsrc",
+        "description": "Generate an audio signal generated by an expression.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afdelaysrc",
+        "description": "Generate a Fractional delay FIR coefficients.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afireqsrc",
+        "description": "Generate a FIR equalizer coefficients audio stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "afirsrc",
+        "description": "Generate a FIR coefficients audio stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "anoisesrc",
+        "description": "Generate a noise audio signal.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "sine",
+        "description": "Generate sine wave audio signal.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "anullsink",
+        "description": "Do absolutely nothing with the input audio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "alphamerge",
+        "description": "Copy the luma value of the second input into the alpha channel of the first input.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "atadenoise",
+        "description": "Apply an Adaptive Temporal Averaging Denoiser.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "avgblur_opencl",
+        "description": "Apply average blur filter",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "colorchannelmixer",
+        "description": "Adjust colors by mixing color channels.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "framerate",
+        "description": "Upsamples or downsamples progressive source between specified frame rates.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "paletteuse",
+        "description": "Use a palette to downsample an input video stream.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "setsar",
+        "description": "Set the pixel sample aspect ratio.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "allrgb",
+        "description": "Generate all RGB colors.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "allyuv",
+        "description": "Generate all yuv colors.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "adrawgraph",
+        "description": "Draw a graph using input audio metadata.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "agraphmonitor",
+        "description": "Show various filtergraph stats.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "concat",
+        "description": "Concatenate audio and video streams.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showcqt",
+        "description": "Convert input audio to a CQT (Constant/Clamped Q Transform) spectrum video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showcwt",
+        "description": "Convert input audio to a CWT (Continuous Wavelet Transform) spectrum video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showfreqs",
+        "description": "Convert input audio to a frequencies video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showspatial",
+        "description": "Convert input audio to a spatial video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showspectrum",
+        "description": "Convert input audio to a spectrum video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showspectrumpic",
+        "description": "Convert input audio to a spectrum video output single picture.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showvolume",
+        "description": "Convert input audio volume to video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showwaves",
+        "description": "Convert input audio to a video output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "showwavespic",
+        "description": "Convert input audio to a video output single picture.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "spectrumsynth",
+        "description": "Convert input spectrum videos to audio output.",
+        "inputs": [],
+        "outputs": []
+      },
+      {
+        "name": "amovie",
+        "description": "Read audio from a movie source.",
+        "inputs": [],
+        "outputs": []
+      }
+    ]
+  },
+  "stats": {
+    "total": 568,
+    "video": 242,
+    "audio": 129
+  },
+  "generatedAt": "2026-04-18T05:32:04.096Z"
+}

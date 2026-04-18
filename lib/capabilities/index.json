@@ -1,0 +1,25 @@
+{
+  "ffmpeg": {
+    "version": "N-123918-gf7ca6f7481-20260411",
+    "configuration": "--prefix=/ffbuild/prefix --pkg-config-flags=--static --pkg-config=pkg-config --cross-prefix=x86_64-w..."
+  },
+  "stats": {
+    "codecs": 786,
+    "videoCodecs": 444,
+    "audioCodecs": 306,
+    "filters": 568,
+    "videoFilters": 242,
+    "audioFilters": 129,
+    "formats": 416,
+    "hwaccels": 9,
+    "protocols": 73
+  },
+  "files": {
+    "buildInfo": "build-info.json",
+    "codecs": "codecs.json",
+    "commonCodecs": "codecs-common.json",
+    "filters": "filters.json",
+    "formats": "formats.json"
+  },
+  "generatedAt": "2026-04-18T05:32:04.098Z"
+}

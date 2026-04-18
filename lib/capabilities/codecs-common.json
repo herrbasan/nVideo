@@ -1,0 +1,567 @@
+{
+  "encoders": {
+    "video": {
+      "cpu": [
+        {
+          "name": "libx264",
+          "longName": "libx264 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "libx265",
+          "longName": "libx265 H.265 / HEVC",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "libsvtav1",
+          "longName": "SVT-AV1(Scalable Video Technology for AV1) encoder",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "delay"
+          ]
+        },
+        {
+          "name": "libaom-av1",
+          "longName": "libaom AV1",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "librav1e",
+          "longName": "librav1e AV1",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        }
+      ],
+      "nvidia": [
+        {
+          "name": "h264_nvenc",
+          "longName": "NVIDIA NVENC H.264 encoder",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "hevc_nvenc",
+          "longName": "NVIDIA NVENC hevc encoder",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "av1_nvenc",
+          "longName": "NVIDIA NVENC av1 encoder",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        }
+      ],
+      "intel": [
+        {
+          "name": "h264_qsv",
+          "longName": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 (Intel Quick Sync Video acceleration)",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "delay"
+          ]
+        },
+        {
+          "name": "hevc_qsv",
+          "longName": "HEVC (Intel Quick Sync Video acceleration)",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "delay"
+          ]
+        },
+        {
+          "name": "av1_qsv",
+          "longName": "AV1 (Intel Quick Sync Video acceleration)",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "delay"
+          ]
+        }
+      ],
+      "amd": [
+        {
+          "name": "h264_amf",
+          "longName": "AMD AMF H.264 Encoder",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "hevc_amf",
+          "longName": "AMD AMF HEVC encoder",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "av1_amf",
+          "longName": "AMD AMF AV1 encoder",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        }
+      ],
+      "other_hw": [
+        {
+          "name": "h264_vulkan",
+          "longName": "H.264/AVC (Vulkan)",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "hevc_vulkan",
+          "longName": "H.265/HEVC (Vulkan)",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        },
+        {
+          "name": "av1_vulkan",
+          "longName": "AV1 (Vulkan)",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay"
+          ]
+        }
+      ],
+      "professional": [
+        {
+          "name": "prores",
+          "longName": "Apple ProRes",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "frame_threads"
+          ]
+        },
+        {
+          "name": "dnxhd",
+          "longName": "VC3/DNxHD",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "frame_threads",
+            "slice_threads"
+          ]
+        },
+        {
+          "name": "ffv1",
+          "longName": "FFmpeg video codec #1",
+          "type": "video",
+          "canDecode": false,
+          "canEncode": true,
+          "capabilities": [
+            "dr1",
+            "delay",
+            "slice_threads"
+          ]
+        }
+      ]
+    },
+    "audio": [
+      {
+        "name": "aac",
+        "longName": "AAC (Advanced Audio Coding)",
+        "type": "audio",
+        "canDecode": false,
+        "canEncode": true,
+        "capabilities": [
+          "dr1",
+          "delay",
+          "small_last_frame"
+        ]
+      },
+      {
+        "name": "flac",
+        "longName": "FLAC (Free Lossless Audio Codec)",
+        "type": "audio",
+        "canDecode": false,
+        "canEncode": true,
+        "capabilities": [
+          "dr1",
+          "delay",
+          "small_last_frame"
+        ]
+      },
+      {
+        "name": "libmp3lame",
+        "longName": "libmp3lame MP3 (MPEG audio layer 3)",
+        "type": "audio",
+        "canDecode": false,
+        "canEncode": true,
+        "capabilities": [
+          "dr1",
+          "delay",
+          "small_last_frame"
+        ]
+      },
+      {
+        "name": "libopus",
+        "longName": "libopus Opus",
+        "type": "audio",
+        "canDecode": false,
+        "canEncode": true,
+        "capabilities": [
+          "dr1",
+          "delay",
+          "small_last_frame"
+        ]
+      },
+      {
+        "name": "ac3",
+        "longName": "ATSC A/52A (AC-3)",
+        "type": "audio",
+        "canDecode": false,
+        "canEncode": true,
+        "capabilities": [
+          "dr1"
+        ]
+      },
+      {
+        "name": "eac3",
+        "longName": "ATSC A/52 E-AC-3",
+        "type": "audio",
+        "canDecode": false,
+        "canEncode": true,
+        "capabilities": [
+          "dr1"
+        ]
+      },
+      {
+        "name": "vorbis",
+        "longName": "Vorbis",
+        "type": "audio",
+        "canDecode": false,
+        "canEncode": true,
+        "capabilities": [
+          "dr1",
+          "delay",
+          "experimental"
+        ]
+      },
+      {
+        "name": "pcm_s16le",
+        "longName": "PCM signed 16-bit little-endian",
+        "type": "audio",
+        "canDecode": false,
+        "canEncode": true,
+        "capabilities": [
+          "dr1",
+          "variable_frame_size"
+        ]
+      }
+    ]
+  },
+  "decoders": {
+    "video": [
+      {
+        "name": "h264",
+        "longName": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+        "type": "video",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "delay",
+          "frame_threads",
+          "slice_threads"
+        ]
+      },
+      {
+        "name": "hevc",
+        "longName": "HEVC (High Efficiency Video Coding)",
+        "type": "video",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "delay",
+          "frame_threads",
+          "slice_threads"
+        ]
+      },
+      {
+        "name": "av1",
+        "longName": "Alliance for Open Media AV1",
+        "type": "video",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1"
+        ]
+      },
+      {
+        "name": "libdav1d",
+        "longName": "dav1d AV1 decoder by VideoLAN",
+        "type": "video",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "delay"
+        ]
+      },
+      {
+        "name": "vp9",
+        "longName": "Google VP9",
+        "type": "video",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "frame_threads",
+          "slice_threads"
+        ]
+      },
+      {
+        "name": "vp8",
+        "longName": "On2 VP8",
+        "type": "video",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "frame_threads",
+          "slice_threads"
+        ]
+      },
+      {
+        "name": "mpeg4",
+        "longName": "MPEG-4 part 2",
+        "type": "video",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "draw_horiz_band",
+          "dr1",
+          "delay",
+          "frame_threads"
+        ]
+      },
+      {
+        "name": "mpeg2video",
+        "longName": "MPEG-2 video",
+        "type": "video",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "draw_horiz_band",
+          "dr1",
+          "delay",
+          "slice_threads"
+        ]
+      }
+    ],
+    "audio": [
+      {
+        "name": "aac",
+        "longName": "AAC (Advanced Audio Coding)",
+        "type": "audio",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "channel_conf"
+        ]
+      },
+      {
+        "name": "mp3",
+        "longName": "MP3 (MPEG audio layer 3)",
+        "type": "audio",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "channel_conf"
+        ]
+      },
+      {
+        "name": "flac",
+        "longName": "FLAC (Free Lossless Audio Codec)",
+        "type": "audio",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "channel_conf",
+          "frame_threads"
+        ]
+      },
+      {
+        "name": "opus",
+        "longName": "Opus",
+        "type": "audio",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "delay",
+          "channel_conf"
+        ]
+      },
+      {
+        "name": "vorbis",
+        "longName": "Vorbis",
+        "type": "audio",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "channel_conf"
+        ]
+      },
+      {
+        "name": "ac3",
+        "longName": "ATSC A/52A (AC-3)",
+        "type": "audio",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "channel_conf"
+        ]
+      },
+      {
+        "name": "eac3",
+        "longName": "ATSC A/52B (AC-3, E-AC-3)",
+        "type": "audio",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "channel_conf"
+        ]
+      },
+      {
+        "name": "pcm_s16le",
+        "longName": "PCM signed 16-bit little-endian",
+        "type": "audio",
+        "canDecode": true,
+        "canEncode": false,
+        "capabilities": [
+          "dr1",
+          "param_change"
+        ]
+      }
+    ]
+  },
+  "videoEncodersByHwaccel": {
+    "cpu": [
+      "libx264",
+      "libx265",
+      "libsvtav1",
+      "libaom-av1"
+    ],
+    "nvidia": [
+      "h264_nvenc",
+      "hevc_nvenc",
+      "av1_nvenc"
+    ],
+    "intel": [
+      "h264_qsv",
+      "hevc_qsv",
+      "av1_qsv"
+    ],
+    "amd": [
+      "h264_amf",
+      "hevc_amf",
+      "av1_amf"
+    ],
+    "vulkan": [
+      "h264_vulkan",
+      "hevc_vulkan",
+      "av1_vulkan"
+    ]
+  },
+  "recommended": {
+    "webStreaming": {
+      "video": "libx264",
+      "audio": "aac"
+    },
+    "archiving": {
+      "video": "libx265",
+      "audio": "flac"
+    },
+    "modern": {
+      "video": "libsvtav1",
+      "audio": "libopus"
+    },
+    "fastest": {
+      "video": "h264_nvenc",
+      "audio": "aac"
+    }
+  }
+}

@@ -3158,3 +3158,243 @@ cleanup:
     if (ifmtCtx) avformat_close_input(&ifmtCtx);
     return success;
 }
+
+// ==================== Build & Capability Info ====================
+
+BuildInfo FFmpegProcessor::getBuildInfo() {
+    BuildInfo info;
+    info.version = av_version_info();
+
+    const char* config = avcodec_configuration();
+    if (config) {
+        info.configuration = config;
+    }
+
+    // Hardware accelerations
+    enum AVHWDeviceType hwType = AV_HWDEVICE_TYPE_NONE;
+    while ((hwType = av_hwdevice_iterate_types(hwType)) != AV_HWDEVICE_TYPE_NONE) {
+        const char* name = av_hwdevice_get_type_name(hwType);
+        if (name) {
+            info.hwaccels.push_back(name);
+        }
+    }
+
+    // Protocols - iterate through all registered protocols
+    void* opaque = nullptr;
+    const char* protocol;
+    while ((protocol = avio_enum_protocols(&opaque, 0)) != nullptr) {
+        info.protocols.push_back(std::string(protocol));
+    }
+    opaque = nullptr;
+    while ((protocol = avio_enum_protocols(&opaque, 1)) != nullptr) {
+        info.protocols.push_back(std::string(protocol) + " (write)");
+    }
+
+    return info;
+}
+
+std::vector<CodecInfo> FFmpegProcessor::getCodecs(const std::string& typeFilter) {
+    std::vector<CodecInfo> result;
+
+    const AVCodec* codec = nullptr;
+    void* iter = nullptr;
+
+    while ((codec = av_codec_iterate(&iter)) != nullptr) {
+        // Determine codec type
+        std::string codecType;
+        switch (codec->type) {
+            case AVMEDIA_TYPE_VIDEO: codecType = "video"; break;
+            case AVMEDIA_TYPE_AUDIO: codecType = "audio"; break;
+            case AVMEDIA_TYPE_SUBTITLE: codecType = "subtitle"; break;
+            case AVMEDIA_TYPE_DATA: codecType = "data"; break;
+            case AVMEDIA_TYPE_ATTACHMENT: codecType = "attachment"; break;
+            default: codecType = "unknown"; break;
+        }
+
+        // Filter by type if specified
+        if (!typeFilter.empty() && codecType != typeFilter) {
+            continue;
+        }
+
+        CodecInfo info;
+        info.name = codec->name ? codec->name : "";
+        info.longName = codec->long_name ? codec->long_name : "";
+        info.type = codecType;
+        info.canDecode = av_codec_is_decoder(codec);
+        info.canEncode = av_codec_is_encoder(codec);
+
+        // Collect capabilities (FFmpeg 7.0 compatible flags)
+        if (codec->capabilities & AV_CODEC_CAP_DRAW_HORIZ_BAND) info.capabilities.push_back("draw_horiz_band");
+        if (codec->capabilities & AV_CODEC_CAP_DR1) info.capabilities.push_back("dr1");
+        if (codec->capabilities & AV_CODEC_CAP_DELAY) info.capabilities.push_back("delay");
+        if (codec->capabilities & AV_CODEC_CAP_SMALL_LAST_FRAME) info.capabilities.push_back("small_last_frame");
+        if (codec->capabilities & AV_CODEC_CAP_EXPERIMENTAL) info.capabilities.push_back("experimental");
+        if (codec->capabilities & AV_CODEC_CAP_CHANNEL_CONF) info.capabilities.push_back("channel_conf");
+        if (codec->capabilities & AV_CODEC_CAP_FRAME_THREADS) info.capabilities.push_back("frame_threads");
+        if (codec->capabilities & AV_CODEC_CAP_SLICE_THREADS) info.capabilities.push_back("slice_threads");
+        if (codec->capabilities & AV_CODEC_CAP_PARAM_CHANGE) info.capabilities.push_back("param_change");
+        if (codec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE) info.capabilities.push_back("variable_frame_size");
+
+        result.push_back(info);
+    }
+
+    return result;
+}
+
+std::vector<FilterInfo> FFmpegProcessor::getFilters(const std::string& typeFilter) {
+    std::vector<FilterInfo> result;
+
+    const AVFilter* filter = nullptr;
+    void* iter = nullptr;
+
+    while ((filter = av_filter_iterate(&iter)) != nullptr) {
+        // Skip internal filters (those starting with "_")
+        if (filter->name && filter->name[0] == '_') {
+            continue;
+        }
+
+        FilterInfo info;
+        info.name = filter->name ? filter->name : "";
+        info.description = filter->description ? filter->description : "";
+
+        // Determine filter type
+        // FFmpeg 7.0 API changed - we use name-based heuristics for reliable detection
+        std::string filterType = "other";
+        std::string name = info.name;
+        std::string desc = info.description;
+
+        // Audio filters typically start with 'a' and have audio-related descriptions
+        bool startsWithA = (name.length() > 0 && name[0] == 'a');
+        bool hasAudioKeyword = desc.find("audio") != std::string::npos ||
+                               desc.find("Audio") != std::string::npos ||
+                               desc.find("sample") != std::string::npos ||
+                               desc.find("channel") != std::string::npos ||
+                               desc.find("channels") != std::string::npos;
+        // Audio filters that don't start with 'a'
+        bool knownAudioFilter = (name == "volume" || name == "equalizer" || name == "dynaudnorm" ||
+                                  name == "loudnorm" || name == "pan" || name == "amix" ||
+                                  name == "amerge" || name == "aresample" || name == "asyncts" ||
+                                  name == "atempo" || name == "atrim" || name == "showvolume" ||
+                                  name == "showfreqs" || name == "showspectrum" || name == " showcqt");
+
+        // Video filters typically start with 'v' or have video-related descriptions
+        bool startsWithV = (name.length() > 0 && name[0] == 'v');
+        bool hasVideoKeyword = desc.find("video") != std::string::npos ||
+                               desc.find("Video") != std::string::npos ||
+                               desc.find("frame") != std::string::npos ||
+                               desc.find("pixel") != std::string::npos ||
+                               desc.find("image") != std::string::npos;
+        // Known video filters that don't start with 'v'
+        bool knownVideoFilter = (name == "scale" || name == "crop" || name == "fade" ||
+                                  name == "rotate" || name == "transpose" || name == "overlay" ||
+                                  name == "color" || name == "drawtext" || name == "split" ||
+                                  name == "concat" || name == "fps" || name == "pad" ||
+                                  name == "trim" || name == "setpts" || name == "format" ||
+                                  name == "hue" || name == "eq" || name == "brightness" ||
+                                  name == "contrast" || name == "saturation" || name == "blur" ||
+                                  name == "sharpen" || name == "deshake" || name == "stabilize" ||
+                                  name == "delogo" || name == "removegrain" || name == "hqdn3d");
+
+        if ((startsWithA && !startsWithV) || hasAudioKeyword || knownAudioFilter) {
+            // Additional check: if it starts with 'a' AND has video keywords, it might be misclassified
+            if (startsWithA && (hasVideoKeyword || name == "ass" || name == "avgblur")) {
+                filterType = "video";
+            } else {
+                filterType = "audio";
+            }
+        } else if (startsWithV || hasVideoKeyword || knownVideoFilter) {
+            filterType = "video";
+        }
+
+        // Special cases - filters that start with 'a' but are video filters
+        if (name == "ass" || name == "avgblur" || name == "aphase" || name == "alphaextract") {
+            filterType = "video";
+        }
+
+        // Filter by type if specified
+        if (!typeFilter.empty() && filterType != typeFilter) {
+            continue;
+        }
+
+        // Note: In FFmpeg 7.0, AVFilterPad is opaque and requires private headers
+        // for detailed iteration. We provide basic info without pad details.
+
+        result.push_back(info);
+    }
+
+    return result;
+}
+
+std::vector<FormatInfo> FFmpegProcessor::getFormats() {
+    std::vector<FormatInfo> result;
+
+    const AVInputFormat* ifmt = nullptr;
+    const AVOutputFormat* ofmt = nullptr;
+    void* ifmtIter = nullptr;
+    void* ofmtIter = nullptr;
+
+    // Collect all muxers (output formats)
+    std::map<std::string, FormatInfo> formatMap;
+
+    while ((ofmt = av_muxer_iterate(&ofmtIter)) != nullptr) {
+        FormatInfo info;
+        info.name = ofmt->name ? ofmt->name : "";
+        info.longName = ofmt->long_name ? ofmt->long_name : "";
+        info.canMux = true;
+        info.canDemux = false;
+
+        // Parse extensions
+        if (ofmt->extensions) {
+            std::string extStr(ofmt->extensions);
+            size_t pos = 0;
+            while ((pos = extStr.find(',')) != std::string::npos) {
+                info.extensions.push_back(extStr.substr(0, pos));
+                extStr.erase(0, pos + 1);
+            }
+            if (!extStr.empty()) {
+                info.extensions.push_back(extStr);
+            }
+        }
+
+        formatMap[info.name] = info;
+    }
+
+    // Collect demuxers (input formats)
+    while ((ifmt = av_demuxer_iterate(&ifmtIter)) != nullptr) {
+        std::string name = ifmt->name ? ifmt->name : "";
+
+        if (formatMap.find(name) != formatMap.end()) {
+            // Format exists as both muxer and demuxer
+            formatMap[name].canDemux = true;
+        } else {
+            // Format is only a demuxer
+            FormatInfo info;
+            info.name = name;
+            info.longName = ifmt->long_name ? ifmt->long_name : "";
+            info.canMux = false;
+            info.canDemux = true;
+
+            // Parse extensions
+            if (ifmt->extensions) {
+                std::string extStr(ifmt->extensions);
+                size_t pos = 0;
+                while ((pos = extStr.find(',')) != std::string::npos) {
+                    info.extensions.push_back(extStr.substr(0, pos));
+                    extStr.erase(0, pos + 1);
+                }
+                if (!extStr.empty()) {
+                    info.extensions.push_back(extStr);
+                }
+            }
+
+            formatMap[name] = info;
+        }
+    }
+
+    // Convert map to vector
+    for (const auto& pair : formatMap) {
+        result.push_back(pair.second);
+    }
+
+    return result;
+}

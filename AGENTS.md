@@ -1,8 +1,17 @@
 # nVideo - Agent Development Guide
 
 **Project**: Native video/audio processing for Node.js via N-API + FFmpeg
+
+**Documentation**:
+- [API Reference](documentation/README.md) - Complete API documentation
+- [Transcoding Guide](documentation/TRANSCODE.md) - Transcode options, recipes, hardware acceleration
+- [Streaming Guide](documentation/STREAMING.md) - Real-time playback, AudioWorklet, buffer management
+- [Capabilities Reference](documentation/CAPABILITIES.md) - FFmpeg capabilities, codecs, filters, formats
+
 **Spec**: [docs/nVideo_spec.md](docs/nVideo_spec.md)
 **Dev Plan**: [docs/nVideo_dev_plan.md](docs/nVideo_dev_plan.md)
+
+---
 
 ## Vision
 
@@ -56,7 +65,7 @@ The N-API addon exists because **streaming decoded data into JavaScript memory**
 │  - Convenience: nVideo.remux(), nVideo.concat(), nVideo.convert()   │
 ├─────────────────────────────────────────────────────────────────────┤
 │  Layer 2: N-API Bindings (src/binding.cpp)                          │
-│  - ProcessorWrapper (Napi::ObjectWrap)                              │
+│  - ProcessorWrapper (Napi::ObjectWrap)                               │
 │  - Zero-copy data marshalling (Float32Array, Uint8Array)            │
 │  - Type conversion, validation, error handling                      │
 ├─────────────────────────────────────────────────────────────────────┤
@@ -66,7 +75,7 @@ The N-API addon exists because **streaming decoded data into JavaScript memory**
 │  - libavcodec: decode/encode                                        │
 │  - libswscale: pixel format conversion, scaling                     │
 │  - libswresample: audio resampling, format conversion               │
-│  - libavfilter: filter graph (resize, crop, rotate, EQ, etc.)      │
+│  - libavfilter: filter graph (resize, crop, rotate, EQ, etc.)       │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -87,9 +96,11 @@ nVideo/
 │   └── utils.h/.cpp         # Helper functions
 ├── lib/
 │   ├── index.js             # JS entry point, convenience layer
-│   ├── player-video.js      # Video streaming player (SAB + VideoFrame)
 │   ├── player-audio.js      # Audio streaming player (SAB + AudioWorklet)
-│   └── buffer-pool.js       # BufferPool, RingBuffer, AVStreamPlayer
+│   ├── player-video.js      # Video streaming player (SAB + Canvas)
+│   ├── buffer-pool.js       # BufferPool, RingBuffer, AVStreamPlayer
+│   └── capabilities/        # Auto-generated FFmpeg capability JSON files
+├── documentation/           # API documentation (see above)
 ├── deps/
 │   └── ffmpeg/              # Pre-built FFmpeg shared libs (BtbN)
 │       ├── include/         # Headers
@@ -98,6 +109,7 @@ nVideo/
 ├── dist/                    # Pre-built .node binaries (per platform)
 ├── scripts/
 │   ├── download-ffmpeg.js   # Download FFmpeg from BtbN
+│   ├── generate-capabilities.js # Generate capability JSON files
 │   └── package-binary.js    # Create release tarball
 ├── test/
 │   ├── video.test.js        # Video decode/encode tests
@@ -125,8 +137,8 @@ nVideo/
 - **MSVC builds only** — MinGW-compiled NAPI addons crash in Electron (IAT corruption, 0xC0000005). Proven in nImage.
 - **Electron rebuild** — `npx electron-rebuild -f -w nvideo -v <version>` after building for Node.js
 - **DLL loading** — FFmpeg DLLs must be in same directory as `.node` file or on system PATH
-- **Binary loading order** — project `bin/` → `build/Release/` → `dist/` (see nImage 4-location fallback)
-- **SAB headers** — `Cross-Origin-Opener-Policy: same-origin` + `Cross-Origin-Embedder-Policy: require-corp` required for SharedArrayBuffer in renderer
+- **Binary loading order** — project `bin/` → `build/Release/` → `dist/` (see nImage 3-location fallback)
+- **SAB headers** — `Cross-Origin-Opener-Policy: same-origin` + `Cross-Origin-Embedder-Policy: require-corp` required for SharedArrayBuffer in renderer. See STREAMING.md for details.
 - **Worklet reuse** — reuse AudioWorkletNode instances across track switches to avoid Chrome memory leak (~8-10MB per 30 switches)
 
 ---
@@ -177,7 +189,7 @@ _This section is for the agent to record discoveries, patterns, gotchas, and dec
 - **FFmpeg DLL versions**: BtbN latest (as of 2026-04-12) ships avformat-62, avcodec-62, avutil-60, swscale-9, swresample-6, avfilter-11. These are hardcoded in `binding.gyp` copies section — will need updating when FFmpeg major versions bump.
 - **MSVC /std:c++17 vs /std:c++20**: node-gyp sets `/std:c++20` by default, our binding.gyp overrides to `/std:c++17`. This produces a benign D9025 warning. No issue.
 - **`npm install` runs `node-gyp rebuild`**: Removed explicit `install` script from package.json. Use `npm install --ignore-scripts` then `npm run build` manually to control FFmpeg download timing.
-- **Binary loading order**: `bin/` (project-level, Electron-reliable) → `build/Release/` (dev) → `dist/` (distribution). Three locations, not four — nImage had prebuilds/ which we don't use.
+- **Binary loading order**: `bin/` (project-level, Electron-reliable) → `build/Release/` (dev) → `dist/` (distribution). Three locations.
 
 ### Phase 0 Verification (2026-04-12) ✅ COMPLETE
 
@@ -212,7 +224,6 @@ _This section is for the agent to record discoveries, patterns, gotchas, and dec
   - SAB ring buffer for decoded RGB frames
   - Separate feed loop and render loop (feed at 16ms, render at FPS)
   - Position tracking via frame number extrapolation
-- Both players exported via `nVideo.AudioStreamPlayer` and `nVideo.VideoStreamPlayer`
 
 **Performance verified:**
 - Audio decode: 60s MP3 in 39ms (1538x realtime)
@@ -227,3 +238,17 @@ _This section is for the agent to record discoveries, patterns, gotchas, and dec
 - **AVFrame Pre-Allocation Optimization**: Avoid invoking `av_frame_alloc()` and `av_frame_free()` inside the hot-path `while (av_read_frame)` loop. While allocating just the frame struct is relatively cheap, doing so hundreds of times per second (especially for video and audio filters concurrent processing) generates C++ heap fragmentation and jitter. Hoist `swVideoFrame`, `videoFilteredFrame`, and `audioFilteredFrame` out of the loop and reuse them with `av_frame_unref()` to ensure steady, fast performance.
 - **Rich Transcode Telemetry**: In addition to standard percentage completion, the native binding now provides highly detailed real-time data back to JavaScript. This includes live tracking of `size` (bytes written), `bitrate` calculations mid-stream, `estimatedSize` projections, isolated `audioTime` measurements (to diagnose A/V desync conditions), and discrete `dupFrames`/`dropFrames` counters every 100ms.
 - **End-of-Stream Flush Rescaling**: A critical issue causing "non monotonically increasing dts" errors from muxers (especially MP4/AAC) occurred strictly when flushing encoders. When sending `nullptr` frames at the end of the transcode pipeline to extract delayed NVENC B-frames or final audio buffers, you must still explicitly invoke `av_packet_rescale_ts` on the recovered flush packets before passing them to the final `av_interleaved_write_frame` loop. Missing this step on the very last frames suddenly drops their `time_base` coordinate limits back into native unscaled values, causing massive time calculation leaps that confuse the multiplexer.
+
+### FFmpeg Capability Discovery (2026-04-18)
+
+Added endpoints to query FFmpeg's capabilities directly from the binary, plus auto-generated static JSON files in `lib/capabilities/`.
+
+**Implementation notes:**
+- All live endpoints use FFmpeg's iteration APIs (`av_codec_iterate()`, `av_filter_iterate()`, etc.)
+- FFmpeg 7.0 API changes required removing deprecated codec capability flags (AV_CODEC_CAP_TRUNCATED, AV_CODEC_CAP_HWACCEL, etc.)
+- AVFilterPad is now opaque in FFmpeg 7.0, so filter type detection uses name/description heuristics
+- Static files are generated automatically after each build via `npm run build`
+- Encoders and decoders are properly separated in `codecs-common.json` to avoid duplicate name issues
+
+**See [CAPABILITIES.md](documentation/CAPABILITIES.md) for full API reference and usage.**
+

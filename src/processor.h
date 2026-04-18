@@ -144,12 +144,62 @@ struct TranscodeError {
     int stream;             // Which stream
 };
 
+// Codec info structure
+struct CodecInfo {
+    std::string name;           // Short name (e.g., "h264", "aac")
+    std::string longName;       // Long description
+    std::string type;           // "video", "audio", "subtitle", "data"
+    bool canDecode;             // Has decoder
+    bool canEncode;             // Has encoder
+    std::vector<std::string> capabilities; // Capability flags (e.g., "hwaccel", "lossless")
+};
+
+// Filter info structure
+struct FilterInfo {
+    std::string name;           // Filter name
+    std::string description;    // Human-readable description
+    std::vector<std::string> inputs;   // Input pad labels
+    std::vector<std::string> outputs;  // Output pad labels
+    std::vector<std::string> options;  // Configurable options (if available)
+};
+
+// Format info structure (muxer/demuxer)
+struct FormatInfo {
+    std::string name;           // Format name
+    std::string longName;       // Long description
+    std::vector<std::string> extensions; // Common file extensions
+    bool canMux;                // Can write/mux
+    bool canDemux;              // Can read/demux
+};
+
+// FFmpeg build configuration info
+struct BuildInfo {
+    std::string version;        // FFmpeg version string
+    std::string configuration; // Build configuration flags
+    std::vector<std::string> protocols; // Supported protocols
+    std::vector<std::string> hwaccels;  // Supported hardware accelerations
+};
+
 class FFmpegProcessor {
 public:
     FFmpegProcessor();
     ~FFmpegProcessor();
 
     static std::string getVersion();
+
+    // ==================== Build & Capability Info ====================
+
+    // Get FFmpeg build information
+    static BuildInfo getBuildInfo();
+
+    // Get all available codecs (can filter by type: "video", "audio", "subtitle", or "" for all)
+    static std::vector<CodecInfo> getCodecs(const std::string& type = "");
+
+    // Get all available filters (can filter by type: "video", "audio", or "" for all)
+    static std::vector<FilterInfo> getFilters(const std::string& type = "");
+
+    // Get all available formats (muxers/demuxers)
+    static std::vector<FormatInfo> getFormats();
 
     // Probe - returns full metadata without opening decoders
     static ProbeResult probe(const char* path);

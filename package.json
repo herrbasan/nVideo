@@ -5,18 +5,20 @@
   "main": "lib/index.js",
   "files": [
     "lib/",
+    "lib/capabilities/",
     "dist/",
     "src/"
   ],
   "scripts": {
     "setup": "node scripts/download-ffmpeg.js",
     "configure": "node-gyp configure",
-    "build": "npm run setup && node-gyp configure && node-gyp build",
+    "build": "npm run setup && node-gyp configure && node-gyp build && npm run generate-capabilities",
     "build:debug": "node-gyp configure && node-gyp build --debug",
     "rebuild": "node-gyp rebuild",
     "clean": "node-gyp clean",
     "test": "node test/test.js",
-    "rebuild:electron": "npx @electron/rebuild -f -w nvideo"
+    "rebuild:electron": "npx @electron/rebuild -f -w nvideo",
+    "generate-capabilities": "node scripts/generate-capabilities.js"
   },
   "keywords": [
     "ffmpeg",

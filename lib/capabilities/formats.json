@@ -1,0 +1,3689 @@
+{
+  "all": [
+    {
+      "name": "3dostr",
+      "longName": "3DO STR",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "str"
+      ]
+    },
+    {
+      "name": "3g2",
+      "longName": "3GP2 (3GPP2 file format)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "3g2"
+      ]
+    },
+    {
+      "name": "3gp",
+      "longName": "3GP (3GPP file format)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "3gp"
+      ]
+    },
+    {
+      "name": "4xm",
+      "longName": "4X Technologies",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "a64",
+      "longName": "a64 - video for Commodore 64",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "a64",
+        " A64"
+      ]
+    },
+    {
+      "name": "aa",
+      "longName": "Audible AA format files",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "aa"
+      ]
+    },
+    {
+      "name": "aac",
+      "longName": "raw ADTS AAC (Advanced Audio Coding)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "aac"
+      ]
+    },
+    {
+      "name": "aax",
+      "longName": "CRI AAX",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "aax"
+      ]
+    },
+    {
+      "name": "ac3",
+      "longName": "raw AC-3",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ac3"
+      ]
+    },
+    {
+      "name": "ac4",
+      "longName": "raw AC-4",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ac4"
+      ]
+    },
+    {
+      "name": "ace",
+      "longName": "tri-Ace Audio Container",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "acm",
+      "longName": "Interplay ACM",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "acm"
+      ]
+    },
+    {
+      "name": "act",
+      "longName": "ACT Voice file format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "adf",
+      "longName": "Artworx Data Format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "adf"
+      ]
+    },
+    {
+      "name": "adp",
+      "longName": "ADP",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "adp",
+        "dtk"
+      ]
+    },
+    {
+      "name": "ads",
+      "longName": "Sony PS2 ADS",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "ads",
+        "ss2"
+      ]
+    },
+    {
+      "name": "adts",
+      "longName": "ADTS AAC (Advanced Audio Coding)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "aac",
+        "adts"
+      ]
+    },
+    {
+      "name": "adx",
+      "longName": "CRI ADX",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "adx"
+      ]
+    },
+    {
+      "name": "aea",
+      "longName": "MD STUDIO audio",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "aea"
+      ]
+    },
+    {
+      "name": "afc",
+      "longName": "AFC",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "afc"
+      ]
+    },
+    {
+      "name": "aiff",
+      "longName": "Audio IFF",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "aif",
+        "aiff",
+        "afc",
+        "aifc"
+      ]
+    },
+    {
+      "name": "aix",
+      "longName": "CRI AIX",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "aix"
+      ]
+    },
+    {
+      "name": "alaw",
+      "longName": "PCM A-law",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "al"
+      ]
+    },
+    {
+      "name": "alias_pix",
+      "longName": "Alias/Wavefront PIX image",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "alp",
+      "longName": "LEGO Racers ALP",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "tun",
+        "pcm"
+      ]
+    },
+    {
+      "name": "amr",
+      "longName": "3GPP AMR",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "amr"
+      ]
+    },
+    {
+      "name": "amrnb",
+      "longName": "raw AMR-NB",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "amrwb",
+      "longName": "raw AMR-WB",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "amv",
+      "longName": "AMV",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "amv"
+      ]
+    },
+    {
+      "name": "anm",
+      "longName": "Deluxe Paint Animation",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "apac",
+      "longName": "raw APAC",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "apc"
+      ]
+    },
+    {
+      "name": "apc",
+      "longName": "CRYO APC",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ape",
+      "longName": "Monkey's Audio",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "ape",
+        "apl",
+        "mac"
+      ]
+    },
+    {
+      "name": "apm",
+      "longName": "Ubisoft Rayman 2 APM",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "apm"
+      ]
+    },
+    {
+      "name": "apng",
+      "longName": "Animated Portable Network Graphics",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "apng"
+      ]
+    },
+    {
+      "name": "aptx",
+      "longName": "raw aptX (Audio Processing Technology for Bluetooth)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "aptx"
+      ]
+    },
+    {
+      "name": "aptx_hd",
+      "longName": "raw aptX HD (Audio Processing Technology for Bluetooth)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "aptxhd"
+      ]
+    },
+    {
+      "name": "apv",
+      "longName": "APV raw bitstream",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "apv"
+      ]
+    },
+    {
+      "name": "aqtitle",
+      "longName": "AQTitle subtitles",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "aqt"
+      ]
+    },
+    {
+      "name": "argo_asf",
+      "longName": "Argonaut Games ASF",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "argo_brp",
+      "longName": "Argonaut Games BRP",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "argo_cvg",
+      "longName": "Argonaut Games CVG",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "cvg"
+      ]
+    },
+    {
+      "name": "asf",
+      "longName": "ASF (Advanced / Active Streaming Format)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "asf",
+        "wmv",
+        "wma"
+      ]
+    },
+    {
+      "name": "asf_o",
+      "longName": "ASF (Advanced / Active Streaming Format)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "asf_stream",
+      "longName": "ASF (Advanced / Active Streaming Format)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "asf",
+        "wmv",
+        "wma"
+      ]
+    },
+    {
+      "name": "ass",
+      "longName": "SSA (SubStation Alpha) subtitle",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ass",
+        "ssa"
+      ]
+    },
+    {
+      "name": "ast",
+      "longName": "AST (Audio Stream)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ast"
+      ]
+    },
+    {
+      "name": "au",
+      "longName": "Sun AU",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "au"
+      ]
+    },
+    {
+      "name": "av1",
+      "longName": "AV1 Annex B",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "obu"
+      ]
+    },
+    {
+      "name": "avi",
+      "longName": "AVI (Audio Video Interleaved)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "avi"
+      ]
+    },
+    {
+      "name": "avif",
+      "longName": "AVIF",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "avif"
+      ]
+    },
+    {
+      "name": "avisynth",
+      "longName": "AviSynth script",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "avs"
+      ]
+    },
+    {
+      "name": "avm2",
+      "longName": "SWF (ShockWave Flash) (AVM2)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "avr",
+      "longName": "AVR (Audio Visual Research)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "avr"
+      ]
+    },
+    {
+      "name": "avs",
+      "longName": "Argonaut Games Creature Shock",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "avs2",
+      "longName": "raw AVS2-P2/IEEE1857.4 video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "avs",
+        "avs2"
+      ]
+    },
+    {
+      "name": "avs3",
+      "longName": "AVS3-P2/IEEE1857.10",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "avs3"
+      ]
+    },
+    {
+      "name": "bethsoftvid",
+      "longName": "Bethesda Softworks VID",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "bfi",
+      "longName": "Brute Force & Ignorance",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "bfstm",
+      "longName": "BFSTM (Binary Cafe Stream)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "bfstm",
+        "bcstm"
+      ]
+    },
+    {
+      "name": "bin",
+      "longName": "Binary text",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "bink",
+      "longName": "Bink",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "binka",
+      "longName": "Bink Audio",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "binka"
+      ]
+    },
+    {
+      "name": "bit",
+      "longName": "G.729 BIT file format",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "bit"
+      ]
+    },
+    {
+      "name": "bitpacked",
+      "longName": "Bitpacked",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "bitpacked"
+      ]
+    },
+    {
+      "name": "bmp_pipe",
+      "longName": "piped bmp sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "bmv",
+      "longName": "Discworld II BMV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "bmv"
+      ]
+    },
+    {
+      "name": "boa",
+      "longName": "Black Ops Audio",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "bonk",
+      "longName": "raw Bonk",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "bonk"
+      ]
+    },
+    {
+      "name": "brender_pix",
+      "longName": "BRender PIX image",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "brstm",
+      "longName": "BRSTM (Binary Revolution Stream)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "brstm"
+      ]
+    },
+    {
+      "name": "c93",
+      "longName": "Interplay C93",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "caf",
+      "longName": "Apple CAF (Core Audio Format)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "caf"
+      ]
+    },
+    {
+      "name": "cavsvideo",
+      "longName": "raw Chinese AVS (Audio Video Standard) video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "cavs"
+      ]
+    },
+    {
+      "name": "cdg",
+      "longName": "CD Graphics",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "cdg"
+      ]
+    },
+    {
+      "name": "cdxl",
+      "longName": "Commodore CDXL video",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "cdxl",
+        "xl"
+      ]
+    },
+    {
+      "name": "chromaprint",
+      "longName": "Chromaprint",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "cine",
+      "longName": "Phantom Cine",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "codec2",
+      "longName": "codec2 .c2 muxer",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "c2"
+      ]
+    },
+    {
+      "name": "codec2raw",
+      "longName": "raw codec2 muxer",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "concat",
+      "longName": "Virtual concatenation script",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "crc",
+      "longName": "CRC testing",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "cri_pipe",
+      "longName": "piped cri sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "dash",
+      "longName": "DASH Muxer",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mpd"
+      ]
+    },
+    {
+      "name": "data",
+      "longName": "raw data",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "daud",
+      "longName": "D-Cinema audio",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "302"
+      ]
+    },
+    {
+      "name": "dcstr",
+      "longName": "Sega DC STR",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "str"
+      ]
+    },
+    {
+      "name": "dds_pipe",
+      "longName": "piped dds sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "derf",
+      "longName": "Xilam DERF",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "adp"
+      ]
+    },
+    {
+      "name": "dfa",
+      "longName": "Chronomaster DFA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "dfpwm",
+      "longName": "raw DFPWM1a",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "dfpwm"
+      ]
+    },
+    {
+      "name": "dhav",
+      "longName": "Video DAV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "dav"
+      ]
+    },
+    {
+      "name": "dirac",
+      "longName": "raw Dirac",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "drc",
+        "vc2"
+      ]
+    },
+    {
+      "name": "dnxhd",
+      "longName": "raw DNxHD (SMPTE VC-3)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "dnxhd",
+        "dnxhr"
+      ]
+    },
+    {
+      "name": "dpx_pipe",
+      "longName": "piped dpx sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "dsf",
+      "longName": "DSD Stream File (DSF)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "dsicin",
+      "longName": "Delphine Software International CIN",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "dss",
+      "longName": "Digital Speech Standard (DSS)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "dss"
+      ]
+    },
+    {
+      "name": "dts",
+      "longName": "raw DTS",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "dts"
+      ]
+    },
+    {
+      "name": "dtshd",
+      "longName": "raw DTS-HD",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "dtshd"
+      ]
+    },
+    {
+      "name": "dv",
+      "longName": "DV (Digital Video)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "dv"
+      ]
+    },
+    {
+      "name": "dvbsub",
+      "longName": "raw dvbsub",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "dvbtxt",
+      "longName": "dvbtxt",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "dvd",
+      "longName": "MPEG-2 PS (DVD VOB)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "dvd"
+      ]
+    },
+    {
+      "name": "dvdvideo",
+      "longName": "DVD-Video",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "dxa",
+      "longName": "DXA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ea",
+      "longName": "Electronic Arts Multimedia",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ea_cdata",
+      "longName": "Electronic Arts cdata",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "cdata"
+      ]
+    },
+    {
+      "name": "eac3",
+      "longName": "raw E-AC-3",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "eac3",
+        "ec3"
+      ]
+    },
+    {
+      "name": "epaf",
+      "longName": "Ensoniq Paris Audio File",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "paf",
+        "fap"
+      ]
+    },
+    {
+      "name": "evc",
+      "longName": "raw EVC video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "evc"
+      ]
+    },
+    {
+      "name": "exr_pipe",
+      "longName": "piped exr sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "f32be",
+      "longName": "PCM 32-bit floating-point big-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "f32le",
+      "longName": "PCM 32-bit floating-point little-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "f4v",
+      "longName": "F4V Adobe Flash Video",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "f4v"
+      ]
+    },
+    {
+      "name": "f64be",
+      "longName": "PCM 64-bit floating-point big-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "f64le",
+      "longName": "PCM 64-bit floating-point little-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ffmetadata",
+      "longName": "FFmpeg metadata in text",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ffmeta"
+      ]
+    },
+    {
+      "name": "fifo",
+      "longName": "FIFO queue pseudo-muxer",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "film_cpk",
+      "longName": "Sega FILM / CPK",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "cpk"
+      ]
+    },
+    {
+      "name": "filmstrip",
+      "longName": "Adobe Filmstrip",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "flm"
+      ]
+    },
+    {
+      "name": "fits",
+      "longName": "Flexible Image Transport System",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "fits"
+      ]
+    },
+    {
+      "name": "flac",
+      "longName": "raw FLAC",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "flac"
+      ]
+    },
+    {
+      "name": "flic",
+      "longName": "FLI/FLC/FLX animation",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "flv",
+      "longName": "FLV (Flash Video)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "flv"
+      ]
+    },
+    {
+      "name": "framecrc",
+      "longName": "framecrc testing",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "framehash",
+      "longName": "Per-frame hash testing",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "framemd5",
+      "longName": "Per-frame MD5 testing",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "frm",
+      "longName": "Megalux Frame",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "fsb",
+      "longName": "FMOD Sample Bank",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "fsb"
+      ]
+    },
+    {
+      "name": "fwse",
+      "longName": "Capcom's MT Framework sound",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "fwse"
+      ]
+    },
+    {
+      "name": "g722",
+      "longName": "raw G.722",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "g722"
+      ]
+    },
+    {
+      "name": "g723_1",
+      "longName": "raw G.723.1",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "tco",
+        "rco"
+      ]
+    },
+    {
+      "name": "g726",
+      "longName": "raw big-endian G.726 (\"left-justified\")",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "g726le",
+      "longName": "raw little-endian G.726 (\"right-justified\")",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "g728",
+      "longName": "raw G.728",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "g728"
+      ]
+    },
+    {
+      "name": "g729",
+      "longName": "G.729 raw format demuxer",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "g729"
+      ]
+    },
+    {
+      "name": "gdv",
+      "longName": "Gremlin Digital Video",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "gem_pipe",
+      "longName": "piped gem sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "genh",
+      "longName": "GENeric Header",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "genh"
+      ]
+    },
+    {
+      "name": "gif",
+      "longName": "CompuServe Graphics Interchange Format (GIF)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "gif"
+      ]
+    },
+    {
+      "name": "gif_pipe",
+      "longName": "piped gif sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "gsm",
+      "longName": "raw GSM",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "gsm"
+      ]
+    },
+    {
+      "name": "gxf",
+      "longName": "GXF (General eXchange Format)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "gxf"
+      ]
+    },
+    {
+      "name": "h261",
+      "longName": "raw H.261",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "h261"
+      ]
+    },
+    {
+      "name": "h263",
+      "longName": "raw H.263",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "h263"
+      ]
+    },
+    {
+      "name": "h264",
+      "longName": "raw H.264 video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "h264",
+        "264"
+      ]
+    },
+    {
+      "name": "hash",
+      "longName": "Hash testing",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "hca",
+      "longName": "CRI HCA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "hca"
+      ]
+    },
+    {
+      "name": "hcom",
+      "longName": "Macintosh HCOM",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "hdr_pipe",
+      "longName": "piped hdr sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "hds",
+      "longName": "HDS Muxer",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "hevc",
+      "longName": "raw HEVC video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "hevc",
+        "h265",
+        "265"
+      ]
+    },
+    {
+      "name": "hls",
+      "longName": "Apple HTTP Live Streaming",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "m3u8"
+      ]
+    },
+    {
+      "name": "hnm",
+      "longName": "Cryo HNM v4",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "hxvs",
+      "longName": "HXVF/HXVS IP camera format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "264",
+        "265"
+      ]
+    },
+    {
+      "name": "iamf",
+      "longName": "Raw Immersive Audio Model and Formats",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "iamf"
+      ]
+    },
+    {
+      "name": "ico",
+      "longName": "Microsoft Windows ICO",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ico"
+      ]
+    },
+    {
+      "name": "idcin",
+      "longName": "id Cinematic",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "idf",
+      "longName": "iCE Draw File",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "idf"
+      ]
+    },
+    {
+      "name": "iff",
+      "longName": "IFF (Interchange File Format)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ifv",
+      "longName": "IFV CCTV DVR",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "ifv"
+      ]
+    },
+    {
+      "name": "ilbc",
+      "longName": "iLBC storage",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "lbc"
+      ]
+    },
+    {
+      "name": "image2",
+      "longName": "image2 sequence",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "bmp",
+        "dpx",
+        "exr",
+        "jls",
+        "jpeg",
+        "jpg",
+        "jxs",
+        "jxl",
+        "ljpg",
+        "pam",
+        "pbm",
+        "pcx",
+        "pfm",
+        "pgm",
+        "pgmyuv",
+        "phm",
+        "png",
+        "ppm",
+        "sgi",
+        "tga",
+        "tif",
+        "tiff",
+        "jp2",
+        "j2c",
+        "j2k",
+        "xwd",
+        "sun",
+        "ras",
+        "rs",
+        "im1",
+        "im8",
+        "im24",
+        "sunras",
+        "vbn",
+        "xbm",
+        "xface",
+        "pix",
+        "y",
+        "avif",
+        "qoi",
+        "hdr",
+        "wbmp"
+      ]
+    },
+    {
+      "name": "image2pipe",
+      "longName": "piped image2 sequence",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "imf",
+      "longName": "IMF (Interoperable Master Format)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ingenient",
+      "longName": "raw Ingenient MJPEG",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "cgi"
+      ]
+    },
+    {
+      "name": "ipmovie",
+      "longName": "Interplay MVE",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ipod",
+      "longName": "iPod H.264 MP4 (MPEG-4 Part 14)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "m4v",
+        "m4a",
+        "m4b"
+      ]
+    },
+    {
+      "name": "ipu",
+      "longName": "raw IPU Video",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "ipu"
+      ]
+    },
+    {
+      "name": "ircam",
+      "longName": "Berkeley/IRCAM/CARL Sound Format",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "sf",
+        "ircam"
+      ]
+    },
+    {
+      "name": "ismv",
+      "longName": "ISMV/ISMA (Smooth Streaming)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "ismv",
+        "isma"
+      ]
+    },
+    {
+      "name": "iss",
+      "longName": "Funcom ISS",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "iv8",
+      "longName": "IndigoVision 8000 video",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ivf",
+      "longName": "On2 IVF",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ivf"
+      ]
+    },
+    {
+      "name": "ivr",
+      "longName": "IVR (Internet Video Recording)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "ivr"
+      ]
+    },
+    {
+      "name": "j2k_pipe",
+      "longName": "piped j2k sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "jacosub",
+      "longName": "JACOsub subtitle format",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "jss",
+        "js"
+      ]
+    },
+    {
+      "name": "jpeg_pipe",
+      "longName": "piped jpeg sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "jpegls_pipe",
+      "longName": "piped jpegls sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "jpegxl_anim",
+      "longName": "Animated JPEG XL",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "jxl"
+      ]
+    },
+    {
+      "name": "jpegxl_pipe",
+      "longName": "piped jpegxl sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "jpegxs_pipe",
+      "longName": "piped jpegxs sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "jv",
+      "longName": "Bitmap Brothers JV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "kux",
+      "longName": "KUX (YouKu)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "kux"
+      ]
+    },
+    {
+      "name": "kvag",
+      "longName": "Simon & Schuster Interactive VAG",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "vag"
+      ]
+    },
+    {
+      "name": "laf",
+      "longName": "LAF (Limitless Audio Format)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "laf"
+      ]
+    },
+    {
+      "name": "latm",
+      "longName": "LOAS/LATM",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "latm",
+        "loas"
+      ]
+    },
+    {
+      "name": "lc3",
+      "longName": "LC3 (Low Complexity Communication Codec)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "lc3"
+      ]
+    },
+    {
+      "name": "libgme",
+      "longName": "Game Music Emu demuxer",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "libopenmpt",
+      "longName": "Tracker formats (libopenmpt)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "669",
+        "amf",
+        "ams",
+        "dbm",
+        "digi",
+        "dmf",
+        "dsm",
+        "dtm",
+        "far",
+        "gdm",
+        "ice",
+        "imf",
+        "it",
+        "j2b",
+        "m15",
+        "mdl",
+        "med",
+        "mmcmp",
+        "mms",
+        "mo3",
+        "mod",
+        "mptm",
+        "mt2",
+        "mtm",
+        "nst",
+        "okt",
+        "plm",
+        "ppm",
+        "psm",
+        "pt36",
+        "ptm",
+        "s3m",
+        "sfx",
+        "sfx2",
+        "st26",
+        "stk",
+        "stm",
+        "stp",
+        "ult",
+        "umx",
+        "wow",
+        "xm",
+        "xpk"
+      ]
+    },
+    {
+      "name": "live_flv",
+      "longName": "live RTMP FLV (Flash Video)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "flv"
+      ]
+    },
+    {
+      "name": "lmlm4",
+      "longName": "raw lmlm4",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "loas",
+      "longName": "LOAS AudioSyncStream",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "lrc",
+      "longName": "LRC lyrics",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "lrc"
+      ]
+    },
+    {
+      "name": "luodat",
+      "longName": "Video CCTV DAT",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "dat"
+      ]
+    },
+    {
+      "name": "lvf",
+      "longName": "LVF",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "lvf"
+      ]
+    },
+    {
+      "name": "lxf",
+      "longName": "VR native stream (LXF)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "m4v",
+      "longName": "raw MPEG-4 video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "m4v"
+      ]
+    },
+    {
+      "name": "matroska",
+      "longName": "Matroska Audio",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "mka"
+      ]
+    },
+    {
+      "name": "matroska,webm",
+      "longName": "Matroska / WebM",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mkv",
+        "mk3d",
+        "mka",
+        "mks",
+        "webm"
+      ]
+    },
+    {
+      "name": "mca",
+      "longName": "MCA Audio Format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mca"
+      ]
+    },
+    {
+      "name": "mcc",
+      "longName": "MacCaption",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mcc"
+      ]
+    },
+    {
+      "name": "md5",
+      "longName": "MD5 testing",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "mgsts",
+      "longName": "Metal Gear Solid: The Twin Snakes",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "microdvd",
+      "longName": "MicroDVD subtitle format",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "sub"
+      ]
+    },
+    {
+      "name": "mjpeg",
+      "longName": "raw MJPEG video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mjpg",
+        "mjpeg"
+      ]
+    },
+    {
+      "name": "mjpeg_2000",
+      "longName": "raw MJPEG 2000 video",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "j2k"
+      ]
+    },
+    {
+      "name": "mkvtimestamp_v2",
+      "longName": "extract pts as timecode v2 format, as defined by mkvtoolnix",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "mlp",
+      "longName": "raw MLP",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mlp"
+      ]
+    },
+    {
+      "name": "mlv",
+      "longName": "Magic Lantern Video (MLV)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "mm",
+      "longName": "American Laser Games MM",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "mmf",
+      "longName": "Yamaha SMAF",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mmf"
+      ]
+    },
+    {
+      "name": "mods",
+      "longName": "MobiClip MODS",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mods"
+      ]
+    },
+    {
+      "name": "moflex",
+      "longName": "MobiClip MOFLEX",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "moflex"
+      ]
+    },
+    {
+      "name": "mov",
+      "longName": "QuickTime / MOV",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "mov"
+      ]
+    },
+    {
+      "name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "longName": "QuickTime / MOV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mov",
+        "mp4",
+        "m4a",
+        "3gp",
+        "3g2",
+        "mj2",
+        "psp",
+        "m4v",
+        "m4b",
+        "ism",
+        "ismv",
+        "isma",
+        "f4v",
+        "avif",
+        "heic",
+        "heif"
+      ]
+    },
+    {
+      "name": "mp2",
+      "longName": "MP2 (MPEG audio layer 2)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "mp2",
+        "m2a",
+        "mpa"
+      ]
+    },
+    {
+      "name": "mp3",
+      "longName": "MP3 (MPEG audio layer 3)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mp3"
+      ]
+    },
+    {
+      "name": "mp4",
+      "longName": "MP4 (MPEG-4 Part 14)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "mp4"
+      ]
+    },
+    {
+      "name": "mpc",
+      "longName": "Musepack",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mpc"
+      ]
+    },
+    {
+      "name": "mpc8",
+      "longName": "Musepack SV8",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "mpeg",
+      "longName": "MPEG-1 Systems / MPEG program stream",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mpg",
+        "mpeg"
+      ]
+    },
+    {
+      "name": "mpeg1video",
+      "longName": "raw MPEG-1 video",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "mpg",
+        "mpeg",
+        "m1v"
+      ]
+    },
+    {
+      "name": "mpeg2video",
+      "longName": "raw MPEG-2 video",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "m2v"
+      ]
+    },
+    {
+      "name": "mpegts",
+      "longName": "MPEG-TS (MPEG-2 Transport Stream)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ts",
+        "m2t",
+        "m2ts",
+        "mts"
+      ]
+    },
+    {
+      "name": "mpegtsraw",
+      "longName": "raw MPEG-TS (MPEG-2 Transport Stream)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "mpegvideo",
+      "longName": "raw MPEG video",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "mpjpeg",
+      "longName": "MIME multipart JPEG",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mjpg"
+      ]
+    },
+    {
+      "name": "mpl2",
+      "longName": "MPL2 subtitles",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "txt",
+        "mpl2"
+      ]
+    },
+    {
+      "name": "mpsub",
+      "longName": "MPlayer subtitles",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sub"
+      ]
+    },
+    {
+      "name": "msf",
+      "longName": "Sony PS3 MSF",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "msf"
+      ]
+    },
+    {
+      "name": "msnwctcp",
+      "longName": "MSN TCP Webcam stream",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "msp",
+      "longName": "Microsoft Paint (MSP))",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "mtaf",
+      "longName": "Konami PS2 MTAF",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mtaf"
+      ]
+    },
+    {
+      "name": "mtv",
+      "longName": "MTV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "mulaw",
+      "longName": "PCM mu-law",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ul"
+      ]
+    },
+    {
+      "name": "musx",
+      "longName": "Eurocom MUSX",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "musx"
+      ]
+    },
+    {
+      "name": "mv",
+      "longName": "Silicon Graphics Movie",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "mvi",
+      "longName": "Motion Pixels MVI",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mvi"
+      ]
+    },
+    {
+      "name": "mxf",
+      "longName": "MXF (Material eXchange Format)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mxf"
+      ]
+    },
+    {
+      "name": "mxf_d10",
+      "longName": "MXF (Material eXchange Format) D-10 Mapping",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "mxf_opatom",
+      "longName": "MXF (Material eXchange Format) Operational Pattern Atom",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "mxf"
+      ]
+    },
+    {
+      "name": "mxg",
+      "longName": "MxPEG clip",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mxg"
+      ]
+    },
+    {
+      "name": "nc",
+      "longName": "NC camera feed",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "v"
+      ]
+    },
+    {
+      "name": "nistsphere",
+      "longName": "NIST SPeech HEader REsources",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "nist",
+        "sph"
+      ]
+    },
+    {
+      "name": "nsp",
+      "longName": "Computerized Speech Lab NSP",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "nsp"
+      ]
+    },
+    {
+      "name": "nsv",
+      "longName": "Nullsoft Streaming Video",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "null",
+      "longName": "raw null video",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "nut",
+      "longName": "NUT",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "nut"
+      ]
+    },
+    {
+      "name": "nuv",
+      "longName": "NuppelVideo",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "obu",
+      "longName": "AV1 low overhead OBU",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "obu"
+      ]
+    },
+    {
+      "name": "oga",
+      "longName": "Ogg Audio",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "oga"
+      ]
+    },
+    {
+      "name": "ogg",
+      "longName": "Ogg",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ogg"
+      ]
+    },
+    {
+      "name": "ogv",
+      "longName": "Ogg Video",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "ogv"
+      ]
+    },
+    {
+      "name": "oma",
+      "longName": "Sony OpenMG audio",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "oma"
+      ]
+    },
+    {
+      "name": "opus",
+      "longName": "Ogg Opus",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "opus"
+      ]
+    },
+    {
+      "name": "osq",
+      "longName": "raw OSQ",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "osq"
+      ]
+    },
+    {
+      "name": "paf",
+      "longName": "Amazing Studio Packed Animation File",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pam_pipe",
+      "longName": "piped pam sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pbm_pipe",
+      "longName": "piped pbm sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pcx_pipe",
+      "longName": "piped pcx sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pdv",
+      "longName": "PlayDate Video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "pdv"
+      ]
+    },
+    {
+      "name": "pfm_pipe",
+      "longName": "piped pfm sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pgm_pipe",
+      "longName": "piped pgm sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pgmyuv_pipe",
+      "longName": "piped pgmyuv sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pgx_pipe",
+      "longName": "piped pgx sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "phm_pipe",
+      "longName": "piped phm sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "photocd_pipe",
+      "longName": "piped photocd sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pictor_pipe",
+      "longName": "piped pictor sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pjs",
+      "longName": "PJS (Phoenix Japanimation Society) subtitles",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "pjs"
+      ]
+    },
+    {
+      "name": "pmp",
+      "longName": "Playstation Portable PMP",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "png_pipe",
+      "longName": "piped png sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pp_bnk",
+      "longName": "Pro Pinball Series Soundbank",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ppm_pipe",
+      "longName": "piped ppm sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "psd_pipe",
+      "longName": "piped psd sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "psp",
+      "longName": "PSP MP4 (MPEG-4 Part 14)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "mp4",
+        "psp"
+      ]
+    },
+    {
+      "name": "psxstr",
+      "longName": "Sony Playstation STR",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pva",
+      "longName": "TechnoTrend PVA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "pvf",
+      "longName": "PVF (Portable Voice Format)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "pvf"
+      ]
+    },
+    {
+      "name": "qcp",
+      "longName": "QCP",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "qdraw_pipe",
+      "longName": "piped qdraw sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "qoa",
+      "longName": "QOA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "qoa"
+      ]
+    },
+    {
+      "name": "qoi_pipe",
+      "longName": "piped qoi sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "r3d",
+      "longName": "REDCODE R3D",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "rawvideo",
+      "longName": "raw video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "yuv",
+        "rgb"
+      ]
+    },
+    {
+      "name": "rcwt",
+      "longName": "RCWT (Raw Captions With Time)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "realtext",
+      "longName": "RealText subtitle format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "rt"
+      ]
+    },
+    {
+      "name": "redspark",
+      "longName": "RedSpark",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "rsd"
+      ]
+    },
+    {
+      "name": "rka",
+      "longName": "RKA (RK Audio)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "rka"
+      ]
+    },
+    {
+      "name": "rl2",
+      "longName": "RL2",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "rm",
+      "longName": "RealMedia",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "rm",
+        "ra"
+      ]
+    },
+    {
+      "name": "roq",
+      "longName": "raw id RoQ",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "roq"
+      ]
+    },
+    {
+      "name": "rpl",
+      "longName": "RPL / ARMovie",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "rsd",
+      "longName": "GameCube RSD",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "rsd"
+      ]
+    },
+    {
+      "name": "rso",
+      "longName": "Lego Mindstorms RSO",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "rso"
+      ]
+    },
+    {
+      "name": "rtp",
+      "longName": "RTP output",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "rtp_mpegts",
+      "longName": "RTP/mpegts output format",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "rtsp",
+      "longName": "RTSP output",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "s16be",
+      "longName": "PCM signed 16-bit big-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "s16le",
+      "longName": "PCM signed 16-bit little-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "sw"
+      ]
+    },
+    {
+      "name": "s24be",
+      "longName": "PCM signed 24-bit big-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "s24le",
+      "longName": "PCM signed 24-bit little-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "s32be",
+      "longName": "PCM signed 32-bit big-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "s32le",
+      "longName": "PCM signed 32-bit little-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "s337m",
+      "longName": "SMPTE 337M",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "s8",
+      "longName": "PCM signed 8-bit",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "sb"
+      ]
+    },
+    {
+      "name": "sami",
+      "longName": "SAMI subtitle format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "smi",
+        "sami"
+      ]
+    },
+    {
+      "name": "sap",
+      "longName": "SAP output",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "sbc",
+      "longName": "raw SBC",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "sbc",
+        "msbc"
+      ]
+    },
+    {
+      "name": "sbg",
+      "longName": "SBaGen binaural beats script",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sbg"
+      ]
+    },
+    {
+      "name": "scc",
+      "longName": "Scenarist Closed Captions",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "scc"
+      ]
+    },
+    {
+      "name": "scd",
+      "longName": "Square Enix SCD",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "sdns",
+      "longName": "Xbox SDNS",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sdns"
+      ]
+    },
+    {
+      "name": "sdp",
+      "longName": "SDP",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "sdr2",
+      "longName": "SDR2",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sdr2"
+      ]
+    },
+    {
+      "name": "sds",
+      "longName": "MIDI Sample Dump Standard",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sds"
+      ]
+    },
+    {
+      "name": "sdx",
+      "longName": "Sample Dump eXchange",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sdx"
+      ]
+    },
+    {
+      "name": "segment",
+      "longName": "segment",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "ser",
+      "longName": "SER (Simple uncompressed video format for astronomical capturing)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "ser"
+      ]
+    },
+    {
+      "name": "sga",
+      "longName": "Digital Pictures SGA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sga"
+      ]
+    },
+    {
+      "name": "sgi_pipe",
+      "longName": "piped sgi sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "shn",
+      "longName": "raw Shorten",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "shn"
+      ]
+    },
+    {
+      "name": "siff",
+      "longName": "Beam Software SIFF",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "vb",
+        "son"
+      ]
+    },
+    {
+      "name": "simbiosis_imx",
+      "longName": "Simbiosis Interactive IMX",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "imx"
+      ]
+    },
+    {
+      "name": "sln",
+      "longName": "Asterisk raw pcm",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sln"
+      ]
+    },
+    {
+      "name": "smjpeg",
+      "longName": "Loki SDL MJPEG",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "smk",
+      "longName": "Smacker",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "smoothstreaming",
+      "longName": "Smooth Streaming Muxer",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "smush",
+      "longName": "LucasArts Smush",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "sol",
+      "longName": "Sierra SOL",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "sox",
+      "longName": "SoX (Sound eXchange) native",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "sox"
+      ]
+    },
+    {
+      "name": "spdif",
+      "longName": "IEC 61937 (used on S/PDIF - IEC958)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "spdif"
+      ]
+    },
+    {
+      "name": "spx",
+      "longName": "Ogg Speex",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "spx"
+      ]
+    },
+    {
+      "name": "srt",
+      "longName": "SubRip subtitle",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "srt"
+      ]
+    },
+    {
+      "name": "stl",
+      "longName": "Spruce subtitle format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "stl"
+      ]
+    },
+    {
+      "name": "stream_segment,ssegment",
+      "longName": "streaming segment muxer",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "streamhash",
+      "longName": "Per-stream hash testing",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "subviewer",
+      "longName": "SubViewer subtitle format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sub"
+      ]
+    },
+    {
+      "name": "subviewer1",
+      "longName": "SubViewer v1 subtitle format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "sub"
+      ]
+    },
+    {
+      "name": "sunrast_pipe",
+      "longName": "piped sunrast sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "sup",
+      "longName": "raw HDMV Presentation Graphic Stream subtitles",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "sup"
+      ]
+    },
+    {
+      "name": "svag",
+      "longName": "Konami PS2 SVAG",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "svag"
+      ]
+    },
+    {
+      "name": "svcd",
+      "longName": "MPEG-2 PS (SVCD)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "vob"
+      ]
+    },
+    {
+      "name": "svg_pipe",
+      "longName": "piped svg sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "svs",
+      "longName": "Square SVS",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "svs"
+      ]
+    },
+    {
+      "name": "swf",
+      "longName": "SWF (ShockWave Flash)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "swf"
+      ]
+    },
+    {
+      "name": "tak",
+      "longName": "raw TAK",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "tak"
+      ]
+    },
+    {
+      "name": "tedcaptions",
+      "longName": "TED Talks captions",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "tee",
+      "longName": "Multiple muxer tee",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "thp",
+      "longName": "THP",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "tiertexseq",
+      "longName": "Tiertex Limited SEQ",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "tiff_pipe",
+      "longName": "piped tiff sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "tmv",
+      "longName": "8088flex TMV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "truehd",
+      "longName": "raw TrueHD",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "thd"
+      ]
+    },
+    {
+      "name": "tta",
+      "longName": "TTA (True Audio)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "tta"
+      ]
+    },
+    {
+      "name": "ttml",
+      "longName": "TTML subtitle",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "ttml"
+      ]
+    },
+    {
+      "name": "tty",
+      "longName": "Tele-typewriter",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "ans",
+        "art",
+        "asc",
+        "diz",
+        "ice",
+        "nfo",
+        "txt",
+        "vt"
+      ]
+    },
+    {
+      "name": "txd",
+      "longName": "Renderware TeXture Dictionary",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "ty",
+      "longName": "TiVo TY Stream",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "ty",
+        "ty+"
+      ]
+    },
+    {
+      "name": "u16be",
+      "longName": "PCM unsigned 16-bit big-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "u16le",
+      "longName": "PCM unsigned 16-bit little-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "uw"
+      ]
+    },
+    {
+      "name": "u24be",
+      "longName": "PCM unsigned 24-bit big-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "u24le",
+      "longName": "PCM unsigned 24-bit little-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "u32be",
+      "longName": "PCM unsigned 32-bit big-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "u32le",
+      "longName": "PCM unsigned 32-bit little-endian",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "u8",
+      "longName": "PCM unsigned 8-bit",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ub"
+      ]
+    },
+    {
+      "name": "uncodedframecrc",
+      "longName": "uncoded framecrc testing",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "usm",
+      "longName": "CRI USM",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "usm"
+      ]
+    },
+    {
+      "name": "v210",
+      "longName": "Uncompressed 4:2:2 10-bit",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "v210"
+      ]
+    },
+    {
+      "name": "v210x",
+      "longName": "Uncompressed 4:2:2 10-bit",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "yuv10"
+      ]
+    },
+    {
+      "name": "vag",
+      "longName": "Sony PS2 VAG",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "vag"
+      ]
+    },
+    {
+      "name": "vbn_pipe",
+      "longName": "piped vbn sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "vc1",
+      "longName": "raw VC-1 video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "vc1"
+      ]
+    },
+    {
+      "name": "vc1test",
+      "longName": "VC-1 test bitstream",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "rcv"
+      ]
+    },
+    {
+      "name": "vcd",
+      "longName": "MPEG-1 Systems / MPEG program stream (VCD)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "vidc",
+      "longName": "PCM Archimedes VIDC",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "vividas",
+      "longName": "Vividas VIV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "vivo",
+      "longName": "Vivo",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "viv"
+      ]
+    },
+    {
+      "name": "vmd",
+      "longName": "Sierra VMD",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "vob",
+      "longName": "MPEG-2 PS (VOB)",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "vob"
+      ]
+    },
+    {
+      "name": "vobsub",
+      "longName": "VobSub subtitle format",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "idx"
+      ]
+    },
+    {
+      "name": "voc",
+      "longName": "Creative Voice",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "voc"
+      ]
+    },
+    {
+      "name": "vpk",
+      "longName": "Sony PS2 VPK",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "vpk"
+      ]
+    },
+    {
+      "name": "vplayer",
+      "longName": "VPlayer subtitles",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "txt"
+      ]
+    },
+    {
+      "name": "vqf",
+      "longName": "Nippon Telegraph and Telephone Corporation (NTT) TwinVQ",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "vqf",
+        "vql",
+        "vqe"
+      ]
+    },
+    {
+      "name": "vvc",
+      "longName": "raw H.266/VVC video",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "vvc",
+        "h266",
+        "266"
+      ]
+    },
+    {
+      "name": "w64",
+      "longName": "Sony Wave64",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "w64"
+      ]
+    },
+    {
+      "name": "wady",
+      "longName": "Marble WADY",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "way"
+      ]
+    },
+    {
+      "name": "wav",
+      "longName": "WAV / WAVE (Waveform Audio)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "wav"
+      ]
+    },
+    {
+      "name": "wavarc",
+      "longName": "Waveform Archiver",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "wa"
+      ]
+    },
+    {
+      "name": "wc3movie",
+      "longName": "Wing Commander III movie",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "webm",
+      "longName": "WebM",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "webm"
+      ]
+    },
+    {
+      "name": "webm_chunk",
+      "longName": "WebM Chunk Muxer",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "chk"
+      ]
+    },
+    {
+      "name": "webm_dash_manifest",
+      "longName": "WebM DASH Manifest",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "xml"
+      ]
+    },
+    {
+      "name": "webp",
+      "longName": "WebP",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": [
+        "webp"
+      ]
+    },
+    {
+      "name": "webp_pipe",
+      "longName": "piped webp sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "webvtt",
+      "longName": "WebVTT subtitle",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "vtt"
+      ]
+    },
+    {
+      "name": "whip",
+      "longName": "WHIP(WebRTC-HTTP ingestion protocol) muxer",
+      "canMux": true,
+      "canDemux": false,
+      "extensions": []
+    },
+    {
+      "name": "wsaud",
+      "longName": "Westwood Studios audio",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "aud"
+      ]
+    },
+    {
+      "name": "wsd",
+      "longName": "Wideband Single-bit Data (WSD)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "wsd"
+      ]
+    },
+    {
+      "name": "wsvqa",
+      "longName": "Westwood Studios VQA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "wtv",
+      "longName": "Windows Television (WTV)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "wtv"
+      ]
+    },
+    {
+      "name": "wv",
+      "longName": "raw WavPack",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "wv"
+      ]
+    },
+    {
+      "name": "wve",
+      "longName": "Psion 3 audio",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "xa",
+      "longName": "Maxis XA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "xbin",
+      "longName": "eXtended BINary text (XBIN)",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "xbm_pipe",
+      "longName": "piped xbm sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "xmd",
+      "longName": "Konami XMD",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "xmd"
+      ]
+    },
+    {
+      "name": "xmv",
+      "longName": "Microsoft XMV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "xmv"
+      ]
+    },
+    {
+      "name": "xpm_pipe",
+      "longName": "piped xpm sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "xvag",
+      "longName": "Sony PS3 XVAG",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "xvag"
+      ]
+    },
+    {
+      "name": "xwd_pipe",
+      "longName": "piped xwd sequence",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "xwma",
+      "longName": "Microsoft xWMA",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": []
+    },
+    {
+      "name": "yop",
+      "longName": "Psygnosis YOP",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "yop"
+      ]
+    },
+    {
+      "name": "yuv4mpegpipe",
+      "longName": "YUV4MPEG pipe",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "y4m"
+      ]
+    }
+  ],
+  "popular": [
+    {
+      "name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "longName": "QuickTime / MOV",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mov",
+        "mp4",
+        "m4a",
+        "3gp",
+        "3g2",
+        "mj2",
+        "psp",
+        "m4v",
+        "m4b",
+        "ism",
+        "ismv",
+        "isma",
+        "f4v",
+        "avif",
+        "heic",
+        "heif"
+      ]
+    },
+    {
+      "name": "matroska,webm",
+      "longName": "Matroska / WebM",
+      "canMux": false,
+      "canDemux": true,
+      "extensions": [
+        "mkv",
+        "mk3d",
+        "mka",
+        "mks",
+        "webm"
+      ]
+    },
+    {
+      "name": "avi",
+      "longName": "AVI (Audio Video Interleaved)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "avi"
+      ]
+    },
+    {
+      "name": "mp3",
+      "longName": "MP3 (MPEG audio layer 3)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mp3"
+      ]
+    },
+    {
+      "name": "flac",
+      "longName": "raw FLAC",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "flac"
+      ]
+    },
+    {
+      "name": "wav",
+      "longName": "WAV / WAVE (Waveform Audio)",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "wav"
+      ]
+    },
+    {
+      "name": "ogg",
+      "longName": "Ogg",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "ogg"
+      ]
+    },
+    {
+      "name": "hls",
+      "longName": "Apple HTTP Live Streaming",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "m3u8"
+      ]
+    },
+    {
+      "name": "dash",
+      "longName": "DASH Muxer",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": [
+        "mpd"
+      ]
+    },
+    {
+      "name": "rtp",
+      "longName": "RTP output",
+      "canMux": true,
+      "canDemux": true,
+      "extensions": []
+    }
+  ],
+  "stats": {
+    "total": 416,
+    "canMux": 184,
+    "canDemux": 364
+  },
+  "generatedAt": "2026-04-18T05:32:04.098Z"
+}

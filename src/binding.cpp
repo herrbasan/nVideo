@@ -959,6 +959,129 @@ static Napi::Value ExtractAudio(const Napi::CallbackInfo& info) {
     return ResultToJS(env, result);
 }
 
+// nVideo.getBuildInfo() - Get FFmpeg build information
+static Napi::Value GetBuildInfo(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    BuildInfo buildInfo = FFmpegProcessor::getBuildInfo();
+
+    Napi::Object result = Napi::Object::New(env);
+    result.Set(Napi::String::New(env, "version"), Napi::String::New(env, buildInfo.version));
+    result.Set(Napi::String::New(env, "configuration"), Napi::String::New(env, buildInfo.configuration));
+
+    // Hardware accelerations
+    Napi::Array hwaccels = Napi::Array::New(env, buildInfo.hwaccels.size());
+    for (size_t i = 0; i < buildInfo.hwaccels.size(); i++) {
+        hwaccels.Set(static_cast<uint32_t>(i), Napi::String::New(env, buildInfo.hwaccels[i]));
+    }
+    result.Set(Napi::String::New(env, "hwaccels"), hwaccels);
+
+    // Protocols
+    Napi::Array protocols = Napi::Array::New(env, buildInfo.protocols.size());
+    for (size_t i = 0; i < buildInfo.protocols.size(); i++) {
+        protocols.Set(static_cast<uint32_t>(i), Napi::String::New(env, buildInfo.protocols[i]));
+    }
+    result.Set(Napi::String::New(env, "protocols"), protocols);
+
+    return result;
+}
+
+// nVideo.getCodecs(type?) - Get available codecs
+static Napi::Value GetCodecs(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    std::string typeFilter = "";
+    if (info.Length() >= 1 && info[0].IsString()) {
+        typeFilter = info[0].As<Napi::String>().Utf8Value();
+    }
+
+    std::vector<CodecInfo> codecs = FFmpegProcessor::getCodecs(typeFilter);
+
+    Napi::Array result = Napi::Array::New(env, codecs.size());
+    for (size_t i = 0; i < codecs.size(); i++) {
+        const CodecInfo& ci = codecs[i];
+        Napi::Object codecObj = Napi::Object::New(env);
+        codecObj.Set(Napi::String::New(env, "name"), Napi::String::New(env, ci.name));
+        codecObj.Set(Napi::String::New(env, "longName"), Napi::String::New(env, ci.longName));
+        codecObj.Set(Napi::String::New(env, "type"), Napi::String::New(env, ci.type));
+        codecObj.Set(Napi::String::New(env, "canDecode"), Napi::Boolean::New(env, ci.canDecode));
+        codecObj.Set(Napi::String::New(env, "canEncode"), Napi::Boolean::New(env, ci.canEncode));
+
+        Napi::Array caps = Napi::Array::New(env, ci.capabilities.size());
+        for (size_t j = 0; j < ci.capabilities.size(); j++) {
+            caps.Set(static_cast<uint32_t>(j), Napi::String::New(env, ci.capabilities[j]));
+        }
+        codecObj.Set(Napi::String::New(env, "capabilities"), caps);
+
+        result.Set(static_cast<uint32_t>(i), codecObj);
+    }
+
+    return result;
+}
+
+// nVideo.getFilters(type?) - Get available filters
+static Napi::Value GetFilters(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    std::string typeFilter = "";
+    if (info.Length() >= 1 && info[0].IsString()) {
+        typeFilter = info[0].As<Napi::String>().Utf8Value();
+    }
+
+    std::vector<FilterInfo> filters = FFmpegProcessor::getFilters(typeFilter);
+
+    Napi::Array result = Napi::Array::New(env, filters.size());
+    for (size_t i = 0; i < filters.size(); i++) {
+        const FilterInfo& fi = filters[i];
+        Napi::Object filterObj = Napi::Object::New(env);
+        filterObj.Set(Napi::String::New(env, "name"), Napi::String::New(env, fi.name));
+        filterObj.Set(Napi::String::New(env, "description"), Napi::String::New(env, fi.description));
+
+        Napi::Array inputs = Napi::Array::New(env, fi.inputs.size());
+        for (size_t j = 0; j < fi.inputs.size(); j++) {
+            inputs.Set(static_cast<uint32_t>(j), Napi::String::New(env, fi.inputs[j]));
+        }
+        filterObj.Set(Napi::String::New(env, "inputs"), inputs);
+
+        Napi::Array outputs = Napi::Array::New(env, fi.outputs.size());
+        for (size_t j = 0; j < fi.outputs.size(); j++) {
+            outputs.Set(static_cast<uint32_t>(j), Napi::String::New(env, fi.outputs[j]));
+        }
+        filterObj.Set(Napi::String::New(env, "outputs"), outputs);
+
+        result.Set(static_cast<uint32_t>(i), filterObj);
+    }
+
+    return result;
+}
+
+// nVideo.getFormats() - Get available formats (muxers/demuxers)
+static Napi::Value GetFormats(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    std::vector<FormatInfo> formats = FFmpegProcessor::getFormats();
+
+    Napi::Array result = Napi::Array::New(env, formats.size());
+    for (size_t i = 0; i < formats.size(); i++) {
+        const FormatInfo& fi = formats[i];
+        Napi::Object formatObj = Napi::Object::New(env);
+        formatObj.Set(Napi::String::New(env, "name"), Napi::String::New(env, fi.name));
+        formatObj.Set(Napi::String::New(env, "longName"), Napi::String::New(env, fi.longName));
+        formatObj.Set(Napi::String::New(env, "canMux"), Napi::Boolean::New(env, fi.canMux));
+        formatObj.Set(Napi::String::New(env, "canDemux"), Napi::Boolean::New(env, fi.canDemux));
+
+        Napi::Array exts = Napi::Array::New(env, fi.extensions.size());
+        for (size_t j = 0; j < fi.extensions.size(); j++) {
+            exts.Set(static_cast<uint32_t>(j), Napi::String::New(env, fi.extensions[j]));
+        }
+        formatObj.Set(Napi::String::New(env, "extensions"), exts);
+
+        result.Set(static_cast<uint32_t>(i), formatObj);
+    }
+
+    return result;
+}
+
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set(Napi::String::New(env, "version"), Napi::Function::New(env, GetVersion));
     exports.Set(Napi::String::New(env, "probe"), Napi::Function::New(env, Probe));
@@ -970,6 +1093,10 @@ static Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set(Napi::String::New(env, "concat"), Napi::Function::New(env, Concat));
     exports.Set(Napi::String::New(env, "extractStream"), Napi::Function::New(env, ExtractStream));
     exports.Set(Napi::String::New(env, "extractAudio"), Napi::Function::New(env, ExtractAudio));
+    exports.Set(Napi::String::New(env, "getBuildInfo"), Napi::Function::New(env, GetBuildInfo));
+    exports.Set(Napi::String::New(env, "getCodecs"), Napi::Function::New(env, GetCodecs));
+    exports.Set(Napi::String::New(env, "getFilters"), Napi::Function::New(env, GetFilters));
+    exports.Set(Napi::String::New(env, "getFormats"), Napi::Function::New(env, GetFormats));
     return exports;
 }
 
