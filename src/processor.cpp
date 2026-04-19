@@ -1397,14 +1397,14 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             }
         }
 
-        // CRF and Preset via av_opt_set on priv_data (x264/x265)
+        // CRF and Preset via av_opt_set on codec context (searches priv_data via AV_OPT_SEARCH_CHILDREN)
         // NVENC codecs use 'cq' instead of 'crf'
         if (opts.video.crf > 0) {
             char crfStr[16];
             snprintf(crfStr, sizeof(crfStr), "%d", opts.video.crf);
             bool isNvenc = (opts.video.codec.find("nvenc") != std::string::npos);
             const char* optName = isNvenc ? "cq" : "crf";
-            ret = av_opt_set(videoEncCtx->priv_data, optName, crfStr, 0);
+            ret = av_opt_set(videoEncCtx, optName, crfStr, AV_OPT_SEARCH_CHILDREN);
             if (ret < 0) {
                 error.message = std::string("Failed to set ") + optName + ": " + av_err_to_string(ret);
                 error.operation = "open";
@@ -1412,7 +1412,7 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             }
         }
         if (!opts.video.preset.empty()) {
-            ret = av_opt_set(videoEncCtx->priv_data, "preset", opts.video.preset.c_str(), 0);
+            ret = av_opt_set(videoEncCtx, "preset", opts.video.preset.c_str(), AV_OPT_SEARCH_CHILDREN);
             if (ret < 0) {
                 error.message = std::string("Failed to set preset: ") + av_err_to_string(ret);
                 error.operation = "open";
@@ -1420,9 +1420,11 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             }
         }
 
-        // Apply arbitrary video encoder options
+        // Apply arbitrary video options via AV_OPT_SEARCH_CHILDREN.
+        // This searches AVCodecContext fields (pix_fmt, bit_rate, gop_size, etc.)
+        // AND encoder private data (rc, tune, cpu-used, etc.) in one call.
         for (const auto& pair : opts.video.options) {
-            ret = av_opt_set(videoEncCtx->priv_data, pair.first.c_str(), pair.second.c_str(), 0);
+            ret = av_opt_set(videoEncCtx, pair.first.c_str(), pair.second.c_str(), AV_OPT_SEARCH_CHILDREN);
             if (ret < 0) {
                 error.message = std::string("Failed to set video option '") + pair.first + "': " + av_err_to_string(ret);
                 error.operation = "open";
@@ -2976,9 +2978,11 @@ bool FFmpegProcessor::extractAudio(const char* inputPath, const char* outputPath
     else audioEncCtx->ch_layout = AV_CHANNEL_LAYOUT_STEREO;
     audioEncCtx->sample_fmt = find_best_sample_fmt(audioEnc, AV_SAMPLE_FMT_FLTP);
 
-    // Apply arbitrary audio encoder options
+    // Apply arbitrary audio options via AV_OPT_SEARCH_CHILDREN.
+    // Searches AVCodecContext fields (bit_rate, sample_rate, ch_layout, etc.)
+    // AND encoder private data in one call.
     for (const auto& pair : audioOpts.options) {
-        ret = av_opt_set(audioEncCtx->priv_data, pair.first.c_str(), pair.second.c_str(), 0);
+        ret = av_opt_set(audioEncCtx, pair.first.c_str(), pair.second.c_str(), AV_OPT_SEARCH_CHILDREN);
         if (ret < 0) {
             error.message = std::string("Failed to set audio option '") + pair.first + "': " + av_err_to_string(ret);
             error.operation = "open"; goto cleanup;
