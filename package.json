@@ -12,7 +12,7 @@
   "scripts": {
     "setup": "node scripts/download-ffmpeg.js",
     "configure": "node-gyp configure",
-    "build": "npm run setup && node-gyp configure && node-gyp build && npm run generate-capabilities",
+    "build": "npm run setup && node-gyp configure && node-gyp build && npm run generate-capabilities && node scripts/copy-dist.js",
     "build:debug": "node-gyp configure && node-gyp build --debug",
     "rebuild": "node-gyp rebuild",
     "clean": "node-gyp clean",
