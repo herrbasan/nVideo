@@ -104,6 +104,7 @@ struct TranscodeOptions {
         int64_t bitrate = 0;     // 0 = keep original or default
         int fps = 0;             // 0 = keep original
         std::string filters;     // FFmpeg filter graph string
+        std::map<std::string, std::string> options; // Arbitrary encoder options via av_opt_set
     };
 
     // Audio options (null = copy stream, empty object = disable)
@@ -113,6 +114,7 @@ struct TranscodeOptions {
         int sampleRate = 0;      // 0 = keep original
         int channels = 0;       // 0 = keep original
         std::string filters;     // FFmpeg filter graph string
+        std::map<std::string, std::string> options; // Arbitrary encoder options via av_opt_set
     };
 
     VideoOpts video;

@@ -1420,6 +1420,16 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             }
         }
 
+        // Apply arbitrary video encoder options
+        for (const auto& pair : opts.video.options) {
+            ret = av_opt_set(videoEncCtx->priv_data, pair.first.c_str(), pair.second.c_str(), 0);
+            if (ret < 0) {
+                error.message = std::string("Failed to set video option '") + pair.first + "': " + av_err_to_string(ret);
+                error.operation = "open";
+                goto cleanup;
+            }
+        }
+
         // Configure video encoder threading
         if (opts.threads > 0) videoEncCtx->thread_count = opts.threads;
         videoEncCtx->thread_type = FF_THREAD_FRAME | FF_THREAD_SLICE;
@@ -2965,6 +2975,16 @@ bool FFmpegProcessor::extractAudio(const char* inputPath, const char* outputPath
     else if (audioStream->codecpar->ch_layout.nb_channels > 0) audioEncCtx->ch_layout = audioStream->codecpar->ch_layout;
     else audioEncCtx->ch_layout = AV_CHANNEL_LAYOUT_STEREO;
     audioEncCtx->sample_fmt = find_best_sample_fmt(audioEnc, AV_SAMPLE_FMT_FLTP);
+
+    // Apply arbitrary audio encoder options
+    for (const auto& pair : audioOpts.options) {
+        ret = av_opt_set(audioEncCtx->priv_data, pair.first.c_str(), pair.second.c_str(), 0);
+        if (ret < 0) {
+            error.message = std::string("Failed to set audio option '") + pair.first + "': " + av_err_to_string(ret);
+            error.operation = "open"; goto cleanup;
+        }
+    }
+
     if ((ret = avcodec_open2(audioEncCtx, audioEnc, nullptr)) < 0) {
         error.message = std::string("Failed to open audio encoder: ") + av_err_to_string(ret);
         error.operation = "open"; goto cleanup;
