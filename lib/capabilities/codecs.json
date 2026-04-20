@@ -2042,17 +2042,6 @@
       ]
     },
     {
-      "name": "libwebp_anim",
-      "longName": "libwebp WebP image",
-      "type": "video",
-      "canDecode": false,
-      "canEncode": true,
-      "capabilities": [
-        "dr1",
-        "delay"
-      ]
-    },
-    {
       "name": "libwebp",
       "longName": "libwebp WebP image",
       "type": "video",
@@ -9314,17 +9303,6 @@
         ]
       },
       {
-        "name": "libwebp_anim",
-        "longName": "libwebp WebP image",
-        "type": "video",
-        "canDecode": false,
-        "canEncode": true,
-        "capabilities": [
-          "dr1",
-          "delay"
-        ]
-      },
-      {
         "name": "libwebp",
         "longName": "libwebp WebP image",
         "type": "video",
@@ -16430,10 +16408,10 @@
     ]
   },
   "stats": {
-    "total": 786,
-    "video": 444,
+    "total": 785,
+    "video": 443,
     "audio": 306,
     "subtitle": 36
   },
-  "generatedAt": "2026-04-18T05:32:04.092Z"
+  "generatedAt": "2026-04-20T14:26:13.187Z"
 }
