@@ -12,9 +12,9 @@
   "scripts": {
     "setup": "node scripts/download-ffmpeg.js",
     "configure": "node-gyp configure",
-    "build": "npm run setup && node-gyp configure && node-gyp build && npm run generate-capabilities",
+    "build": "npm run setup && node-gyp configure && node-gyp build && npm run generate-capabilities && node scripts/copy-dist.js",
     "build:debug": "node-gyp configure && node-gyp build --debug",
-    "rebuild": "node-gyp rebuild",
+    "rebuild": "node-gyp rebuild && node scripts/copy-dist.js",
     "clean": "node-gyp clean",
     "test": "node test/test.js",
     "rebuild:electron": "npx @electron/rebuild -f -w nvideo",

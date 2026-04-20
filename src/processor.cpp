@@ -1397,42 +1397,48 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
             }
         }
 
-        // CRF and Preset via av_opt_set on priv_data (x264/x265)
-        // NVENC codecs use 'cq' instead of 'crf'
-        if (opts.video.crf > 0) {
-            char crfStr[16];
-            snprintf(crfStr, sizeof(crfStr), "%d", opts.video.crf);
-            bool isNvenc = (opts.video.codec.find("nvenc") != std::string::npos);
-            const char* optName = isNvenc ? "cq" : "crf";
-            ret = av_opt_set(videoEncCtx->priv_data, optName, crfStr, 0);
-            if (ret < 0) {
-                error.message = std::string("Failed to set ") + optName + ": " + av_err_to_string(ret);
-                error.operation = "open";
-                goto cleanup;
-            }
-        }
-        if (!opts.video.preset.empty()) {
-            ret = av_opt_set(videoEncCtx->priv_data, "preset", opts.video.preset.c_str(), 0);
-            if (ret < 0) {
-                error.message = std::string("Failed to set preset: ") + av_err_to_string(ret);
-                error.operation = "open";
-                goto cleanup;
-            }
-        }
-
         // Configure video encoder threading
         if (opts.threads > 0) videoEncCtx->thread_count = opts.threads;
         videoEncCtx->thread_type = FF_THREAD_FRAME | FF_THREAD_SLICE;
 
-        // For HW encoding, we need to pass hw_frames_ctx via options
+        // Handle pix_fmt from options map (struct field, not AVOption)
+        auto pixFmtIt = opts.video.options.find("pix_fmt");
+        if (pixFmtIt != opts.video.options.end()) {
+            enum AVPixelFormat fmt = av_get_pix_fmt(pixFmtIt->second.c_str());
+            if (fmt != AV_PIX_FMT_NONE) videoEncCtx->pix_fmt = fmt;
+        }
+
+        // Build options dictionary for avcodec_open2.
+        // This is FFmpeg's standard mechanism — handles both AVCodecContext fields
+        // and encoder priv_data (NVENC options like rc, tune, multipass, etc.)
         AVDictionary* encOpts = nullptr;
-        if (hwEncode && hwFramesCtx) {
-            // hw_frames_ctx is already set on videoEncCtx, no need for options
+
+        if (opts.video.crf > 0) {
+            char crfStr[16];
+            snprintf(crfStr, sizeof(crfStr), "%d", opts.video.crf);
+            bool isNvenc = (opts.video.codec.find("nvenc") != std::string::npos);
+            av_dict_set(&encOpts, isNvenc ? "cq" : "crf", crfStr, 0);
+        }
+        if (!opts.video.preset.empty()) {
+            av_dict_set(&encOpts, "preset", opts.video.preset.c_str(), 0);
+        }
+        for (const auto& pair : opts.video.options) {
+            if (pair.first == "pix_fmt") continue; // handled above
+            av_dict_set(&encOpts, pair.first.c_str(), pair.second.c_str(), 0);
         }
 
         if ((ret = avcodec_open2(videoEncCtx, videoEnc, &encOpts)) < 0) {
             av_dict_free(&encOpts);
             error.message = std::string("Failed to open video encoder: ") + av_err_to_string(ret);
+            error.operation = "open";
+            goto cleanup;
+        }
+
+        // Check for unconsumed options (not recognized by encoder)
+        AVDictionaryEntry* leftover = nullptr;
+        while ((leftover = av_dict_get(encOpts, "", leftover, AV_DICT_IGNORE_SUFFIX))) {
+            av_dict_free(&encOpts);
+            error.message = std::string("Failed to set video option '") + leftover->key + "': Option not found";
             error.operation = "open";
             goto cleanup;
         }
@@ -2965,10 +2971,28 @@ bool FFmpegProcessor::extractAudio(const char* inputPath, const char* outputPath
     else if (audioStream->codecpar->ch_layout.nb_channels > 0) audioEncCtx->ch_layout = audioStream->codecpar->ch_layout;
     else audioEncCtx->ch_layout = AV_CHANNEL_LAYOUT_STEREO;
     audioEncCtx->sample_fmt = find_best_sample_fmt(audioEnc, AV_SAMPLE_FMT_FLTP);
-    if ((ret = avcodec_open2(audioEncCtx, audioEnc, nullptr)) < 0) {
+
+    // Build options dictionary for avcodec_open2.
+    // Handles both AVCodecContext fields and encoder priv_data automatically.
+    AVDictionary* audioEncOpts = nullptr;
+    for (const auto& pair : audioOpts.options) {
+        av_dict_set(&audioEncOpts, pair.first.c_str(), pair.second.c_str(), 0);
+    }
+
+    if ((ret = avcodec_open2(audioEncCtx, audioEnc, &audioEncOpts)) < 0) {
+        av_dict_free(&audioEncOpts);
         error.message = std::string("Failed to open audio encoder: ") + av_err_to_string(ret);
         error.operation = "open"; goto cleanup;
     }
+
+    // Check for unconsumed options
+    AVDictionaryEntry* audioLeftover = nullptr;
+    while ((audioLeftover = av_dict_get(audioEncOpts, "", audioLeftover, AV_DICT_IGNORE_SUFFIX))) {
+        av_dict_free(&audioEncOpts);
+        error.message = std::string("Failed to set audio option '") + audioLeftover->key + "': Option not found";
+        error.operation = "open"; goto cleanup;
+    }
+    av_dict_free(&audioEncOpts);
 
     AVStream* audioOutStream = avformat_new_stream(ofmtCtx, nullptr);
     if (!audioOutStream) { error.message = "Failed to create output audio stream"; error.operation = "open"; goto cleanup; }

@@ -527,6 +527,20 @@ static bool ParseTranscodeOptions(Napi::Env env, Napi::Object opts, TranscodeOpt
             if (video.Has("filters")) {
                 outOpts.video.filters = video.Get("filters").As<Napi::String>().Utf8Value();
             }
+            if (video.Has("options")) {
+                Napi::Value optsVal = video.Get("options");
+                if (optsVal.IsObject()) {
+                    Napi::Object optsObj = optsVal.As<Napi::Object>();
+                    Napi::Array keys = optsObj.GetPropertyNames();
+                    for (uint32_t i = 0; i < keys.Length(); i++) {
+                        Napi::Value key = keys.Get(i);
+                        Napi::Value val = optsObj.Get(key);
+                        if (key.IsString() && val.IsString()) {
+                            outOpts.video.options[key.As<Napi::String>().Utf8Value()] = val.As<Napi::String>().Utf8Value();
+                        }
+                    }
+                }
+            }
         } else if (videoVal.IsNull() || videoVal.IsUndefined()) {
             // Video disabled
             outOpts.video.codec = "";
@@ -551,6 +565,20 @@ static bool ParseTranscodeOptions(Napi::Env env, Napi::Object opts, TranscodeOpt
             }
             if (audio.Has("filters")) {
                 outOpts.audio.filters = audio.Get("filters").As<Napi::String>().Utf8Value();
+            }
+            if (audio.Has("options")) {
+                Napi::Value optsVal = audio.Get("options");
+                if (optsVal.IsObject()) {
+                    Napi::Object optsObj = optsVal.As<Napi::Object>();
+                    Napi::Array keys = optsObj.GetPropertyNames();
+                    for (uint32_t i = 0; i < keys.Length(); i++) {
+                        Napi::Value key = keys.Get(i);
+                        Napi::Value val = optsObj.Get(key);
+                        if (key.IsString() && val.IsString()) {
+                            outOpts.audio.options[key.As<Napi::String>().Utf8Value()] = val.As<Napi::String>().Utf8Value();
+                        }
+                    }
+                }
             }
         } else if (audioVal.IsNull() || audioVal.IsUndefined()) {
             // Audio disabled
@@ -927,6 +955,20 @@ static Napi::Value ExtractAudio(const Napi::CallbackInfo& info) {
     if (opts.Has("sampleRate")) audioOpts.sampleRate = opts.Get("sampleRate").As<Napi::Number>().Int32Value();
     if (opts.Has("channels")) audioOpts.channels = opts.Get("channels").As<Napi::Number>().Int32Value();
     if (opts.Has("filters")) audioOpts.filters = opts.Get("filters").As<Napi::String>().Utf8Value();
+    if (opts.Has("options")) {
+        Napi::Value optsVal = opts.Get("options");
+        if (optsVal.IsObject()) {
+            Napi::Object optsObj = optsVal.As<Napi::Object>();
+            Napi::Array keys = optsObj.GetPropertyNames();
+            for (uint32_t i = 0; i < keys.Length(); i++) {
+                Napi::Value key = keys.Get(i);
+                Napi::Value val = optsObj.Get(key);
+                if (key.IsString() && val.IsString()) {
+                    audioOpts.options[key.As<Napi::String>().Utf8Value()] = val.As<Napi::String>().Utf8Value();
+                }
+            }
+        }
+    }
 
     TranscodeProgressCallback progressCb;
     if (onProgress) {
