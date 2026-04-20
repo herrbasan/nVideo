@@ -1153,9 +1153,17 @@ static const char* av_err_to_string(int err) {
     return buf;
 }
 
-// Helper: try av_opt_set on codec ctx (direct), then with children, then on priv_data
+// Helper: try av_opt_set on codec ctx (direct), then with children, then on priv_data.
+// Also handles direct struct fields that are not AVOptions (e.g. pix_fmt).
 static int av_opt_set_robust(void* codecCtx, const char* name, const char* val) {
     AVCodecContext* ctx = static_cast<AVCodecContext*>(codecCtx);
+    // Handle pix_fmt directly — it's a struct field, not an AVOption on AVCodecContext
+    if (strcmp(name, "pix_fmt") == 0) {
+        enum AVPixelFormat fmt = av_get_pix_fmt(val);
+        if (fmt == AV_PIX_FMT_NONE) return AVERROR(EINVAL);
+        ctx->pix_fmt = fmt;
+        return 0;
+    }
     int ret = av_opt_set(ctx, name, val, 0);
     if (ret >= 0) return ret;
     ret = av_opt_set(ctx, name, val, AV_OPT_SEARCH_CHILDREN);
