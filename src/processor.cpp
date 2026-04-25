@@ -1310,57 +1310,13 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         videoEncCtx->height = encHeight;
         videoEncCtx->time_base = videoStream->time_base;
 
-        // Pixel format - check if hardware encoder
+        // Pixel format for encoder — always CPU-accessible format.
+        // HW decoded frames are transferred to CPU via av_hwframe_transfer_data() in the transcode loop.
+        // The encoder (including HW encoders like h264_nvenc) receives CPU frames and handles
+        // internal GPU upload. We do NOT set hw_frames_ctx on the encoder.
         AVPixelFormat pixFmt = AV_PIX_FMT_YUV420P;
-        bool hwEncode = !opts.hwaccel.empty();
 
-        if (hwEncode && hwDeviceCtx) {
-            // Get supported pixel formats from encoder
-            const enum AVPixelFormat* encPixFmts = videoEnc->pix_fmts;
-            AVPixelFormat hwPixFmt = AV_PIX_FMT_NONE;
-            
-            // Find HW pixel format for this encoder
-            if (opts.hwaccel == "cuda") {
-                hwPixFmt = AV_PIX_FMT_CUDA;
-            } else if (opts.hwaccel == "qsv") {
-                hwPixFmt = AV_PIX_FMT_QSV;
-            } else if (opts.hwaccel == "vaapi") {
-                hwPixFmt = AV_PIX_FMT_VAAPI;
-            } else if (opts.hwaccel == "d3d11va") {
-                hwPixFmt = AV_PIX_FMT_D3D11;
-            }
-            
-            // Check if encoder supports the HW format
-            if (hwPixFmt != AV_PIX_FMT_NONE) {
-                bool supported = false;
-                if (encPixFmts) {
-                    for (int i = 0; encPixFmts[i] != AV_PIX_FMT_NONE; i++) {
-                        if (encPixFmts[i] == hwPixFmt) {
-                            supported = true;
-                            break;
-                        }
-                    }
-                }
-                
-                if (supported) {
-                    // Create HW frames context for encoder
-                    hwFramesCtx = av_hwframe_ctx_alloc(hwDeviceCtx);
-                    if (hwFramesCtx) {
-                        AVHWFramesContext* framesCtx = (AVHWFramesContext*)hwFramesCtx->data;
-                        framesCtx->format = hwPixFmt;
-                        framesCtx->sw_format = AV_PIX_FMT_NV12; // Common intermediate format
-                        framesCtx->width = encWidth;
-                        framesCtx->height = encHeight;
-                        
-                        ret = av_hwframe_ctx_init(hwFramesCtx);
-                        if (ret >= 0) {
-                            videoEncCtx->hw_frames_ctx = av_buffer_ref(hwFramesCtx);
-                            pixFmt = hwPixFmt;
-                        }
-                    }
-                }
-            }
-        } else if (!opts.video.pixelFormat.empty()) {
+        if (!opts.video.pixelFormat.empty()) {
             if (opts.video.pixelFormat == "yuv420p") pixFmt = AV_PIX_FMT_YUV420P;
             else if (opts.video.pixelFormat == "yuv422p") pixFmt = AV_PIX_FMT_YUV422P;
             else if (opts.video.pixelFormat == "yuv444p") pixFmt = AV_PIX_FMT_YUV444P;
@@ -1453,16 +1409,10 @@ bool FFmpegProcessor::transcode(const char* inputPath, const char* outputPath,
         avcodec_parameters_from_context(videoOutStream->codecpar, videoEncCtx);
         videoOutStream->time_base = videoEncCtx->time_base;
 
-        // Setup SwsContext for scaling if dimensions differ (only for SW encoding)
-        if (!hwEncode && (encWidth != videoDecCtx->width || encHeight != videoDecCtx->height)) {
+        // Setup SwsContext for scaling if dimensions differ
+        if (encWidth != videoDecCtx->width || encHeight != videoDecCtx->height) {
             swsCtx = sws_getContext(videoDecCtx->width, videoDecCtx->height, videoDecCtx->pix_fmt,
                                    encWidth, encHeight, videoEncCtx->pix_fmt, SWS_BILINEAR, nullptr, nullptr, nullptr);
-        }
-
-        // If HW encoding is enabled but no filters specified, skip filter graph
-        // The encoder will handle SW->HW frame transfer internally if supported
-        if (hwEncode && hwFramesCtx && opts.video.filters.empty()) {
-            // No filter graph needed - encoder handles frame conversion
         }
 
         // Setup video filter graph if filters are specified
