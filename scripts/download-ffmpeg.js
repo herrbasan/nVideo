@@ -98,7 +98,7 @@ function organizeFiles(extractedPath) {
 
     const srcBinDir = path.join(extractedPath, 'bin');
     if (fs.existsSync(srcBinDir)) {
-        const binaries = fs.readdirSync(srcBinDir).filter(f => f.endsWith('.dll') || f.endsWith('.so'));
+        const binaries = fs.readdirSync(srcBinDir).filter(f => f.endsWith('.dll') || f.endsWith('.so') || f.endsWith('.exe') || (!f.includes('.')));
         binaries.forEach(file => fs.copyFileSync(path.join(srcBinDir, file), path.join(binDir, file)));
         console.log(`Copied ${binaries.length} binary files`);
     }
