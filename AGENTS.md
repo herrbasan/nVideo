@@ -27,8 +27,10 @@ The N-API addon exists because **streaming decoded data into JavaScript memory**
 2. **File output bypasses JS entirely** — when transcoding to file, FFmpeg's native I/O writes directly to disk. The entire read → decode → filter → encode → write pipeline runs in C++ memory. Node.js only initiates the operation and receives a completion callback. No decoded frames ever enter V8 heap.
 3. **Pure C++ core, thin N-API wrapper** — the `FFmpegProcessor` class has zero N-API dependencies. The binding layer is a thin translation membrane.
 4. **FFmpeg-native API** — the JS API maps 1:1 to FFmpeg's C API and CLI. Existing FFmpeg recipes translate directly. Filter graphs use FFmpeg's filter graph syntax. Codec options map to `AVOptions`.
-5. **Performance-first JS surface** — no method chaining, no intermediate objects. The API uses flat function calls and configuration objects. A thin JS convenience layer may wrap the FFmpeg-native core, but it must not introduce allocation overhead.
-6. **No CLI dependency** — links directly against FFmpeg's C libraries (`libavformat`, `libavcodec`, `libswscale`, `libswresample`, `libavfilter`). No `ffmpeg.exe` needed.
+5. **Performance-first JS surface** — no method chaining, no intermediate objects. The API uses flat function calls and configuration objects. A thin JS convenience layer may wrap the core, but it must not introduce allocation overhead.
+6. **Dual Pipeline Architecture** — nVideo utilizes two distinct pipelines based on the operation's goal:
+   - **CLI Pipeline (File Transcoding):** For file-to-file transformations, we explicitly spawn the bundled `ffmpeg.exe`. This relies on the robust, battle-tested FFmpeg CLI engine. It is the proper, reliable way to leverage GPU hardware acceleration (like NVENC zero-copy) without implementing low-level C++ hardware context boilerplate.
+   - **NAPI Pipeline (Real-time Applications):** For operations requiring direct memory access (e.g., streaming decoded audio directly into `SharedArrayBuffer` for JS AudioWorklet playback, or extracting raw RGB frames), we link directly against FFmpeg's C libraries (`libavformat`, `libavcodec`, `libswscale`, `libswresample`).
 7. **Rich progress reporting** — every long-running operation reports detailed, real-time progress back to JavaScript. Progress data mirrors what FFmpeg's `-progress` flag provides: timestamps, frame counts, bitrates, speed, ETA. Progress is delivered via callbacks from async workers (`napi_threadsafe_function`), never EventEmitter.
 8. **Electron-compatible** — MSVC-built binaries, proper DLL loading, tested in renderer and main process.
 9. **Checkpoint before debugging** — when you encounter problems, always make a commit before starting to change things, so you have a clean state to return to when you actually figure out the cause/solution.
@@ -101,11 +103,12 @@ nVideo/
 │   ├── buffer-pool.js       # BufferPool, RingBuffer, AVStreamPlayer
 │   └── capabilities/        # Auto-generated FFmpeg capability JSON files
 ├── documentation/           # API documentation (see above)
-├── deps/
-│   └── ffmpeg/              # Pre-built FFmpeg shared libs (BtbN)
-│       ├── include/         # Headers
-│       ├── win/             # Windows .lib + .dll
-│       └── linux/           # Linux .so
+├── deps/                    # Dual-purpose FFmpeg dependencies
+│   ├── win/                 # Windows dependencies
+│   │   ├── bin/             # RUNTIME: ffmpeg.exe & .dll shared libraries for CLI pipeline
+│   │   ├── include/         # COMPILE-TIME: C++ headers for NAPI pipeline
+│   │   └── lib/             # COMPILE-TIME: .lib linker files for NAPI pipeline
+│   └── linux/               # Linux dependencies (.so, bin)
 ├── dist/                    # Pre-built .node binaries (per platform)
 ├── scripts/
 │   ├── download-ffmpeg.js   # Download FFmpeg from BtbN
